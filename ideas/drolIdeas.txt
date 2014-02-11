@@ -1,0 +1,51 @@
+links: 
+Shortest-Path and Minimum-Delay Algorithms in Networks with Time-Dependent Edge-Length
+http://cs.ucsb.edu/~suri/cs231/Rlist/ordaRom.pdf
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5638983
+
+path in G from s to t
+
+
+start in t:
+path(G,s,t)
+if s got an edge to t 
+	stop
+else
+from t consider all edges going to t
+	from all the vertexes connected to t with an edge 
+		consitter all the edges going from vertexes with an edge to t
+			find the optimal path
+				call path(G,s,t)
+
+			
+
+Brute force:
+path(G,s,t)
+find all paths from to t
+	minipath
+	for all the paths
+		minimize obj: the time of the path consitering chargingtime and drivingTime  
+		if obj < minipath
+			minipath = obj 
+
+
+Different Graph reprasentations 
+1. Edges are roads seqments and Vertexes are charging stations
+2. Edges got 2 weights (kWh, time) time is always positive but kWh is positive
+	if the edge reprecent at charging station
+
+To solve using 2
+	fastest path 
+		minimize: sum(time)
+		subject to{i in 1..|E|: sum(kWh) > 0
+
+To solve useing 1: 
+	find shortest path through all vertexes
+	for all paths 
+		minPath
+		minimize Z: timeCharging+timeDriving
+		if minPath > Z
+			minPath = Z
+
+
+
