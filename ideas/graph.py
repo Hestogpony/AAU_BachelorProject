@@ -1,16 +1,16 @@
-graph = { 'A' : {'B':2,'C':4},
-	'B':{'C':3,'D':2},
-	'C' : {'E':4},
-	'D' : {'C':1},
-	'E' : {'F':2},
-	'F' : {'C':1}}
+graph = { 'A' : {'B':[2, 3],'C':[4, 5]},
+	'B':{'C':[3, 4],'D':[2,3]},
+	'C' : {'E':[4,6]},
+	'D' : {'C':[1,2]},
+	'E' : {'F':[2,1]},
+	'F' : {'C':[1,2]}}
 
 
 def sum(path):
 	length = 0
 	i = 0
 	while i < len(path)-1 :
-		length += graph[path[i]][path[i+1]]
+		length +=  graph[path[i]][path[i+1]][0] 
 		i = i +1
 	return length
 		
