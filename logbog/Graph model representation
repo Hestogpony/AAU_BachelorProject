@@ -1,0 +1,11 @@
+Graph model representation:
+
+Vertices: Road intersections
+Edges: Roads
+
+Weights: A tuple of 1) Energy modification to traverse the edge and 2) The time it takes to travel
+
+Negative energy is consumption (driving)
+Positive energy is charging
+
+Loops with a tuple of positive energy and time it takes to charge represents, a charging station

@@ -1,0 +1,25 @@
+######
+Shortest path problem:
+
+SPEEDUP TEKNIKKER for dijkstra:
+src: http://algo2.iti.kit.edu/schultes/hwy/schultes_diss.pdf SIDE 15, fra 2008!
+
+Observationer for speedups:
+1) Stop når shortest path til dest node er udregnet
+2) Udfør et "preprocessing step" som laver auxilary input data, som kan bruges til at accelere  alle queries
+3) Vej netværker er 
+	a) Meget "sparse" (mange knuder, få kanter)
+	b) De er næsten planære, altså meget få broer og tunneler relative til det totale netværk.
+	c) Der er hiearkiske egenskaber, e.g. motorveje er mere interessant end byveje
+
+
+State of the art shortest path solvers:
+- Transit node routing
+- Contraction hiearchies
+- Spatially Induced Linkage Cognizance
+- Path-Coherent Pairs Decomposition
+
+
+http://vldb.org/pvldb/vol5/p406_lingkunwu_vldb2012.pdf Konkluderer at CH er mest attraktiv relativ til på space og time complexity!!
+
+CH wiki: http://en.wikipedia.org/wiki/Contraction_hierarchies
