@@ -1,0 +1,90 @@
+\PassOptionsToPackage{table}{xcolor}
+\documentclass[openright,twoside,11pt]{memoir}
+\synctex=1
+
+\setlength{\lineskiplimit}{5pt}
+% VSPACES
+\setlength{\beforechapskip}{0pt}
+\setlength{\afterchapskip}{10pt} % vspace under chapters
+\setlength{\belowcaptionskip}{-8pt} % vspace mellem caption og tekst
+
+%TIKZ
+\usepackage{fancybox}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+        
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, rounded corners, draw=black, very thick, 
+    text width=6em, minimum height=1.5em, 
+    text centered, on chain},
+  combtree/.style={
+    rectangle, rounded corners, draw=black, very thick, 
+    text width=5em, minimum height=1.5em, 
+    text centered, on chain},
+  line/.style={draw, thick, <-},
+  element/.style={tape, top color=white, 
+  	bottom color=blue!50!black!60!, minimum width=8em,
+    draw=blue!40!black!90, very thick, text width=10em, 
+    minimum height=3.5em, text centered, on chain},
+  every join/.style={->, thick,shorten >=1pt},
+  decoration={brace},
+  tuborg/.style={decorate, very thick},
+  tubnode/.style={midway, right=2pt},
+}
+\tikzstyle{square}=[rectangle, draw, rounded corners=1mm, solid]
+\tikzstyle{texted}=[rectangle, draw, rounded corners=1mm, solid, text
+width=2.3cm, text centered, minimum height=1cm]
+\tikzstyle{ellipse}=[rectangle, draw, rounded corners=5mm, solid, text
+width=2.3cm, text centered, minimum height=1cm]
+\tikzstyle{neuroncircle}=[circle,draw,minimum size=30pt]
+
+% OTHER
+\usepackage[algochapter,linesnumbered]{algorithm2e}
+\DontPrintSemicolon
+\SetAlCapFnt{\em}
+
+\usepackage{tabularx} % tabularx
+\usepackage{epstopdf} % to include eps files
+\usepackage{enumitem} % for [noitemsep] in enumerate/itemize lists
+\graphicspath{ {images/} }
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{listings}	%for code examples
+%\usepackage{microtype}
+\usepackage[font=it,labelfont=bf]{caption}
+\usepackage{hyperref}
+
+% PARAGRAPH SPACING
+\parskip=5pt plus 2pt minus 1pt
+\parindent=0pt
+
+% WIDER MARGINS
+\let\oldmarginpar\marginpar
+\renewcommand\marginpar[1]{\-\oldmarginpar[\raggedleft\footnotesize #1]%
+{\raggedright\footnotesize\color{red} #1}}
+% Margins
+\setstocksize{11in}{8.5in}
+\settrimmedsize{11in}{8.5in}{*}
+\settrims{0in}{0in}
+\settypeblocksize{9.0in}{6in}{*}
+\setlrmargins{1.25in}{*}{*}
+\setulmargins{1.0in}{*}{*}
+\setheadfoot{14pt}{26pt}
+\setheaderspaces{*}{13pt}{*}
+
+% Fra settings.tex
+\setlrmarginsandblock{3.5cm}{2.5cm}{*}
+\setulmarginsandblock{2.5cm}{3.0cm}{*}
+
+\checkandfixthelayout
+
+%colors
+\definecolor{shcomment}{rgb}{0.12, 0.38, 0.18 }
+\definecolor{shkeyword}{rgb}{0.37, 0.08, 0.25}  % #5F1441
+\definecolor{shstring}{rgb}{0.06, 0.10, 0.98} % #101AF9
