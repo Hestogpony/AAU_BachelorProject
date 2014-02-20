@@ -1,0 +1,28 @@
+% Definer dokumentegenskaber
+\documentclass[a4paper,12pt, twocolumn]{article}
+
+\usepackage{import}
+
+\begin{document}
+
+\title{Title}
+\author{Author1, Author2, Author3\\
+  University of Aalborg,\\
+  Aalborg,\\
+  Denmark,\\
+  \texttt{@student.aau.dk}}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+Abstract
+\end{abstract}
+
+\input{1.introduction/introduction.tex}
+\input{2.relatedwork/relatedwork.tex}
+\input{6.experimental_evaluation/experimental_evaluation.tex}
+\input{7.conclusion/conclusion.tex}
+
+\bibliography{literature}
+\bibliographystyle{is-plain}
+\end{document}
