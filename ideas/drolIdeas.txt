@@ -52,16 +52,17 @@ Initial pruning:
 Remove all roadseqments that are to long to drive, including roads with intersektion. 
 	
 ligninger: 
-Kilometer, hastighed til kWh: 
+miles, hastighed til Wh: 
 f(x, y) = x*ff(y)
 
-Hastighed til kWh/kilometer
+Hastighed til Wh/miles
 ff(y) = 4y + 49
 
 Charging:
 x = battery% 
 f(x) = x+2 if x < 80
 	x+0,57 if x >= 80
+
 
 
 
