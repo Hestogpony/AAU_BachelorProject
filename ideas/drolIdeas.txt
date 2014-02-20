@@ -48,4 +48,20 @@ To solve useing 1:
 			minPath = Z
 
 
+Initial pruning:
+Remove all roadseqments that are to long to drive, including roads with intersektion. 
+	
+ligninger: 
+Kilometer, hastighed til kWh: 
+f(x, y) = x*ff(y)
+
+Hastighed til kWh/kilometer
+ff(y) = 4y + 49
+
+Charging:
+x = battery% 
+f(x) = x+2 if x < 80
+	x+0,57 if x >= 80
+
+
 
