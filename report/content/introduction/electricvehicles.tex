@@ -1,0 +1,92 @@
+
+\section{Electrical Vehicles}
+
+We investigate the range, charging options, charging times, battery capacity and other factors 
+which may be relevant when calculating the fastest path between two points for electric vehicles.
+We focus on two electric vehicles: the Nissan Leaf and Tesla's S model. The reasons why we have 
+chosen these two cars in particular is the fact that both of the cars, today, are among the most 
+popular electric vehicles. 
+
+\subsection{The Range of electric vehicles}
+
+The range of an electric vehicles depends on many parameters, such as: the battery capacity, how efficient the battery
+is used, the speed which is driven at, the drag of the car, the wind resistance, how much air conditioning is 
+used etc. The two most important factors, though, are the battery capacity and the speed which is driven at. 
+Tesla's S model comes with different battery sizes. We choose to make our calculation for the Tesla S model with a 
+battery size of 85 kWh which is the biggest battery size of any electric vehicle right now. The Nissan Leaf on the 
+other hand comes with a 24 kWh battery.\\
+
+The range of the Tesla S model with 85 kWh battery is approximately given by the following function:
+
+\[f(x, y, z) = \frac{x}{y * (4z + 49)}\]
+
+The range of the Nissan Leaf given speed is approximately given by the following function:
+
+\[f(x, y, z) = \frac{x}{y * ((\textit{unknown})z + (\textit{unknown}))}\]
+
+$x$ is the current battery capacity in watt-hours, $y$ is the the energy usage in watt-hours per kilometres and $z$ is the 
+speed in kilometres per hour. In \ref{table:rangegivenspeedtesla} calculations for the range of Tesla S Model is given. 
+As seen in the table the range decreases exponentially with the speed.\\
+
+\begin{table}
+	\begin{center}
+    	\begin{tabular}{ | >{\centering\arraybackslash}m{1in} | >{\centering\arraybackslash}m{1in} | >{\centering\arraybackslash}m{1in} | }
+    	\hline
+    	\textbf{Speed (km/t)}  	& \textbf{Usage (kWh/km)} 	& \textbf{Range (km)} 	\\ \hline
+    	30 				& 0.169				& 502.96  		\\ \hline
+    	55 				& 0.269				& 315.99		\\ \hline
+    	80 				& 0.369				& 230.35		\\ \hline
+    	130				& 0.569 			& 149.38		\\ 
+    	\hline    
+    	\end{tabular}
+    	\end{center}
+    	\caption{Calculates the range of Tesla's S Model with battery size of 85 kWh, given the speed}
+		\label{table:rangegivenspeedtesla}
+\end{table}
+
+If we were to drive from A to B, where the distance between A and B were 500 km, in a Tesla S model. 
+At which speed would we arrive to B fastest: at 30, 55, 80 or 130 km/t? For simplicity we assume there are
+infinitely many charging stations on the road, so we can charge as soon as our battery hits 0 \% capacity.
+The time for charging from 0 \% to 100 \% takes 90 min at each charging station. 
+The result is calculated in \ref{table:500kmfastesttesla}. As seen in the table it is fastest to drive 500 km
+with a speed of 130 km/t. If the charging times were even longer perhaps it would be faster to drive 80 km/t 
+instead. Also, on a regular road there wouldn't be infinitely many charging stations, so in some cases we would
+spend time looking for a charging station or we would have to charge even though the battery wasn't empty, 
+because the next charging station was very far away. 
+
+\begin{table}
+	\begin{center}
+    	\begin{tabular}{ | >{\centering\arraybackslash}m{1in} | >{\centering\arraybackslash}m{1in} | 
+    					   >{\centering\arraybackslash}m{1in} | >{\centering\arraybackslash}m{1in} |}
+    	\hline
+    	\textbf{Speed (km/t)}  	& \textbf{Time driving (min)} 	& \textbf{Time charging (min)}	& \textbf{Total time (min)} \\ \hline
+    	30 				& 1000					& 0  					& 1000				\\ \hline
+    	55 				& 545					& 90					& 635				\\ \hline
+    	80 				& 375					& 180					& 555				\\ \hline
+    	130				& 231 					& 270					& 501				\\ 
+    	\hline    
+    	\end{tabular}
+    	\end{center}
+    	\caption{Calculation of which speed is the optimal for driving 500 km fastest}
+		\label{table:500kmfastesttesla}
+\end{table}
+
+\subsection{The Charging time of electric vehicles}
+  
+There are different ways of getting an electric vehicles to a full charge. One way is to change the
+flat battery with a charged battery at a battery changing station.  Another way is to charge the flat 
+battery at home, at work or at a recharging station. Changing the flat battery to a charged one, can 
+take down to a couple of minutes at a battery changing station and it doesn't depend on size of the battery 
+or the current capacity of the battery. The battery charging time, on the other hand, depends on the battery 
+size. The bigger the battery is, the longer it takes to recharge it. Also, the more full the battery is, the 
+longer time it takes to charge it more. For example, it takes a lot longer time to charge the last 20 \% of 
+the battery than it takes to charge the first 20 \% of the battery.
+
+The charging time of the Tesla S model with 85 kWh battery is approximately given by the following function:
+
+\[f() = \frac{(\textit{unknown})}{(\textit{unknown})}\]
+
+%\subsubsection{Charging plug-in standards}
+
+
+
