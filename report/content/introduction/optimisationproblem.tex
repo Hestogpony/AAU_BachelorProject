@@ -1,0 +1,15 @@
+\section{The Optimisation problem}
+
+We intend to find the fastest path between two points, A and B, for electric vehicles. To find the 
+fastest path we need to measure time. Time can be spend on two things: driving on the road or on charging
+at a charging station if necessary. Since the charging times can vary a lot from charging station to charging station 
+perhaps it would be fastest to take a slower path if it had a faster charging station on it. Whether one path is 
+faster than another can be formulated as an optimisation problem:
+
+\[\displaystyle \sum_{i=1}^{n} \textit{Drivetime}[i] * k \displaystyle \sum_{j=1}^{n} \textit{Chargetime}[j]\]
+
+Where $\textit{Drivetime}[i]$ is the time it takes to pass road $i$, $k$ is an uncertainty constant,
+which we use because it is difficult to keep a constant speed. Finally, $\textit{Chargetime}[j]$ is the time
+spend charging on charge station $j$.
+
+%Min(Time(speed)) = Min(TimeSpendDriving(speed) + TimeSpendCharing(speed)) = Min
