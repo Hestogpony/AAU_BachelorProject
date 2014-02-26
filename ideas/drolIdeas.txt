@@ -3,6 +3,10 @@ Shortest-Path and Minimum-Delay Algorithms in Networks with Time-Dependent Edge-
 http://cs.ucsb.edu/~suri/cs231/Rlist/ordaRom.pdf
 http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5638983
 
+Tools:
+ADMB: tool for nonlinear optimization problems  
+
+
 path in G from s to t
 
 

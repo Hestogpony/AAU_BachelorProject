@@ -1,0 +1,157 @@
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C,Y,Z >|<A,B,C >∈ R∧ <A,Y,Z >∈ S}
+Select one:
+a. natural join Correct
+b. semi join
+c. outer join
+d. theta join
+
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C,X,Y,Z >|<A,B,C >∈ R∧ <X,Y,Z >∈ S}
+
+ 
+Select one:
+a. rename Incorrect
+b. project
+c. difference
+d. union
+e. Cartesian product correct
+f. select
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,C>|∃B(<A,B,C>∈ R)}
+Select one:
+a. select
+b. project Correct
+c. difference
+d. Cartesian product
+e. rename
+f. union
+
+Is the domain relational calculus a relationally complete language?
+Select one:
+True Correct
+False 
+
+A variable is free in a domain relational calculus expression if
+Select one or more:
+a. it is not quantified by a universal qualifier Correct
+b. it is used in a formula
+c. it is not quantified by an existential qualifier Correct
+
+s the domain relational calculus a
+
+Select one:
+a. declarative language (also called non-procedural) Correct
+b. functional language
+c. object-oriented language
+d. procedural language
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{< A, B, C > | < A, B, C > ∈ R ∧ B > 10}
+Select one:
+a. union
+b. project
+c. select Correct
+d. rename
+e. difference
+f. Cartesian product
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C,A,Y,Z>|<A,B,C>∈ R∧ <A,Y,Z>∈ S∧B<Y}
+Select one:
+a. semi join
+b. natural join
+c. theta join Correct
+d. outer join
+
+Safety of the domain relational calculus means?
+Select one:
+a. That it does not contain free variables
+b. That it only returns a finite number of tuples Correct
+c. That it only uses fundamental operators
+d. It can be translated to an SQL query and executed on a commercial DBMS
+e. That it contains at least two atoms
+
+
+
+Given R(A,B,C) and S(A,B,C), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C >|<A,B,C >∈ R∨<A,B,C >∈ S}
+
+ 
+Select one:
+a. select
+b. union Correct
+c. rename
+d. Cartesian product
+e. difference
+f. project
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C,A,Y,Z >|<A,B,C >∈ R∧ <A,Y,Z >∈ S}
+Select one or more:
+a. outer join Incorrect
+b. semi join
+c. theta join
+d. natural join
+Feedback
+The correct answer is: theta join
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,B,C >|<A,B,C >∈ R∧ <A,_,_>∈ S}
+Select one:
+a. natural join
+b. semi join
+c. theta join Incorrect
+d. outer join
+Feedback
+The correct answer is: semi join
+
+
+
+
+Given R(A,B,C) and S(A,Y,Z), which relational algebra operator does the following expression in domain relational calculus correspond to:
+
+{<A,Y,C>|<A,_,_>∈ R ∧ <A,Y,C>∈ S}
+Select one:
+a. theta join
+b. semi join Correct
+c. outer join
+d. natural join
+Feedback
+The correct answer is: semi join
+
+
+
+Given R(A,B,C) and S(A,B,C), which relational algebra operator does the following expression in domain relational calculus correspond to: {<A,B,C >|<A,B,C >∈ R ∧¬(<A,B,C >∈ S)}
+Select one:
+a. union
+b. select
+c. project
+d. rename
+e. Cartesian product
+f. difference Correct
+
