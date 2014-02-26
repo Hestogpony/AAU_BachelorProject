@@ -1,0 +1,72 @@
+Sikre:
+
+
+
+Prioriteret:
+SHORTEST PATH PROBLEMS WITH RESOURCE CONSTRAINTS
+https://docs.google.com/file/d/0B3p1p2KEeJ_gOTItR0FPMndNUmc/edit
+
+		 	 	 							
+The Shortest Path Problem Revisited: Optimal Routing for Electric Vehicles 
+https://docs.google.com/file/d/0B2BguibSzCJOSXc4eUtnRUNVYzg/edit (side 322)
+Anvender det generelle “constrained shortest path problem” til at finde en energioptimal rute for elbiler. Der indgår kapacitet som constraint, men der ses ellers udelukkende på regenerative breaking, i forhold til at gå fra 80km/t til 50 eller køre ned ad bakke.
+
+Tesla about charging of EVs using superchargers.
+http://www.teslamotors.com/supercharger
+
+Tesla forbrug:
+http://www.teslamotors.com/goelectric/efficiency 
+
+
+Eventuelle:
+
+Fast Shortest Path Algorithms for Large Road Networks: ftp://ftp.etsii.ull.es/pub/PRGCOM/trabajos/caminos_min/fast_shortest_path.pdf
+
+Super godt kapitel om Route Planning i Road Networks:
+http://algo2.iti.kit.edu/schultes/hwy/schultes_diss.pdf
+
+Analyse af state of the art shortest path algoritmer for road netværker (FRA 2012!!):
+http://vldb.org/pvldb/vol5/p406_lingkunwu_vldb2012.pdf
+
+Time-Parameterized Queries in Spatio-Temporal Databases:
+http://infolab.usc.edu/csci587/Fall2010/papers/Time-parameterized%20queries%20in%20spatio-temporal%20databases.pdf 
+
+Energy-optimal Routing for Electric Vehicles:
+http://link.springer.com/content/pdf/10.1007%2F978-3-642-16111-7_35.pdf 
+
+Customizable Route Planning in Road Networks?
+http://research.microsoft.com/pubs/198358/crp_web_130724.pdf
+Moderne ruteplanlægning, grundlæggende for Bing Maps.
+
+Scope-Based Route Planning
+https://docs.google.com/file/d/0B2BguibSzCJORFVXQkVDaGRvOVU/edit
+Effektiv ruteplanlægning, anvender sub-grafer, reduktion af grafer samt vægtning af veje i forhold til “størrelse”, så størrelsen på shortest path problemet bliver reduceret betydeligt. Resultatet er en sti der er optimeret efter en simpel, komfortabel og “naturlig” rute. Jo tættere på start og slut punktet veje er, jo mindre veje bliver tager i betragtning. “Store” veje som motorveje bliver eksempelvis vægtet højere, jo længere ruten er.
+
+Dynamic Scope-Based Dijkstra’s Algorithm
+http://arxiv.org/pdf/1201.2000.pdf
+Effektiv ruteplanlægning med forhold til skiftende vejforhold
+
+http://www.teslamotors.com/blog/model-s-efficiency-and-range
+Tesla motors about the charge of mile/kWh when the speed of the EV increases.
+
+Route Planning Algorithms for Car Navigation
+https://docs.google.com/file/d/0B2BguibSzCJORGJMVms1OG5TYUU/edit
+200 sider med mange tilgange
+
+Shortest-path and minimum-delay in networks with time dependent arc length
+http://cs.ucsb.edu/~suri/cs231/Rlist/ordaRom.pdf
+
+	 	
+Power quality of smart grids with Plug-in Electric Vehicles considering battery charging profile 	http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5638983
+
+The optimal sequenced route query:
+http://link.springer.com/article/10.1007%2Fs00778-006-0038-6
+	Som alternativ til Nearest Neighbours query - Der tages udgangspunkt i sekvenser, hvor man planlægger at nå to eller flere punkter på en rute med relationer. Eks. bank -> indkøb, hvor indkøb -> bank ikke fungere.
+
+On Trip Planning Queries in Spatial Databases:
+http://download.springer.com/static/pdf/702/bok%253A978-3-540-31904-7.pdf?auth66=1392817256_8ee3cdd2269d72b766dfbb977cbc4c1b&ext=.pdf
+	Som alternativ til Nearest Neighbours query - Der tages udgangspunkt i sekvenser, hvor man planlægger at nå to eller flere punkter på en rute med relationer. Eks. bank -> indkøb, hvor indkøb -> bank ikke fungere.
+
+
+http://industrial.panasonic.com/www-cgi/jvcr13pz.cgi?E+BA+3+ACA4001+NCR18650+7+WW
+Whitepaper for det batteri Tesla bruger
