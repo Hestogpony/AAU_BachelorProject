@@ -1,0 +1,14 @@
+*.aux
+*.log
+*.out
+report/*.pdf
+exam/*.pdf
+*.toc
+*.bak
+*.synctex.gz
+*.bbl
+*.blg
+*.class
+*.nav
+*.snm
+*.DS_Store
