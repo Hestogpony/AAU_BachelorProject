@@ -3,9 +3,9 @@ Sikre:
 
 
 Prioriteret:
+
 SHORTEST PATH PROBLEMS WITH RESOURCE CONSTRAINTS
 https://docs.google.com/file/d/0B3p1p2KEeJ_gOTItR0FPMndNUmc/edit
-
 		 	 	 							
 The Shortest Path Problem Revisited: Optimal Routing for Electric Vehicles 
 https://docs.google.com/file/d/0B2BguibSzCJOSXc4eUtnRUNVYzg/edit (side 322)
@@ -17,6 +17,9 @@ http://www.teslamotors.com/supercharger
 Tesla forbrug:
 http://www.teslamotors.com/goelectric/efficiency 
 
+Engineering Route Planning Algorithms 
+https://docs.google.com/file/d/0B2BguibSzCJOY0JWUmE2ZXptN2s/edit?usp=drive_web (s. 117–139)
+Giver et godt overblik over speed-up teknikker og deres betydning.
 
 Eventuelle:
 
