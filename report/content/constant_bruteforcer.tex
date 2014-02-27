@@ -27,7 +27,6 @@ $max_capacity kwh$
 \end{algorithm}
 
 \begin{algorithm}
-\caption{path-minimal-time}
 \begin{algorithmic}[1]
 \Procedure{reachable-nodes}{$P, v$}
 	\State $distance \gets 0$
@@ -35,7 +34,7 @@ $max_capacity kwh$
 	\State $drivabledist \gets v.km/kWh \times v.current_capacity$
 	\While{$distance < drivabledist$}
 		\For{\textbf{each} $edge$ \textbf{in} $P$}
-			\State $distance \gets (P.next(), P.next()).dist)
+			\State $distance \gets (P.next(), P.next()).dist)$
 		\EndFor
 	\EndWhile
 \State \textbf{return} $b$

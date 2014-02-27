@@ -41,13 +41,43 @@ without charging stations.
 The Algorithm is given by the following pseudo code:
 
 \begin{algorithm}
-\begin{algorithmic}
- %\Function{Fastest-path}{$G, s, t, \textit{curBattery}, \textit{maxBattery}$}
-\If {$t \in verticesAvaiable(s, \textit{currentBattery})$}
- %\State $\textit{drive to} t$
- %\EndFunction
+\begin{algorithmic}[1]
+\Procedure{reachableNodes}{$P[0...n], \textit{vehicle}, \textit{energy}$}	
+	\For{$x = 0$ to $n-1$}
+		\State $\textit{tempDistance} = Edge(P[x], P[x+1]).\textit{distance}$
+		\If {$(\textit{tempDistance} / \textit{vehicle.kmPerKWh}) < \textit{energy}$}
+			\State $\textit{nodes.add}(P[x+1])$
+		\EndIf	
+	\EndFor
+	\State \textbf{Return} $\textit{nodes}$
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[H]
+\Procedure{Fastest-Path}{$P[0...n], \textit{vehicle}, \textit{s}, \textit{t}$}
+	\State $\textit{driveTime} = ???!???$
+	\State $\textit{chargeTime} = 0$	
+	\State $\textit{currentNode} = s$
+	\While{$\textit{currentNode} != t$}
+		\If {$\textit{vehicle.currentBattery} == \textit{vehicle.maxBattery}$}
+			\State $\textit{currentNode} = \textit{FastestChargeStation}(
+					\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.currentBattery})$ 		
+		\ElsIf {$\textit{currentNode.speed} < \textit{FastestChargeStation}(\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle),\textit{vehicle.currentBattery}$}
+			\State $\textit{currentNode} = \textit{FastestChargeStation}(\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.currentBattery})$
+%		\Else
+%			\State $\textit{chargeNode} = \textit{FastestChargeStation}(
+%					\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.maxBattery})$
+%			\State $\textit{kWhToCharge = (P[\textit{currentNode,...,chargeNode}] / \textit{vehicle.kmPerKWh}) - \textit{vehicle.currentBattery}}$
+%			\State $\textit{chargeTime} += (\textit{kWhToCharge} / \textit{chargeNode.speed}$
+		\EndIf
+	\EndWhile
+	\State \textbf{Return} $\textit{driveTime} + \textit{chargeTime}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 
 \begin{figure}
 \centering
