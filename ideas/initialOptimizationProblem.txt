@@ -1,0 +1,10 @@
+minimize: sum{j=1, n} (C[j]/y[j]) + sum{i=1, n} z[i]
+subject to: 
+	forall m in 1..n 0 <= sum{i=1,m} (integral{batMin, z[i]} (f(x) - integral{0, batMin} (f(x))) - sum{j=1, m} (C[j]/g(y[j])) <= batteryCap
+	forall m in 1..n sum{j=1, m} (C[j]/g(y[j])) <= sum{i=1,m} (integral{batMin, z[i]} (f(x) - integral{0, batMin} (f(x))) 
+
+n = number of nodes
+C[1..n] = length of roads
+y[1..n], z[1..n] = unknow variables
+f(x) = chargeing function
+g(y) = Power consumption function 

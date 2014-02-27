@@ -1,6 +1,8 @@
 *.aux
 *.log
 *.out
+*.synctex.gz
+.DS_Store
 report/*.pdf
 exam/*.pdf
 *.toc
@@ -11,4 +13,4 @@ exam/*.pdf
 *.class
 *.nav
 *.snm
-*.DS_Store
+*.pyc

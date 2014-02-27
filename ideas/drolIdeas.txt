@@ -6,6 +6,9 @@ http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%
 Tools:
 ADMB: tool for nonlinear optimization problems  
 
+Research more about: 
+Lagrange Multiplier method
+
 
 path in G from s to t
 
