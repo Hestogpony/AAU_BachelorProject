@@ -40,40 +40,58 @@ without charging stations.
 
 The Algorithm is given by the following pseudo code:
 
+To get the shortest path, run \texttt{FASTEST-PATH} for each simple path in a graph, then take the max of these.
+
 \begin{algorithm}
 \begin{algorithmic}[1]
-\Procedure{reachableNodes}{$P[0...n], \textit{vehicle}, \textit{energy}$}	
-	\For{$x = 0$ to $n-1$}
-		\State $\textit{tempDistance} = Edge(P[x], P[x+1]).\textit{distance}$
-		\If {$(\textit{tempDistance} / \textit{vehicle.kmPerKWh}) < \textit{energy}$}
-			\State $\textit{nodes.add}(P[x+1])$
+\Procedure{reachables}{$P[0...n], \textnormal{v}, \textnormal{energy}$}	
+	\For{$x \gets 0$ to $n-1$}
+		\State $\textnormal{tempDistance} \gets Edge(P[x], P[x+1]).\textnormal{distance}$
+		\If {$(\textnormal{tempDistance} / \textnormal{v.kmPerKWh}) < \textnormal{energy}$}
+			\State $\textnormal{nodes.add}(P[x+1])$
 		\EndIf	
 	\EndFor
-	\State \textbf{Return} $\textit{nodes}$
+	\State \textbf{Return} $\textnormal{nodes}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Procedure{pathLength}{$P[0...n]$} 
+  \State $\textnormal{travelTime} \gets 0$ 
+  \For{$x \gets 0$ to $n-1$}
+    \State $\textnormal{travelTime}$ $\gets \textnormal{travelTime} + Edge(P[x], P[x+1]).\textnormal{distance} / Edge(P[x], P[x+1]).\textnormal{speedLimit}$
+  \EndFor
+  \State \textbf{Return} $\textnormal{travelTime}$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
 \begin{algorithmic}[H]
-\Procedure{Fastest-Path}{$P[0...n], \textit{vehicle}, \textit{s}, \textit{t}$}
-	\State $\textit{driveTime} = ???!???$
-	\State $\textit{chargeTime} = 0$	
-	\State $\textit{currentNode} = s$
-	\While{$\textit{currentNode} != t$}
-		\If {$\textit{vehicle.currentBattery} == \textit{vehicle.maxBattery}$}
-			\State $\textit{currentNode} = \textit{FastestChargeStation}(
-					\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.currentBattery})$ 		
-		\ElsIf {$\textit{currentNode.speed} < \textit{FastestChargeStation}(\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle),\textit{vehicle.currentBattery}$}
-			\State $\textit{currentNode} = \textit{FastestChargeStation}(\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.currentBattery})$
-%		\Else
-%			\State $\textit{chargeNode} = \textit{FastestChargeStation}(
-%					\textit{reachableNodes}(P[\textit{currentNode}...n], \textit{vehicle}, \textit{vehicle.maxBattery})$
-%			\State $\textit{kWhToCharge = (P[\textit{currentNode,...,chargeNode}] / \textit{vehicle.kmPerKWh}) - \textit{vehicle.currentBattery}}$
-%			\State $\textit{chargeTime} += (\textit{kWhToCharge} / \textit{chargeNode.speed}$
+\Procedure{Fastest-Path}{$P[0...n], \textnormal{v}, \textnormal{s}, \textnormal{t}$}
+	\State $\textnormal{driveTime} \gets \textnormal{pathLength(P[0...n])}$
+	\State $\textnormal{chargeTime} \gets 0$	
+	\State $\textnormal{currentNode} \gets \textnormal{s}$
+  \State $\textnormal{curEnergy} \gets \textnormal{v.curBat}$
+	\While{$\textnormal{currentNode} \neq \textnormal{t}$}
+    \State $\textnormal{bestNode} \gets \textnormal{BCS}(\textnormal{reachables}(P[\textnormal{currentNode}...n], \textnormal{v},\textnormal{curEnergy}))$
+		\If {$\textnormal{curEnergy} = \textnormal{v.maxBat}$}
+      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - \textnormal{pathLength}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh}$
+			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
+
+		\ElsIf {$\textnormal{currentNode.speed} < \textnormal{bestNode}$}
+      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - \textnormal{pathLength}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh}$
+			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
+		\Else
+			\State $\textnormal{chargeNode} \gets \textnormal{BCS}(
+					\textnormal{reachables}(P[\textnormal{currentNode}...n], \textnormal{v}, \textnormal{v.maxBat})$
+			\State $\textnormal{kWhToCharge} \gets (P[\textnormal{currentNode,...,chargeNode}] / \textnormal{v.kmPerKWh}) - \textnormal{curEnergy}$
+			\State $\textnormal{chargeTime} \gets \textnormal{chargeTime} + (\textnormal{kWhToCharge} / \textnormal{chargeNode.speed}$
 		\EndIf
 	\EndWhile
-	\State \textbf{Return} $\textit{driveTime} + \textit{chargeTime}$
+	\State \textbf{Return} $\textnormal{driveTime} + \textnormal{chargeTime}$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
