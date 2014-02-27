@@ -4,12 +4,11 @@ We intend to find the fastest path between two points, S and T, for an electric 
 
 \begin{equation}
 \begin{aligned}
-& \underset{x_{1 \dots n},y_{1 \dots n}}{\text{minimize}}
-& & \sum_{j=1}^{n} \frac{C_j}{x_j} + \sum_{i=1}^{n} y_i \\
+& \underset{x_{1 \dots n},y_{1 \dots n}}{\text{minimize}} & & \sum_{j=1}^{n} \frac{C_j}{x_j} + \sum_{i=1}^{n} y_i \\
 & \text{subject to} 
-& & \forall{m \in 1 \dots n} 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
+& & \forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
 &&& \forall{m \in 1 \dots n} \sum_{j=1}^{m} C_j*g(y_j) \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) \\
-&&& \forall{j \in 1 \dots n} lb_j \leq x_j \leq up_j
+&&& \forall{j \in 1 \dots n} lb_j \; \leq x_j \leq up_j
 \end{aligned}
 \end{equation}
 
@@ -20,6 +19,7 @@ $x_{1 \dots n}, y_{1 \dots n}$ are the unknown variables, x is speed and y is ti
 $f_{i}(z)$ is the charging function for charging station $i$ \\
 $g(y)$ is the power consumption function of the EV \\
 $lb_j, up_j$ is the lower and upper bound for the speed at $x_j$  \\
+
 
 
 %Min(Time(speed)) = Min(TimeSpendDriving(speed) + TimeSpendCharing(speed)) = Min
