@@ -3,4 +3,14 @@
 *.out
 *.synctex.gz
 .DS_Store
-
+report/*.pdf
+exam/*.pdf
+*.toc
+*.bak
+*.synctex.gz
+*.bbl
+*.blg
+*.class
+*.nav
+*.snm
+*.pyc

@@ -1,0 +1,69 @@
+\section{A Simpler Problem}
+
+To make the problem of finding the fastest path between two points on a road network simpler, 
+we assume the speed of the electric vehicle is constant and we assume the charging time at
+charge stations is constant. 
+
+\subsection{The graph representation}
+We represent the road network as a graph where edges represents the roads and vertices represents
+road intersections or charge stations. An edge is a double of time and cost:
+
+\[E = (\textit{TIME}, \textit{COST}) \]
+
+$\textit{TIME}$ represents the time it takes to pass an edge. $\textit{TIME}$ is the distance of
+the road divided by the speed, but as mentioned earlier, for this simpler problem we assume
+speed is constant, so $\textit{TIME}$ is given solely by the distance of the road. $\textit{COST}$ 
+represents the energy cost for the an edge. $\textit{COST}$ is the energy usage per distance 
+times the distance. Since the energy usage per distance is also given by the speed, this value
+will be constant and so $\textit{COST}$ is solely given by the distance of the edge.
+
+A vertex is a single of time: 
+ 
+\[V = (\textit{TIME})\]
+
+$\textit{TIME}$ is the time it takes to charge an electric vehicle one unit of energy e.g. minutes 
+per kWh. The time it take to charge an electric vehicle one unit of energy depends on the current
+capacity of the electric vehicle, but as mentioned earlier, for simplicity, we assume charging 
+time is constant no matter the current capacity of the battery.
+
+\subsection{A simple example}
+
+We want to give a simple example of how an algorithm might work, for finding the fastest path 
+between two points when the charging time is constant and the speed is constant. The example is
+illustrated in \ref{fig:simpleexample}. We want to find the fastest path from $s$ to $t$. The
+electric vehicle used has a battery capacity of 50 kWh. The unit of $\textit{TIME}$ for vertices
+is minutes/kWh, the unit of $\textit{TIME}$ for edges is minutes and the unit of $\textit{COST}$
+for edges is kWh. E.g. the edge (s, a) takes 10 minutes and costs 10 kWh to pass, and the charge
+station at vertex a charges with a speed of 3 minutes/kWh. Vertices with the value $\infty$, are
+considered intersections of roads and they are without charging stations.
+
+   
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+  [scale=.4,>=stealth',shorten >=1pt,auto,node distance=2.5cm,
+  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\scriptsize\bfseries}]
+  \node[main node] (1) {s};
+  \node[main node] (2) [below right of=1] {a (3)};
+  \node[main node] (3) [above right of=2] {b ($\infty$)};
+  \node[main node] (4) [below right of=3] {c (2)};
+  \node[main node] (5) [above right of=4] {d ($\infty$)};
+  \node[main node] (6) [below right of=5] {e (4)};
+  \node[main node] (7) [above right of=6] {f ($\infty$)};
+  \node[main node] (8) [below right of=7] {g (2)};
+  \node[main node] (9) [above right of=8] {t};
+
+  \path[every node/.style={font=\sffamily\tiny}] 
+  (1) edge node [left] {(10, -10)} (2)
+  (2) edge node [left] {(10, -10)} (3)
+  (3) edge node [left] {(20, -20)} (4)
+  (4) edge node [left] {(20, -20)} (5)
+  (5) edge node [left] {(30, -30)} (6)
+  (6) edge node [left] {(10, -10)} (7)
+  (7) edge node [left] {(40, -40)} (8)
+  (8) edge node [left] {(10, -10)} (9);
+\end{tikzpicture}
+\caption{Figure: Illustration of a simple road network with start point $s$ and end point $t$}
+\label{fig:simpleexample}
+\end{figure}
