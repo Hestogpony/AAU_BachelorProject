@@ -1,6 +1,6 @@
 \section{The Optimisation problem}
 
-We intend to find the fastest path between two points, S and T, for an electric vehicles. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical tearms if we represent roads as vertices V and charging stations as nodes N, if a charging station have a charging speed of 0 it is just an intersection. Then the problem of finding the fastest path between S and T. Finding the best path among the set of simple paths, the best path is the one which is fastest. The problem of finding out how fast a path is can be expressed as an optimisation problem. 
+We intend to find the fastest path between two points, S and T, for an electric vehicles. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical therms if we represent roads as vertices V and charging stations as nodes N, if a charging station have a charging speed of 0 it is just an intersection. Then the problem of finding the fastest path between S and T is the same as finding the best path among the set of simple paths. The problem of finding the  fastest path can be expressed as an optimisation problem.
 
 \begin{equation}
 \begin{aligned}
@@ -8,9 +8,9 @@ We intend to find the fastest path between two points, S and T, for an electric 
 & \text{subject to} 
 & & \forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
 &&& \forall{m \in 1 \dots n} \sum_{j=1}^{m} C_j*g(y_j) \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) \\
-&&& \forall{j \in 1 \dots n} lb_j \; \leq x_j \leq up_j
+&&& \forall{j \in 1 \dots n} \; lb_j \leq x_j \leq up_j
 \end{aligned}
-\end{equation}
+\end{equation}\label{eq:optipro}
 
 Where: \\
 $n$ is the number of nodes/edges in the path \\
@@ -19,6 +19,11 @@ $x_{1 \dots n}, y_{1 \dots n}$ are the unknown variables, x is speed and y is ti
 $f_{i}(z)$ is the charging function for charging station $i$ \\
 $g(y)$ is the power consumption function of the EV \\
 $lb_j, up_j$ is the lower and upper bound for the speed at $x_j$  \\
+
+\subsection{Techniques to help solving the problem}
+To help solving the optimisation problem we think it would be intersting to further investagate the following techniques: branch and bound and Lagrange multipliers.
+A branch-and-bound algorithm can be used to systematically enumerate  of all candidate solutions, where large subsets of candidates are discarded, by using upper and lower estimated bounds of the quantity being optimized. 
+It is not yet clear if the problem can be modified so we can use Lagrange multipliers yet. In our current optimization problem equation \ref{eq:optipro} we are using constraints within ranges, where a problem being solved using Lagrange multipliers are subject to equality constraints.
 
 
 
