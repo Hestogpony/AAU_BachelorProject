@@ -38,9 +38,54 @@ for edges is minutes and the unit of $\textit{COST}$ for edges is kWh. E.g. the 
 3 minutes/kWh. Vertices with the value $\infty$, are considered intersections of roads and they are 
 without charging stations.  
 
-The Algorithm is given by the following pseudo code:
+The Algorithm for finding the fastest path is called \texttt{FASTEST-PATH} and it's given in \ref{alg:fastestpath}.
+The main while loop runs until the current node is $t$, since this is where we want to get to. The
+$\textnormal{currentNode}$ variable always contains the node we are currently at. The first if-statement checks 
+whether our battery is full. If this is the case then we will always drive. The else if-statement checks if there 
+is a faster charge station reachable from the node we are currently at with our current battery capacity
+($\textnormal{curEnergy}$). If this is the case we will drive to this charge station instead. The else-statement
+checks whether which charge stations is the best, if we had a full battery capacity ($\textnormal{v.maxBat}$) and
+we then charge just enough to reach this charge station.
 
-To get the shortest path, run \texttt{FASTEST-PATH} for each simple path in a graph, then take the max of these.
+There are several functions inside \texttt{FASTEST-PATH}, namely: \texttt{REACHABLES}, \texttt{PATHLENGTH} and 
+\texttt{BCS}. 
+
+\texttt{REACHABLES} takes a path, $P$, a vehicle, $\textnormal{v}$, and a battery capacity, 
+$\textnormal{v.energy}$ as input and it output a list of nodes, $\textnormal{nodes}$, which we can reach from 
+the node we are currently at. 
+
+\texttt{PATHLENGTH} takes a path, $P$ as input and outputs the time it takes to get through this path.
+
+\texttt{BCS} takes a list of nodes as input and outputs the node which is the fastest charges station. 
+  
+\begin{algorithm}
+\begin{algorithmic}[H]
+\Procedure{Fastest-Path}{$P[0...n], \textnormal{v}, \textnormal{s}, \textnormal{t}$}
+	\State $\textnormal{driveTime} \gets \textnormal{PATHLENGTH(P[0...n])}$
+	\State $\textnormal{chargeTime} \gets 0$	
+	\State $\textnormal{currentNode} \gets \textnormal{s}$
+  \State $\textnormal{curEnergy} \gets \textnormal{v.curBat}$
+	\While{$\textnormal{currentNode} \neq \textnormal{t}$}
+    \State $\textnormal{bestNode} \gets \textnormal{BCS}(\textnormal{REACHABLES}(P[\textnormal{currentNode}...n], \textnormal{v},\textnormal{curEnergy}))$
+		\If {$\textnormal{curEnergy} = \textnormal{v.maxBat}$}
+      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - (\textnormal{PATHLENGTH}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh})$
+			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
+
+		\ElsIf {$\textnormal{currentNode.speed} < \textnormal{bestNode.speed}$}
+      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - (\textnormal{PATHLENGTH}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh})$
+			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
+		\Else
+			\State $\textnormal{chargeNode} \gets \textnormal{BCS}(
+					\textnormal{REACHABLES}(P[\textnormal{currentNode}...n], \textnormal{v}, \textnormal{v.maxBat})$
+			\State $\textnormal{kWhToCharge} \gets (P[\textnormal{currentNode,...,chargeNode}] / \textnormal{v.kmPerKWh}) - \textnormal{curEnergy}$
+			\State $\textnormal{chargeTime} \gets \textnormal{chargeTime} + (\textnormal{kWhToCharge} / \textnormal{chargeNode.speed}$
+		\EndIf
+	\EndWhile
+	\State \textbf{Return} $\textnormal{driveTime} + \textnormal{chargeTime}$
+\EndProcedure
+\end{algorithmic}
+\label{alg:fastestpath}
+\end{algorithm}
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -68,33 +113,7 @@ To get the shortest path, run \texttt{FASTEST-PATH} for each simple path in a gr
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
-\begin{algorithmic}[H]
-\Procedure{Fastest-Path}{$P[0...n], \textnormal{v}, \textnormal{s}, \textnormal{t}$}
-	\State $\textnormal{driveTime} \gets \textnormal{pathLength(P[0...n])}$
-	\State $\textnormal{chargeTime} \gets 0$	
-	\State $\textnormal{currentNode} \gets \textnormal{s}$
-  \State $\textnormal{curEnergy} \gets \textnormal{v.curBat}$
-	\While{$\textnormal{currentNode} \neq \textnormal{t}$}
-    \State $\textnormal{bestNode} \gets \textnormal{BCS}(\textnormal{reachables}(P[\textnormal{currentNode}...n], \textnormal{v},\textnormal{curEnergy}))$
-		\If {$\textnormal{curEnergy} = \textnormal{v.maxBat}$}
-      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - \textnormal{pathLength}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh}$
-			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
 
-		\ElsIf {$\textnormal{currentNode.speed} < \textnormal{bestNode}$}
-      \State $\textnormal{curEnergy} \gets \textnormal{curEnergy} - \textnormal{pathLength}(P[\textnormal{currentNode}...\textnormal{bestNode})/\textnormal{v.kmPerKWh}$
-			\State $\textnormal{currentNode} \gets \textnormal{bestNode}$
-		\Else
-			\State $\textnormal{chargeNode} \gets \textnormal{BCS}(
-					\textnormal{reachables}(P[\textnormal{currentNode}...n], \textnormal{v}, \textnormal{v.maxBat})$
-			\State $\textnormal{kWhToCharge} \gets (P[\textnormal{currentNode,...,chargeNode}] / \textnormal{v.kmPerKWh}) - \textnormal{curEnergy}$
-			\State $\textnormal{chargeTime} \gets \textnormal{chargeTime} + (\textnormal{kWhToCharge} / \textnormal{chargeNode.speed}$
-		\EndIf
-	\EndWhile
-	\State \textbf{Return} $\textnormal{driveTime} + \textnormal{chargeTime}$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
 
 
 \begin{figure}
