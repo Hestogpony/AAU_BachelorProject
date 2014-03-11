@@ -1,6 +1,23 @@
 \section{The Optimisation problem}
 
-We intend to find the fastest path between two points, S and T, for an electric vehicles. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical tearms if we represent roads as vertices V and charging stations as nodes N, if a charging station have a charging speed of 0 it is just an intersection. Then the problem of finding the fastest path between S and T. Finding the best path among the set of simple paths, the best path is the one which is fastest. The problem of finding out how fast a path is can be expressed as an optimisation problem. 
+We intend to find the fastest path between two points, S and T, for an electric vehicles. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical tearms if we represent roads as vertices V and charging stations as nodes N, if a charging station have a charging speed of 0 it is just an intersection. In plane test solving the problem of finding the fastest path in a graph is: 
+minimization the sum of time spend driving + the sum of time spend charging. 
+\begin{equation}
+\begin{aligned}
+& \underset{x_{1 \dots n},y_{1 \dots n}}{\text{minimize}}
+& & \sum_{j=1}^{n} \frac{C_j}{x_j} + \sum_{i=1}^{n} y_i \\
+\end{aligned}
+\end{equation}\label{eq:objfunction}
+Where $x_j$ is the speed(km/h) of the Ev driving when driving road segment $j$, $C_j$ is the distance(km) of road segment $j$, which mean $\frac{C_j}{x_j}$ is time in hours. $y_i$ is the time spend at charging station $i$.  
+
+For a solution to be feasible the following constrains need to be complied with: 
+The most obvious constraint is the path constraint, the fastest path needs to be a simple path. 
+\begin{equation}
+\begin{aligned}
+& y_0 = s \\
+& & y_n = t \\
+\end{aligned}
+\end{equation}\label{eq:pathconstration} 
 
 \begin{equation}
 \begin{aligned}
