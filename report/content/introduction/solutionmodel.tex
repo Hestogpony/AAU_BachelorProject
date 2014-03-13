@@ -1,0 +1,10 @@
+\section{Database pruning}
+To speed up the computation time of the fastest path algorithm a good idea is to decrease the size of the input as much as posible, before any expensive calculations are performed. As mentioned in the optimization problem \ref{eq:optiproblem} the solution needs to be a path, which means one way to solve the problem is to find all simple paths from s to t and then solve each of theis paths optimally and select the fastest. The method of finding all paths and solving them optimally is how ever really expensive and though it might be posible, it is definitely not a good solution. Inorder to lower the amount of paths needed to be solved, pruning can be useful if performed carefully.  
+Initially one can find a path $P$ from s to t, and solve it optimally. Solving 
+$P$ optimally will return the time it will take to follow this path is $T_p$. We then 
+observe that if another path $p'$ is driven with max speed ignoring the energy constraint in time $T^1$. If $T < T^1$ we can simply ignore the path, since the actual time used to drive the path will be more then $T^1$.
+When we have all all the paths where $T^1 \leq T$ when ever a path faster path is found 
+we update $T$ and ignore all paths with $T^1 > T$. 
+
+\section{Linearization}
+Linearization is a way of finding linear approximation, of a nonelinear graph. Linearization might be useful in our project since our optimization problem \ref{eq:optiproblem} uses two nonlinear function $g(y)$ and $f(z)$, which is the only nonlinear part of the optimization problem. When linearization is used the optimization problem can be solved as a linear programming problem. 
