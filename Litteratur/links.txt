@@ -17,6 +17,9 @@ http://www.teslamotors.com/supercharger
 Tesla forbrug:
 http://www.teslamotors.com/goelectric/efficiency 
 
+Constraint Maximum flow, for convex function: Section 1, 4, 5 er lige sådan vi skal løse fastest path imo. 
+http://dspace.mit.edu/bitstream/handle/1721.1/2480/SWP-3587-28521208.pdf
+
 Engineering Route Planning Algorithms 
 https://docs.google.com/file/d/0B2BguibSzCJOY0JWUmE2ZXptN2s/edit?usp=drive_web (s. 117–139)
 Giver et godt overblik over speed-up teknikker og deres betydning.

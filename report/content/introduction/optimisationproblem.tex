@@ -1,28 +1,50 @@
 \section{The Optimisation problem}
 
-We intend to find the fastest path between two points, S and T, for an electric vehicles. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical tearms if we represent roads as vertices V and charging stations as nodes N, if a charging station have a charging speed of 0 it is just an intersection. Then the problem of finding the fastest path between S and T. Finding the best path among the set of simple paths, the best path is the one which is fastest. The problem of finding out how fast a path is can be expressed as an optimisation problem. 
-
+We intend to find the fastest path between two points, s and t, for an electric vehicle. To find the fastest path we need to measure time. Time can be spend on two things: driving or charging. Since the charging times can vary a lot from charging station to charging station perhaps it would be fastest to take a slower path if it had a faster charging station on it. In more mathematical terms if we represent roads as vertices V and charging stations as edges E, if a charging station have a charging speed of 0 it is just an intersection. In plane test solving the problem of finding the fastest path in a graph is: 
+minimizing the sum of time spend driving + the sum of time spend charging. 
 \begin{equation}
 \begin{aligned}
 & \underset{x_{1 \dots n},y_{1 \dots n}}{\text{minimize}}
 & & \sum_{j=1}^{n} \frac{C_j}{x_j} + \sum_{i=1}^{n} y_i \\
-& \text{subject to} 
-& & \forall{m \in 1 \dots n} 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
-&&& \forall{m \in 1 \dots n} \sum_{j=1}^{m} C_j*g(y_j) \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} f_i(z) - \int_{0}^{bat} f_i(z)\right) \\
-&&& \forall{j \in 1 \dots n} lb_j \leq x_j \leq up_j
 \end{aligned}
-\end{equation}\label{eq:optipro}
+\end{equation}\label{eq:objfunction}
+Where $x_j$ is the speed(km/h) of the EV driving when driving road segment $j$, $C_j$ is the distance(km) of road segment $j$, which means $\frac{C_j}{x_j}$ is time in hours. $y_i$ is the time spend at charging station $i$.  
 
-Where: \\
-$n$ is the number of nodes/edges in the path \\
-$C_{1 \dots n}$ is the length of the roadsegments \\
-$x_{1 \dots n}, y_{1 \dots n}$ are the unknown variables, x is speed and y is time spend charging \\
-$f_{i}(z)$ is the charging function for charging station $i$ \\
-$g(y)$ is the power consumption function of the EV \\
-$lb_j, up_j$ is the lower and upper bound for the speed at $x_j$  \\
+For a solution to be feasible the following constrains need to be complied with: 
+The most obvious constraint is the path constraint, the fastest path needs to be a path. 
+\begin{gather}
+e_1 = s \\
+e_n = t \\
+\forall{m \in 1 \dots n-1} \; (e_m, e_{m+1}) \in E 
+\end{gather}\label{eq:pathconstraint} 
+S and  t is the start and target node in the graph. E is the edges of the input graph.  
+The feasibility of the solution is also bound by different physical factors, e.g. the amount of energy in the battery must be with the range of the battery's capacity and 0, further one can not charge for a negative time period. Lastly the electric vehicle need to drive within a specific speed range.     
+
+\begin{gather}
+\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
+\forall{j \in 1 \dots n} \; lb_j \leq x_j \leq up_j \\
+\forall{i \in 1 \dots n} \; y_i \geq 0
+\end{gather}\label{eq:physicalconstraints}
+$e_i.f(z)$ is the charging function for the charge station located at edge i. $g(y_j)$ is the power consumption function. BatteryCapacity is the capacity of the EV's battery. 
+$lb_j$ is the lower bound for the speed of the EV, $ub_j$ is the upper bound for the speed of the EV on road segment $j$. $bat$ is the amount of minutes the EV would have need to charge at the charging station it is currently at in order to have put the amount of kWh into the battery it has at arrival. When all of the above equations are combined we have the following optimization problem. 
+\begin{equation}
+\begin{aligned}
+&\underset{x_{1 \dots n},y_{1 \dots n}}{\text{minimize}}
+& &\sum_{j=1}^{n} \frac{C_j}{x_j} + \sum_{i=1}^{n} y_i \\
+&subject to: \\
+&&&e_1 = s \\
+&&&e_n = t \\
+&&&\forall{m \in 1 \dots n-1} \; (e_m, e_{m+1}) \in E \\
+&&&\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
+&&&\forall{j \in 1 \dots n} \; lb_j \leq x_j \leq up_j \\
+&&&\forall{i \in 1 \dots n} \; y_i \geq 0 
+\end{aligned}
+\end{equation} \label{eq:optiproblem}
+The unknown parameters of the optimization problem is $x_{1\dots n}$ and $y_{1\dots n}$. 
+
 
 \subsection{Techniques to help solving the problem}
-To help solving the optimisation problem we think it would be intersting to further investagate the following techniques: branch and bound and Lagrange multipliers.
+To help solving the optimisation problem we think it would be interesting to further investigate the following techniques: branch and bound and Lagrange multipliers.
 A branch-and-bound algorithm can be used to systematically enumerate  of all candidate solutions, where large subsets of candidates are discarded, by using upper and lower estimated bounds of the quantity being optimized. 
 It is now yet clear if the problem can be modified so we can use Lagrange multipliers yet, in our current optimization problem equation \ref{eq:optipro} we are using constrained within ranges, where a problem being solved using Lagrange multipliers are subject to equality constraints.
 

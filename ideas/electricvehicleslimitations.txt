@@ -1,0 +1,28 @@
+
+The limitations of electric vehicles in 2014:
+
+	Nissan Leaf:
+		Range: 100-150 km on a full charged battery
+		Top speed: 144 km/h
+		Battery size: 24 kWh
+		Recharging time:
+			Home: 6-7 hours
+			Turbo-charger: 25-30 minutes for a 80 % charged battery
+		Price: 253.690,- kr. (With battery and installation)
+	
+	Recharging times in general:
+		Depends very much on the battery size and the country you live in, but some approximate numbers:
+			Level 1 station: 15 hours for 0 to 100 % (120 volts, 15 to 20 amps)
+			Level 2 station: 4 hours for 0 to 100 % (240 volts, 30 amps)
+			Level 3 station: 30 minutes for 0 to 80 % (480 volts, 125 amps):
+				There are two different and competing standards for level 3 stations: J1772 Combo ports and CHAdeMO ports
+				The limitation of only recharging to 80 % is done to prevent the battery from being damaged.
+	
+		Tesla S-models:
+		
+			Level 1 Tesla station: 88 hours for 0 to 100 % (120 volts) 
+			Level 2 Tesla station: 8,5 hours for 0 to 100 % (240 volts)
+			Level 3 Tesla station: 1 hour for 0 to 100 %
+			
+		
+			
