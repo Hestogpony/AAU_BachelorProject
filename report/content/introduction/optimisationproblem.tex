@@ -21,7 +21,7 @@ S and  t is the start and target node in the graph. E is the edges of the input 
 The feasibility of the solution is also bound by different physical factors, e.g. the amount of energy in the battery must be with the range of the battery's capacity and 0, further one can not charge for a negative timeperiod. Lastly the EV need to drive within a specific speed range.     
 
 \begin{gather}
-\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
+\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(x_j) \leq batteryCapacity \\
 \forall{j \in 1 \dots n} \; lb_j \leq x_j \leq up_j \\
 \forall{i \in 1 \dots n} \; y_i \geq 0
 \end{gather}\label{eq:physicalconstraints}
@@ -35,7 +35,7 @@ $lb_j$ is the lower bound for the speed of the EV, $ub_j$ is the upper bound for
 &&&e_1 = s \\
 &&&e_n = t \\
 &&&\forall{m \in 1 \dots n-1} \; (e_m, e_{m+1}) \in E \\
-&&&\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(y_j) \leq batteryCapacity \\
+&&&\forall{m \in 1 \dots n} \; 0 \leq \sum_{i=1}^{m} \left( \int_{bat}^{y_i} e_i.f(z) \right) - \sum_{j=1}^{m} C_j*g(x_j) \leq batteryCapacity \\
 &&&\forall{j \in 1 \dots n} \; lb_j \leq x_j \leq up_j \\
 &&&\forall{i \in 1 \dots n} \; y_i \geq 0 
 \end{aligned}
