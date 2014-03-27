@@ -31,7 +31,7 @@ class OSMGraph (sax.ContentHandler):
         self.name = ''
     
     def connect(self):
-        return psycopg2.connect(database="osmgraph",port='5432', host='127.0.0.1', user="mikkel", password="syrlinger")
+        return psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.80', user="d609f14", password="cocio")
 
     def startElement (self, name, attrs):
         if name == 'node' and attrs['id'] in self.intersections:

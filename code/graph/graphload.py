@@ -19,8 +19,8 @@ class OSMLoader():
         return psycopg2.connect(database="osmgraph",port='5432', host='127.0.0.1', user="mikkel", password="syrlinger")
 
     def toGraph(self):
-        self.graph = nx.Graph()
-        self.cur.execute('select n1.id, n1.lat, n1.lon, n2.id, n2.lat, n2.lon, name  from nodes as n1, nodes as n2, edges where n1.id=node1 and n2.id=node2;')
+        self.graph = nx.DiGraph()
+        self.cur.execute('select n1.id, n1.lat, n1.lon, n2.id, n2.lat, n2.lon, name  from nodes as n1, nodes as n2, edges where n1.id=node1 and n2.id=node2 and n1.lon between {0} and {1} and n2.lon between {0} and {1} and n1.lat between {2} and {3} and n2.lat between {2} and {3};'.format(self.xmin, self.xmax, self.ymin, self.ymax))
         nexttuple = self.cur.fetchone()
 
         while nexttuple is not None:
@@ -28,13 +28,25 @@ class OSMLoader():
             self.graph.add_edge(nexttuple[0],nexttuple[3],weight=dist, name=nexttuple[6])
             nexttuple = self.cur.fetchone()
 
+def findpaths(G,s,d):
+    paths = []
+    for node in G.nodes():
+        toNode = nx.shortest_path(G,s,node)
+        fromNode = nx.shortest_path(G,node,d)
+        paths.append(toNode.extend(fromNode))
+    return paths
 
 
-osmloader = OSMLoader(9.931589,57.014727,10.013458,57.049189)
+osmloader = OSMLoader(12.33619, 55.67397, 12.56292, 55.74944)
 osmloader.toGraph()
-from time import sleep
-for a in abe:
-    print a
-    sleep(0.01)
+print osmloader.graph.nodes()
+import pylab
+nx.draw(osmloader.graph) 
+pylab.show()
+
+
+
+# abe = nx.shortest_path(osmloader.graph, 118792, 1589573142, weight='weight')
+# print findpaths(osmloader.graph, 118792, 1589573142)
 
 
