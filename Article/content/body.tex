@@ -1,1 +1,23 @@
 \section{The Body}
+
+\subsection{Shorter Not Equal to Faster}
+
+A shorter path does not necessarily mean a faster path for electrical vehicles. 
+This is partly due to the fact that an electrical vehicles uses exponentially more energy 
+as it's speed increases but also due to the fact that charge times on charge stations
+varies a lot. Driving a longer path with a fast charge station on can therefore turn out to
+be a faster choice than driving a shorter path with a slow charge station on. This illustrated 
+in ???. In the example we assume our car has a battery capacity of 100 kWh and a energy-usages of
+0,4 kWh/km. Path 1 consist of two edges with distance = 250 km and speed limit = 100 km/t
+and a charge station with a charge speed of 200 kWh/t. Path 2 consist of two edges with
+distance 200 km and speed limit 100 km/t and a charge station with a charge speed of 30 kWh/t.
+The total time of each path:
+
+\[\textbf{Path 1:} \text{total\_time} = \text{drive\_time} + \text{charge\_time} = 
+				((250 km + 250 km) / 100 km/h) + (100 kWh / 200 kWh/h) = 5,5 h\]
+
+\[\textbf{Path 2:} \text{total\_time} = \text{drive\_time} + \text{charge\_time} = 
+				((200 km + 200 km) / 100 km/h) + (60 kWh / 30 kWh/h) = 6 h\]
+ 
+\subsection{The graph model}
+
