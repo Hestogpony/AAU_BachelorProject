@@ -89,7 +89,7 @@ for node in nodes:
 	except:
 		pass
 
-print (path)
+print (nx.topological_sort(G))
 
 #for edge in edges:
 #	print edge[0], edge[1] 
