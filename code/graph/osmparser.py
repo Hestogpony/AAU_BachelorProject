@@ -1,5 +1,6 @@
 import xml.sax as sax
 import psycopg2
+from time import sleep
 
 
 class OSMIntersections (sax.ContentHandler):
@@ -28,7 +29,7 @@ class OSMGraph (sax.ContentHandler):
         self.context = ''
         self.roadcontext = False
         self.roadtype = ''
-        self.name = ''
+        self.name = None
     
     def connect(self):
         return psycopg2.connect(database="osmgraph",port='5432', host='127.0.0.1', user="mikkel", password="syrlinger")
@@ -40,13 +41,12 @@ class OSMGraph (sax.ContentHandler):
             self.context = 'way'
             self.roadcontext = False
             self.way_id = attrs['id']
+            self.name = None
         elif name == 'nd' and attrs['ref'] in self.intersections:
             self.way.append(attrs['ref'])
         elif name == 'tag' and self.context == 'way':
             if 'name' == attrs['k']:
                 self.name = attrs['v']
-            else:
-                self.name = 'unnamed'
             if 'highway' == attrs['k']:
                 self.roadcontext = True
                 self.roadtype = attrs['v']
@@ -54,14 +54,17 @@ class OSMGraph (sax.ContentHandler):
 
 
     def endElement(self, name):
-        if name == 'way' and self.roadcontext and self.name != 'unnamed':
-            for x in xrange(len(self.way)-2):
+        if name == 'way' and self.roadcontext and self.name:
+            # sleep(0.01);print self.way
+            for x in xrange(0,len(self.way)-1):
                 node1 = self.way[x]
                 node2 = self.way[x+1]
                 self.cur.execute(u'INSERT INTO edges VALUES ({0}, {1}, \'{2}\', {3}, \'{4}\')'.format(node1,node2, unicode(self.name.replace("'", "''")), self.way_id, self.roadtype))
             self.way = []
+        elif name == 'way':
+            self.way = []
 
-copenhagen = open("copenhagen.osm","r")
+copenhagen = open("Copenhagen.osm","r")
 osmintersections = OSMIntersections()
 parser = sax.make_parser()  
 parser.setContentHandler(osmintersections)

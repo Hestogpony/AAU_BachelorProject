@@ -1,28 +1,60 @@
-% Definer dokumentegenskaber
-\documentclass[a4paper,12pt, twocolumn]{article}
 
-\usepackage{import}
+\documentclass{acm_proc_article-sp}
+
+%packages
+\usepackage{epstopdf}
+\usepackage{hyperref}
+
 
 \begin{document}
 
-\title{Fastest Path Algorithm}
-\author{Simon B. Jensen, Andreas B. Eriksen, Mathias M. Andersen, Mikkel A. Madsen\\
-  University of Aalborg,\\
-  Aalborg,\\
-  Denmark,\\
-  \texttt{d609f14@student.aau.dk}}
-\date{\today}
+\title{Fastest-Path Algorithm for Electrical Vehicles}
+
+\numberofauthors{4} 
+\author{
+% 1st. author
+		\alignauthor A. B. Eriksen\\
+       \affaddr{Institute of Computer Science}\\
+       \affaddr{Aalborg University}\\
+       \email{xxx@xxx.dk}
+% 2nd. author
+		\alignauthor M. A. Madsen\\
+       \affaddr{Institute of Computer Science}\\
+       \affaddr{Aalborg University}\\
+       \email{xxx@xxx.dk}
+\and
+% 3rd. author
+		\alignauthor
+		M. M. Andersen\\
+       \affaddr{Institute of Computer Science}\\
+       \affaddr{Aalborg University}\\
+       \email{xxx@xxx.dk}
+% 4th. author
+		\alignauthor
+		S. B. Jensen\\
+       \affaddr{Institute of Computer Science}\\
+       \affaddr{Aalborg University}\\
+       \email{xxx@xxx.dk}}
+\date{30 July 1999}
 \maketitle
 
-\begin{abstract}
-Abstract
-\end{abstract}
+\input{content/abstract}
 
-\input{1.introduction/introduction.tex}
-\input{2.relatedwork/relatedwork.tex}
-\input{6.experimental_evaluation/experimental_evaluation.tex}
-\input{7.conclusion/conclusion.tex}
+\keywords{Keyword1, Keyword2, Keyword3, Keyword4} % NOT required for Proceedings
 
-\bibliography{literature}
-\bibliographystyle{is-plain}
+\input{content/introduction}
+
+\input{content/body}
+
+\input{content/experiments}
+
+\input{content/citations}
+
+\input{content/conclusion}
+
+%ACKNOWLEDGMENTS are optional
+%\input{content/acknowledgement}
+
+\input{content/references}
+
 \end{document}
