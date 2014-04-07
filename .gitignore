@@ -17,3 +17,5 @@ article/main.pdf
 *.snm
 *.pyc
 *.fdb_latexmk
+*.sublime-project
+*.sublime-workspace
