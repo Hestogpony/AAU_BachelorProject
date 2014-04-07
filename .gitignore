@@ -5,6 +5,7 @@
 .DS_Store
 report/*.pdf
 exam/*.pdf
+Article/main.pdf
 *.toc
 *.bak
 *.synctex.gz

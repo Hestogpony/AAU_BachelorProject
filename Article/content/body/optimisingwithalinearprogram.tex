@@ -1,0 +1,66 @@
+\subsection{Optimizing with a linear program}
+To solve the route planning problem with a linear program solver, we are going to get approximate solutions. Linear program solvers work on linear equations, and we ultimately want to use non-linear expressions for the energy consumption as a function of speed, as well as charge rate as a function of battery charge. These functions will each be represented by by a set of linear equations. The precision of these peicewise linearized expressions of course depend on the amount of linear expressions used. In section (experiment), you can see the effect of this varying degree of approximation on a route plan.
+
+%Beskriv ruteplanlægning som et lineært program\\
+
+minimizing the sum of time spend driving and the sum of time spend charging. 
+\begin{equation}
+\begin{aligned}
+% & \underset{x_{1 \dots n},y_{1 \dots n}}
+{\text{minimize}}
+& & \sum_{i=1}^{n} \frac{Charge\;rate[i]}{Velocity[i]} + \sum_{i=1}^{n} Charge\;station[i] \\
+\end{aligned}
+\end{equation}\label{eq:objfunction}
+
+subject to:
+\begin{equation}
+Battery\;capacity
+\end{equation}
+\begin{equation}
+Velocity[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+Charge\;time[1 \dots n]
+\end{equation}
+\begin{equation}
+Charge\;rate[1 \dots n]
+\end{equation}
+\begin{equation}
+Edge\;distance[1 \dots n]
+\end{equation}
+\begin{equation}
+Points1[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+Points2[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+LinesA[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+LinesB[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+Selected\;lines[1 \dots n,1 \dots m]
+\end{equation}
+\begin{equation}
+\forall_{i\in1 \dots n }\;:\;0\le \sum_{j=1}^{m} Selected\;lines[i,j] \le 1
+\end{equation}
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m} \;:\; Selected\;lines[i,j] = 1
+\end{equation}
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m}\;:\;Velocity[i,j] \le Selected\;points[i,j] * Points1[i,j]
+\end{equation}
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m}\;:\;Velocity[i,j] \ge Selected\;points[i,j] * Points2[i,j]
+\end{equation}
+\begin{equation}
+\begin{split}
+\forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}Charge\;rate[i]*Charge\;time\\
+-\sum_{i=1}^{k} Edge\; distance[i](\sum_{j=1}^{m} LinesA[i,j]*Velocity[i,j]\\
++\sum_{j=1}^{m} Selected\;edges[i,j]*LinesB[i,j]) \le Battery\;capacity
+\end{split}
+\end{equation}
+
+%Vis pseudokode for proceduren
