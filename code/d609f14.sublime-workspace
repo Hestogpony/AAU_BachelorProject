@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"jso",
+				"jsonlatlonpath"
+			],
+			[
+				"lat",
+				"latlonpath"
+			],
+			[
+				"nod",
+				"node_street_path"
+			],
+			[
+				"node",
+				"node_street"
+			],
+			[
+				"lon",
+				"lonlatpath"
+			],
+			[
+				"str",
+				"street_node"
+			],
+			[
+				"road",
+				"roadcontext"
+			],
+			[
 				"co",
 				"copenhagen"
 			],
@@ -148,9 +176,13 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 391.0,
 		"selected_items":
 		[
+			[
+				"ssp",
+				"Set Syntax: Python"
+			],
 			[
 				"sspy",
 				"Set Syntax: Python"
@@ -158,10 +190,6 @@
 			[
 				"recon",
 				"LaTeXTools: Reconfigure and migrate settings"
-			],
-			[
-				"ssp",
-				"Set Syntax: Python"
 			],
 			[
 				"ssdat",
@@ -241,9 +269,18 @@
 	},
 	"file_history":
 	[
-		"/Users/mikkel/projects/d609f14/code/graph/osmparser.py",
-		"/Users/mikkel/projects/d609f14/Litteratur/links.txt",
+		"/Users/mikkel/projects/d609f14/code/graph/asdf.js",
+		"/Users/mikkel/Documents/asdf.py",
 		"/Users/mikkel/projects/d609f14/code/graph/graphload.py",
+		"/Users/mikkel/projects/d609f14/code/graph/path.json",
+		"/Users/mikkel/projects/d609f14/code/graph/path.html",
+		"/Users/mikkel/projects/d609f14/code/graph/osmparser.py",
+		"/Users/mikkel/projects/d609f14/code/graph/aalborgost.gpickle",
+		"/Users/mikkel/projects/d609f14/code/graph/Copenhagen.osm",
+		"/Users/mikkel/cspscheduler",
+		"/Users/mikkel/untitled",
+		"/Users/mikkel/Documents/untitled.py",
+		"/Users/mikkel/projects/d609f14/Litteratur/links.txt",
 		"/Users/mikkel/Downloads/Copenhagen.osm",
 		"/Library/Python/2.7/site-packages/networkx/algorithms/mst.py",
 		"/Users/mikkel/projects/d609f14/code/graph/haversine.py",
@@ -277,9 +314,7 @@
 		"/Users/mikkel/projects/d609f14/report/settings/preamble.tex",
 		"/Users/mikkel/projects/D502e13/report/content/design/scheduling/greedy.tex",
 		"/Users/mikkel/Downloads/untitled.py",
-		"/Users/mikkel/Documents/asdf.py",
 		"/Users/mikkel/Downloads/qwe.py",
-		"/Users/mikkel/Documents/untitled.py",
 		"/Users/mikkel/Downloads/denmark-latest.osm.pbf",
 		"/Users/mikkel/Downloads/roadNet-CA.txt",
 		"/Users/mikkel/Downloads/a/mikkelam/blog/templates/header.html",
@@ -361,14 +396,7 @@
 		"/Users/mikkel/projects/D502e13/report/content/evaluation/forecasttest.tex",
 		"/Users/mikkel/projects/D502e13/report/content/implementation/forecasting.tex",
 		"/Users/mikkel/projects/D502e13/report/content/design/scheduling/idea.tex",
-		"/Users/mikkel/projects/D502e13/report/content/implementation/scheduling.tex",
-		"/Users/mikkel/projects/D502e13/report/content/design/scheduling.tex",
-		"/Users/mikkel/projects/D502e13/report/content/introduction/smartgrids.tex",
-		"/Users/mikkel/projects/D502e13/report/content/introduction/problemstatement.tex",
-		"/Users/mikkel/projects/D502e13/report/drawings/linear-regression/price7am.csv",
-		"/Users/mikkel/projects/D502e13/report/content/implementation.tex",
-		"/Users/mikkel/projects/D502e13/report/content/implementation/simulator.tex",
-		"/Users/mikkel/projects/D502e13/report/listings/schedulerInterface.java"
+		"/Users/mikkel/projects/D502e13/report/content/implementation/scheduling.tex"
 	],
 	"find":
 	{
@@ -386,6 +414,41 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"service.route({origin: src,destination: des,travelMode: google.maps.DirectionsTravelMode.DRIVING}, function (result, status) {if (status == google.maps.DirectionsStatus.OK) {for (var i = 0, len = result.routes[0].overview_path.length; i < len; i++) {path.push(result.routes[0].overview_path[i]);}}})",
+			"'",
+			"\n",
+			"},",
+			"osmloader",
+			"OSMLoader",
+			"osmloader",
+			"OSMLoader",
+			"osmloader",
+			"1573491342",
+			"318309730",
+			"18164002",
+			"18164011",
+			"1573491344",
+			"1573491347",
+			"8086438",
+			"1573491344",
+			"8086438",
+			"1573491343",
+			"18164011",
+			"1573491344",
+			"318309730",
+			"280411328",
+			"18164011",
+			"8086438",
+			"8086438\n8086438",
+			"8086438",
+			"18164011",
+			"1573491344",
+			"1573491343",
+			"18164011",
+			"1573491343",
+			"318309711",
+			"1573491343",
+			"7427935",
 			"8086156",
 			"osmloader.graph",
 			"266942152",
@@ -478,42 +541,7 @@
 			"vehicl",
 			"textit",
 			"$",
-			"max_reach",
-			"charge_node",
-			"print",
-			"return",
-			"print",
-			"best_charge_node",
-			"nodes",
-			"driven_edges",
-			"char",
-			"if",
-			"weight",
-			"Weight",
-			"weight",
-			"print",
-			"p",
-			"current_capacity",
-			"p",
-			"energy",
-			"alg",
-			"\\SetAlgoLine",
-			"algo",
-			"0",
-			"time",
-			"speed_limit",
-			",",
-			"min_lon",
-			"imag",
-			"images",
-			"send_note",
-			"plot",
-			";",
-			".keyup(other_supplier);",
-			"\"end_date\"",
-			"x[4",
-			"[3]",
-			"test"
+			"max_reach"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -521,6 +549,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"",
 			"\"start_date\": \"2009-01-01\",\"end_date\"",
 			"}\n",
 			"\n}",
@@ -567,7 +596,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 232.0
+		"height": 229.0
 	},
 	"output.find_results":
 	{
@@ -575,7 +604,7 @@
 	},
 	"replace":
 	{
-		"height": 46.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
