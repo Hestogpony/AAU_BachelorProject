@@ -1,3 +1,28 @@
+\subsection{Optimization algorithm}
+The main goal of this paper is to design an algorithm to find the fastest path for an EV, considering both the time spend driving and the time spend charging. The hard thing about finding the fastest path is and discussed in section \ref{sec:shortestnotfastest} there is no optimal substructure to this problem. The solution model we purpose consistes of continuous pruning and then solving the problem for the path with the lowest $T_p$, until we end up with just a single path which is the fastest path. An initial way to prune is to find a path $P$ from s to t, and solve it optimally. Solving $P$ optimally will return the time it will take to follow this path, we call this value $T_p$. We then observe that if another path $P'$ driven with max speed, ignoring the energy constraint, will take time $T_{p'}$ in time. If $T_p \leq T_{p'}$ we can simply ignore the path $P'$, since the actual time used to drive $P'$ will be greater then or equal to $T_{p'}$. If we find a path which can be driven faster then $T_p$ we update $P$ and $T_{p'}$. When it comes to determining how a path is optimally solved will be discussed in section \ref{sec:optimizingwithLP}. Using pruning and a way to find out how a path is optimally solved, we can produce an algorithm with findes the fastest path as follows. 
+\begin{algorithmic}
+\Function{fastestPath}{$G,s,t$}
+    \State $p \gets$ initialpath($G,s,t$)
+    \State $T_p \gets$ solve($p$)
+    \State $paths \gets$ getpaths($G,s,t,T_p$)
+    \Repeat 
+    	\State $T_{p1} \gets$ solve(paths[1])
+    	\If{$T_{p1} < T_p$} 
+    		\State $T_p \gets T_{p1}$
+    		\State $p \gets paths[1]$ 
+    	\EndIf 
+    	\State $paths.remove(paths[1])$
+    	\ForAll{$p \in paths$} 
+    		\If{$T_p \leq p.min$}
+    			\State $paths.remove(p)$
+    		\EndIf
+    	\EndFor
+    \Until{$paths.size = 0$}
+    \State \Return $(p, T_p)$
+\EndFunction
+\end{algorithmic}
+Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
+
 \subsection{Optimizing with a linear program}
 To solve the route planning problem with a linear program solver, we are going to get approximate solutions. Linear program solvers work on linear equations, and we ultimately want to use non-linear expressions for the energy consumption as a function of speed, as well as charge rate as a function of battery charge. These functions will each be represented by by a set of linear equations. The precision of these peicewise linearized expressions of course depend on the amount of linear expressions used. In section (experiment), you can see the effect of this varying degree of approximation on a route plan.
  
