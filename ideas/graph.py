@@ -92,7 +92,7 @@ def getlengths(path=[], graph=[]):
 		#print(p, vertecis)
 
 getlengths(all_paths(graph, 'A', 'F')[1], graph)
-
+print (shortest_paths(graph, 'A', 'F'))
 #print (optipath())
 
 #print (all_paths(graph, 'A', 'F'))
