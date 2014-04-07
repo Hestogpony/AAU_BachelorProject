@@ -59,7 +59,7 @@ class OSMLoader():
 ol = OSMLoader(12.422791,55.571746,12.702255,55.742187)
 ol.toGraph()
 G=ol.graph
-p = nx.shortest_path(G,ol.street_node('Elmegade'), ol.street_node('Rigensgade'))
+p = nx.shortest_path(G,ol.street_node('Elmegade'), ol.street_node('Kristianiagade'))
 
 ol.jsonlatlonpath(p)
 webbrowser.open('file://' + os.path.realpath('path.html'))

@@ -6,6 +6,7 @@
 report/*.pdf
 exam/*.pdf
 Article/main.pdf
+article/main.pdf
 *.toc
 *.bak
 *.synctex.gz
@@ -15,3 +16,4 @@ Article/main.pdf
 *.nav
 *.snm
 *.pyc
+*.fdb_latexmk
