@@ -1,10 +1,6 @@
 \subsection{Optimizing with a linear program}
 To solve the route planning problem with a linear program solver, we are going to get approximate solutions. Linear program solvers work on linear equations, and we ultimately want to use non-linear expressions for the energy consumption as a function of speed, as well as charge rate as a function of battery charge. These functions will each be represented by by a set of linear equations. The precision of these peicewise linearized expressions of course depend on the amount of linear expressions used. In section (experiment), you can see the effect of this varying degree of approximation on a route plan.
-
-%Beskriv ruteplanlægning som et lineært program\\
-
-\todo[inline]{to do comment}
-
+ 
 minimizing the sum of time spend driving and the sum of time spend charging. 
 \begin{equation}
 \begin{aligned}
@@ -64,5 +60,3 @@ Selected\;lines[1 \dots n,1 \dots m]
 +\sum_{j=1}^{m} Selected\;edges[i,j]*LinesB[i,j]) \le Battery\;capacity
 \end{split}
 \end{equation}
-
-%Vis pseudokode for proceduren
