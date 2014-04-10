@@ -21,25 +21,54 @@ def getLines(function, range, presion):
 def f(x):
 	return 0.0286*x*x + 0.4096*x + 107.57
 
-
+points = []
+points1 = []
+linea = []
+lineb = []
 def produceData(speedLimits, presion):
-	for speedLimit in speedLimits:
-		data = getLines(f, (speedLimit-10, speedLimit), presion)
-		points =  data[1]
-		for point in points:
-			print point[0]
-		print 
-	print "Split"
-	for speedLimit in speedLimits:
-		data = getLines(f, (speedLimit-10, speedLimit), presion)
-		points =  data[1]
-                for point in points:
-                        #print point[1]
-			pass
-                
-		print data[2]
-		
-speedLimits = [50, 40, 70, 30, 90, 50, 55,  12]
-produceData(speedLimits, 2)
 
-#print getLines(f, (70*0.7, 70), 5)
+	for speedLimit in speedLimits:
+		data = getLines(f, (speedLimit-10,speedLimit), presion)
+		#print data
+		ps = []
+		ps1 = []
+		aa = []
+		bs = []
+		for a in data[0]:
+			aa.append(a)
+		
+		for b in data[2]:
+			bs.append(b)
+
+		for p in data[1]:
+			ps.append(p[0])
+			ps1.append(p[1])
+
+		points.append(ps)
+		points1.append(ps1)
+		linea.append(aa)
+		lineb.append(bs)			
+	
+file = open("data.dat", "w")
+def printOutput(ps):
+	
+	i = 1
+	printpoints = ""
+	for point in ps:
+		printpoints += str(i) + "\t"
+		for p in point:
+			printpoints += str(round(p, 2)) + "\t"
+		printpoints += "\n"
+		i += 1	
+	print printpoints
+	file.write(printpoints)
+		
+speedLimits = []
+for i in range(0, 413):
+	speedLimits.append(100)
+produceData(speedLimits, 2)
+printOutput(points)
+printOutput(points1)
+printOutput(linea)
+printOutput(lineb)
+file.close()
