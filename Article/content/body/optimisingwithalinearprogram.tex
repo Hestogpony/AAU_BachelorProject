@@ -23,65 +23,69 @@ The main goal of this paper is to design an algorithm to find the fastest path f
 \end{algorithmic}
 Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
 
-\subsection{Optimizing with a linear program}
-To solve the route planning problem with a linear program solver, we are going to get approximate solutions. Linear program solvers work on linear equations, and we ultimately want to use non-linear expressions for the energy consumption as a function of speed, as well as charge rate as a function of battery charge. These functions will each be represented by by a set of linear equations. The precision of these peicewise linearized expressions of course depend on the amount of linear expressions used. In section (experiment), you can see the effect of this varying degree of approximation on a route plan.
+\subsection{Optimisation problem}
+Finding an estimated optimal solution to a path, the objective function of the optimisation problem is concerned with time, and can be expressed as follows.
+\begin{equation}
+\begin{aligned}
+ & \underset{v_{1 \dots n},charge_{1 \dots n}}
+{\text{minimize:}}
+& & \sum_{i=1}^{n} \frac{Distance_i}{v_i} + charge_i \\
+\end{aligned}
+\end{equation}\label{eq:objfunction}
+The purpose of this function is to minimize the time used on driving $\frac{distance_i}{v_i}$ plus the time used charging $charge_i$ for the entire path. 
+The problem needs to be solve accordingly to a set of constraints, the constraints can be formulated at follows: \\
+On all roadsegments the speed of the EV must be within the speedlimit, $v_i$ is the speed speed on roadsegment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit. 
+\begin{equation}
+\forall_{i \in 1 \dots n}: \; lb_i \leq v_i \leq up_i
+\end{equation}
+The battery level of the EV needs to be between $0$ and the max capacity of the battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each road segment and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV. 
+\begin{equation}
+\begin{aligned}
+& \forall_{i \in 1 \dots n}: \; 0 \leq \sum_{j=1}^{i} \; chargerate_j*charge_j - \\
+&  \sum_{j=1}^{i} \; distance_j*C_R(v_j) \leq maxbattery \\
+ \end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+& \forall_{i \in 1 \dots n-1}: \; 0 \leq \sum_{j=i}^{i+1} chargerate_j*charge_j - \\
+&   distance_i*C_R(v_i) \leq maxbattery \\
+ \end{aligned}
+\end{equation}
+It should also not be posible for the EV to spend a negative amount of time at a chargestation.
+\begin{equation}
+\forall_{i \in 1 \dots n}: \; 0 \leq charge_i 
+\end{equation}
+
+This optimization problem is almost a linear programming problem. We to however suffer from a non-linear constraint $distance_i*C_R(v_i)$ since the consumption rate $C_R(v)$ of the EV is not linear. The function can however be estimated using linearization. Using linearization we end up with the following linear programming problem.  
  
 minimizing the sum of time spend driving and the sum of time spend charging. 
 \begin{equation}
 \begin{aligned}
-% & \underset{x_{1 \dots n},y_{1 \dots n}}
+ & \underset{speed_{1 \dots n},charge_{1 \dots n}}
 {\text{minimize}}
-& & \sum_{i=1}^{n} \frac{Charge\;rate[i]}{Velocity[i]} + \sum_{i=1}^{n} Charge\;station[i] \\
+& & \sum_{i=1}^{n} \frac{Distance_i}{speed_i} + charge_i \\
 \end{aligned}
 \end{equation}\label{eq:objfunction}
 
-subject to:
+subject to: 
 \begin{equation}
-Battery\;capacity
+\forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} Selectedlines[i,j] = 1
 \end{equation}
 \begin{equation}
-Velocity[1 \dots n,1 \dots m]
+\forall_{i\in1 \dots n, j \in 1 \dots m}: \; \;0\leq Selectedlines[i,j] \leq 1
 \end{equation}
 \begin{equation}
-Charge\;time[1 \dots n]
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \le Selectedlines[i,j] * Points1[i,j]
 \end{equation}
 \begin{equation}
-Charge\;rate[1 \dots n]
-\end{equation}
-\begin{equation}
-Edge\;distance[1 \dots n]
-\end{equation}
-\begin{equation}
-Points1[1 \dots n,1 \dots m]
-\end{equation}
-\begin{equation}
-Points2[1 \dots n,1 \dots m]
-\end{equation}
-\begin{equation}
-LinesA[1 \dots n,1 \dots m]
-\end{equation}
-\begin{equation}
-LinesB[1 \dots n,1 \dots m]
-\end{equation}
-\begin{equation}
-Selected\;lines[1 \dots n,1 \dots m]
-\end{equation}
-\begin{equation}
-\forall_{i\in1 \dots n }\;:\;0\le \sum_{j=1}^{m} Selected\;lines[i,j] \le 1
-\end{equation}
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m} \;:\; Selected\;lines[i,j] = 1
-\end{equation}
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}\;:\;Velocity[i,j] \le Selected\;points[i,j] * Points1[i,j]
-\end{equation}
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}\;:\;Velocity[i,j] \ge Selected\;points[i,j] * Points2[i,j]
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \ge Selectedlines[i,j] * Points2[i,j]
 \end{equation}
 \begin{equation}
 \begin{split}
-\forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}Charge\;rate[i]*Charge\;time\\
--\sum_{i=1}^{k} Edge\; distance[i](\sum_{j=1}^{m} LinesA[i,j]*Velocity[i,j]\\
-+\sum_{j=1}^{m} Selected\;edges[i,j]*LinesB[i,j]) \le Battery\;capacity
+\forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}chargerate[i]*charge[i]\\
+-\sum_{i=1}^{k} distance[i](\sum_{j=1}^{m} LinesA[i,j]*speed[i,j]\\
++\sum_{j=1}^{m} Selectedlines[i,j]*LinesB[i,j]) \le maxbattery\;capacity
 \end{split}
 \end{equation}
+
+\todo[inline]{Describe a more naive solution based on heuristics}

@@ -1,12 +1,10 @@
 \section{experiments} % (fold)
 \label{sec:experiments}
-In this section we will describe the experiments being conducted.
+In this section we present how the experiments have being conducted.
 \subsection{Setup} % (fold)
 \label{sub:setup}
 To facilitate the experiments, we've had to find a real world road network graph dataset which has road distances, speed limits and charging stations of varying power output. Such dataset does not openly exist to our knowledge, instead we have used OpenStreetMaps, henceforth \textit{OSM}. One can read more about it at \url{http://www.openstreetmap.org/about}. OSM has a concept of \textit{Ways} and \textit{Nodes}. Ways represent geographical planar objects, e.g. roads. A node is a geographical point (latitude,longitude). A way is then constituted of several nodes, and some tags which describe meta-information such as the name of the way, and what type of construct it is. As such, it follows that if way $A$ and $B$ intersect in node $x$, they will share the node $x$, known as an intersection in the road network. 
 
-
 These objects can easily be converted into a road network structure, by filtering ways of type \textit{road} and use these ways as edges in the road network. To get speed limits we can derive general speed limits from the type of the roads, OSM carries such information as motorway,residential,tertiary for roads. Since we are not interested in the way a road curves, we ignore intermediate points on a way, which do not correspond to an intersection.  
-% subsection setup (end)
 
 % section experiments (end)
