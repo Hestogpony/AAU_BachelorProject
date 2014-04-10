@@ -17,21 +17,19 @@ http://www.teslamotors.com/supercharger
 Tesla forbrug:
 http://www.teslamotors.com/goelectric/efficiency 
 
-Constraint Maximum flow, for convex function: Section 1, 4, 5 er lige sådan vi skal løse fastest path imo. 
-http://dspace.mit.edu/bitstream/handle/1721.1/2480/SWP-3587-28521208.pdf
-
 Engineering Route Planning Algorithms 
 https://docs.google.com/file/d/0B2BguibSzCJOY0JWUmE2ZXptN2s/edit?usp=drive_web (s. 117–139)
 Giver et godt overblik over speed-up teknikker og deres betydning.
 
 Eventuelle:
 
-Fast Shortest Path Algorithms for Large Road Networks: ftp://ftp.etsii.ull.es/pub/PRGCOM/trabajos/caminos_min/fast_shortest_path.pdf
+Fast Shortest Path Algorithms for Large Road Networks: 
+N/A
 
 Super godt kapitel om Route Planning i Road Networks:
 http://algo2.iti.kit.edu/schultes/hwy/schultes_diss.pdf
 
-Analyse af state of the art shortest path algoritmer for road netværker (FRA 2012!!):
+Analyse af state of the art shortest path algoritmer for road netværker:
 http://vldb.org/pvldb/vol5/p406_lingkunwu_vldb2012.pdf
 
 Time-Parameterized Queries in Spatio-Temporal Databases:
@@ -63,7 +61,8 @@ Shortest-path and minimum-delay in networks with time dependent arc length
 http://cs.ucsb.edu/~suri/cs231/Rlist/ordaRom.pdf
 
 	 	
-Power quality of smart grids with Plug-in Electric Vehicles considering battery charging profile 	http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5638983
+Power quality of smart grids with Plug-in Electric Vehicles considering battery charging profile:
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5638983&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5638983
 
 The optimal sequenced route query:
 http://link.springer.com/article/10.1007%2Fs00778-006-0038-6
@@ -73,6 +72,8 @@ On Trip Planning Queries in Spatial Databases:
 http://download.springer.com/static/pdf/702/bok%253A978-3-540-31904-7.pdf?auth66=1392817256_8ee3cdd2269d72b766dfbb977cbc4c1b&ext=.pdf
 	Som alternativ til Nearest Neighbours query - Der tages udgangspunkt i sekvenser, hvor man planlægger at nå to eller flere punkter på en rute med relationer. Eks. bank -> indkøb, hvor indkøb -> bank ikke fungere.
 
-
 http://industrial.panasonic.com/www-cgi/jvcr13pz.cgi?E+BA+3+ACA4001+NCR18650+7+WW
 Whitepaper for det batteri Tesla bruger
+
+Constraint Maximum flow, for convex function: Section 1, 4, 5 er lige sådan vi skal løse fastest path imo. 
+http://dspace.mit.edu/bitstream/handle/1721.1/2480/SWP-3587-28521208.pdf
