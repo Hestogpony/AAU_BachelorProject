@@ -2,11 +2,11 @@
 In this section we will briefly explain the mathematical notation and model used in the paper. The graph representation consists of edges which represent road segment and vertices which represent either charge stations or road intersections. We define a \textbf{road network} as an ordered pair \(G=(V,E)\) comprising of a set $V$ of vertices together with a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
 \[ E_d(e)\rightarrow d \] 
 \[ E_v(e)\rightarrow v \] 
-These total functions respectively return a distance or a speed limit, with and edge $e$ as argument
+These total functions respectively return a distance or a velocity limit, with and edge $e$ as argument.
 
 Each vertex is then defined as a \textit{charge station}, described by the following total function:
 \[V_c(v)\rightarrow c\]
-A road intersection is simply a vertex with charge rate $c = 0\si{\W}$, while a charge station is a vertex where $c > 0$. An electrical vehicle is specified by two parameters: It's battery capacity ($\si{\kWh}$), consumption rate ($\si{\Wh\per\metre}$). The consumption rate is given by the following function:
+A road intersection is simply a vertex with charge rate $c = 0\si{\W}$, while a charge station is a vertex where $c > 0$. An electrical vehicle is specified by two parameters: It's battery capacity given in $\si{\Wh}$, and the consumption rate of the vehicle in $\si{\Wh\per\metre}$. The consumption rate is given by the following function:
 
 \[C_R(v)=av^2+bv+c\]
 % \[ 4,60272*10^{-5}*v^2+6,59187*10^{-4}*v+0,173117 \] tesla
