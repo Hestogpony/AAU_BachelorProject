@@ -23,38 +23,40 @@ The main goal of this paper is to design an algorithm to find the fastest path f
 \end{algorithmic}
 Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
 
-\subsection{Optimization problem}
-Finding an estimated optimal solution to a path, the objective function of the optimization problem is concerned with time, and can be expressed as follows.
+\subsection{Optimisation problem}
+Finding an estimated optimal solution to a path, the objective function of the optimisation problem is concerned with time, and can be expressed as follows.
 \begin{equation}
 \begin{aligned}
- & \underset{speed_{1 \dots n},charge_{1 \dots n}}
-{\text{minimize}}
-& & \sum_{i=1}^{n} \frac{Distance_i}{speed_i} + charge_i \\
+ & \underset{v_{1 \dots n},charge_{1 \dots n}}
+{\text{minimize:}}
+& & \sum_{i=1}^{n} \frac{Distance_i}{v_i} + charge_i \\
 \end{aligned}
 \end{equation}\label{eq:objfunction}
-The purpose of this function is to minimize the time used on driving $\frac{distance_i}{speed_i}$ plus the time used charging $charge_i$ for the entire path. 
-The problem needs to be solve accordingly to a set of constraints, the constraints can be formulated at follows. \\
-On all roadsegments the speed of the EV must be within the speedlimit, $x_i$ is the speed speed on roadsegment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit. 
+The purpose of this function is to minimize the time used on driving $\frac{distance_i}{v_i}$ plus the time used charging $charge_i$ for the entire path. 
+The problem needs to be solve accordingly to a set of constraints, the constraints can be formulated at follows: \\
+On all roadsegments the speed of the EV must be within the speedlimit, $v_i$ is the speed speed on roadsegment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit. 
 \begin{equation}
-\forall_{i \in 1 \dots n} \; lb_i \leq x_i \leq up_i
+\forall_{i \in 1 \dots n}: \; lb_i \leq v_i \leq up_i
 \end{equation}
-The battery level of the EV needs to be between $0$ and the max capacity of the battery. $g(x)$ is the the energy consumption function of the EV. 
+The battery level of the EV needs to be between $0$ and the max capacity of the battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each road segment and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV. 
 \begin{equation}
 \begin{aligned}
-& \forall_{i \in 1 \dots n} \; 0 \leq \sum_{j=1}^{i} \; chargerate_j*charge_j - \\
-&  \sum_{j=1}^{i} \; distance_j*g(x_j) \leq maxbattery \\
+& \forall_{i \in 1 \dots n}: \; 0 \leq \sum_{j=1}^{i} \; chargerate_j*charge_j - \\
+&  \sum_{j=1}^{i} \; distance_j*C_R(v_j) \leq maxbattery \\
  \end{aligned}
 \end{equation}
-We also need to ensure that we do not over charge at any charging station. 
 \begin{equation}
-\forall_{i \in 1 \dots n} \; 0 \leq chargerate_i*charge_i \leq maxbattery 
+\begin{aligned}
+& \forall_{i \in 1 \dots n-1}: \; 0 \leq \sum_{j=i}^{i+1} chargerate_j*charge_j - \\
+&   distance_i*C_R(v_i) \leq maxbattery \\
+ \end{aligned}
 \end{equation}
 It should also not be posible for the EV to spend a negative amount of time at a chargestation.
 \begin{equation}
-\forall_{i \in 1 \dots n} \; 0 \leq charge_i 
+\forall_{i \in 1 \dots n}: \; 0 \leq charge_i 
 \end{equation}
 
-This optimization problem is almost a linear programming problem. We to however suffer from a non-linear constraint $distance_i*g(x_i)$ since the consumption rate of the EV is not linear in terms of speed. The function $g(x_i)$ can however be estimated using linearization. Using linearization we end up with the following linear programming problem.  
+This optimization problem is almost a linear programming problem. We to however suffer from a non-linear constraint $distance_i*C_R(v_i)$ since the consumption rate $C_R(v)$ of the EV is not linear. The function can however be estimated using linearization. Using linearization we end up with the following linear programming problem.  
  
 minimizing the sum of time spend driving and the sum of time spend charging. 
 \begin{equation}
