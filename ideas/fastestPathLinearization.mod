@@ -32,6 +32,7 @@ s.t. OnlyOneLineSeg{i in 1..n}: sum{j in 1..m}(z[i,j]) == 1;
 s.t. ZmustBeBinary{i in 1..n, j in 1..m}: 0 <= z[i,j] <= 1;
 s.t. XmustBeOnTheLine{i in 1..n, j in 1..m}: x[i,j] <= z[i,j]*points2[i,j];
 s.t. XmustBeBetween{i in 1..n, j in 1..m}: x[i,j] >= z[i,j]*points[i,j];
+s.t. NoOverCharge{i in 1..n-1}: 0 <= chargeConstants[i]*y[i]+chargeConstants[i+1]*y[i+1]-edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j])+ sum{j in 1..m} linesB[i,j]*z[i,j]) <= batCap; 
 
 #Todo fik all units to ensure that all mesures of energy have the exact same units and can be comparied. 
 s.t. battery{k in 1..n}: 0 <= sum{i in 1..k}(chargeConstants[i]*y[i]*3) - (sum{i in 1..k} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j])) <= batCap;

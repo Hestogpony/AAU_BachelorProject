@@ -23,8 +23,24 @@ The main goal of this paper is to design an algorithm to find the fastest path f
 \end{algorithmic}
 Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
 
-\subsection{Optimisation problem}
-Finding an estimated optimal solution to a path, the objective function of the optimisation problem is concerned with time, and can be expressed as follows.
+\subsection{Optimization problem}
+Finding an estimated optimal solution to a path of length $n$. The paths the optimization problem is intended to solve are modeled in the following way: \\
+\begin{figure}[h!]
+\centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=2cm,>=stealth',thick]
+        \node[state] (1) {$v_1$};
+        \node[state] (2) [right of=1] {$v_2$};
+        \node[] (dots) [right of=2] {$\dots$};
+        \node[state] (n) [right of=dots] {$v_n$};
+         \node[state,draw=none] (d1) [right of=n] {};
+        \draw [->] (1) to[right] node[auto] {$e_1$} (2);
+        \draw [->] (2) to[right] node[auto] {$e_2$} (dots);
+        \draw [->] (dots) to[right] node[auto] {$e_n-1$} (n);
+        \draw [->] (n) to[right] node[auto] {$e_n$} (d1);
+    \end{tikzpicture}
+    \caption{Example of a path of length $n$} \label{fig:pathexample}
+\end{figure} \\
+The objective function of the optimization problem is concerned with time, and can be expressed as follows.
 \begin{equation}
 \begin{aligned}
  & \underset{v_{1 \dots n},charge_{1 \dots n}}
@@ -51,7 +67,7 @@ The battery level of the EV needs to be between $0$ and the max capacity of the 
 &   distance_i*C_R(v_i) \leq maxbattery \\
  \end{aligned}
 \end{equation}
-It should also not be posible for the EV to spend a negative amount of time at a chargestation.
+It should also not be possible for the EV to spend a negative amount of time at a charge station.
 \begin{equation}
 \forall_{i \in 1 \dots n}: \; 0 \leq charge_i 
 \end{equation}
