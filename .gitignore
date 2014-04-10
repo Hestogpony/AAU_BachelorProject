@@ -5,8 +5,8 @@
 .DS_Store
 report/*.pdf
 exam/*.pdf
-Article/main.pdf
-article/main.pdf
+Article/*.pdf
+article/*.pdf
 *.toc
 *.bak
 *.synctex.gz
