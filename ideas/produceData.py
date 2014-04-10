@@ -28,7 +28,7 @@ lineb = []
 def produceData(speedLimits, presion):
 
 	for speedLimit in speedLimits:
-		data = getLines(f, (speedLimit-10,speedLimit), presion)
+		data = getLines(f, (speedLimit-30,speedLimit), presion)
 		#print data
 		ps = []
 		ps1 = []
@@ -64,7 +64,7 @@ def printOutput(ps):
 	file.write(printpoints)
 		
 speedLimits = []
-for i in range(0, 413):
+for i in range(0, 152):
 	speedLimits.append(100)
 produceData(speedLimits, 2)
 printOutput(points)
