@@ -15,12 +15,7 @@ class RoadNetwork(nw.Graph):
     
     def prune(self):
         pass
+        
     
     
-    
-    
-g = RoadNetwork(2, 3)
-
-g.add_node(41)
-
 
