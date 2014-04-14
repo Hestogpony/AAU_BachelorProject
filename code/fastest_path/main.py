@@ -4,6 +4,7 @@ import networkx as nx
 import os
 import time
 
+<<<<<<< HEAD
 def main():
     
     loader = loader.Loader()   
