@@ -9,7 +9,7 @@ import os
 
 class Loader():
     def __init__(self):
-        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.251.233', user="d609f14", password="cocio")
+        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.252.144', user="d609f14", password="cocio")
         self.cur = self.conn.cursor()
 
     def create_graph(self,lonmin,latmin,lonmax,latmax):
@@ -32,12 +32,10 @@ class Loader():
             nexttuple = self.cur.fetchone()
 
     def street_node(self,street):
-        self.cur.execute('select id from nodes, edges where (node1=id or node2=id) and name=\'{0}\''.format(street))
-        return self.cur.fetchone()[0]
+        return [n[0] for n in self.graph.edges_iter(data=True) if n[2]['name'] == street][0]
 
     def node_street(self,node):
-        self.cur.execute('select name from edges where node1={0}'.format(node))
-        return self.cur.fetchone()[0]
+        pass #fix this
 
     def visualize_path(self,p):
         jsonpath = (json.dumps([{'title': str(n),'lat':self.graph.node[n]['lat'], 'lng':self.graph.node[n]['lon']} for n in p]))
