@@ -1,7 +1,5 @@
 import xml.sax as sax
 import psycopg2
-from time import sleep
-
 
 class OSMIntersections (sax.ContentHandler):
     def __init__ (self):
@@ -64,17 +62,17 @@ class OSMGraph (sax.ContentHandler):
         elif name == 'way':
             self.way = []
 
-copenhagen = open("Copenhagen.osm","r")
-osmintersections = OSMIntersections()
-parser = sax.make_parser()  
-parser.setContentHandler(osmintersections)
-parser.parse(copenhagen)
-copenhagen.seek(0)
-print 'go'
-osmgraph = OSMGraph(osmintersections.intersections)
-parser.setContentHandler(osmgraph)
-parser.parse(copenhagen)
-osmgraph.conn.commit()
+    def parse_osm(filename):
+        fp = open(filename,"r")
+        osmintersections = OSMIntersections()
+        parser = sax.make_parser()  
+        parser.setContentHandler(osmintersections)
+        parser.parse(fp)
+        fp.seek(0)
+        osmgraph = OSMGraph(osmintersections.intersections)
+        parser.setContentHandler(osmgraph)
+        parser.parse(fp)
+        osmgraph.conn.commit()
 
 
 

@@ -11,7 +11,7 @@ class Vehicle():
 		self.kmpkwh=kmpkwh
 
 def bruteforce_fastest_path(G, s, t, vehicle):
-	"""returns the fastest path in directed graph G, from s to t, given a vehicle"""
+	"""returns the fastest path in directed roadnetwork G, from s to t, given a vehicle"""
 	path_generator = nx.all_simple_paths(G, s, t)
 	path_times = []
 	for P in path_generator:

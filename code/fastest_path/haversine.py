@@ -1,4 +1,7 @@
 import math
+
+#Converts latititude and longitude to distance in km
+
 def distance(origin, destination):
     lat1, lon1 = origin
     lat2, lon2 = destination
