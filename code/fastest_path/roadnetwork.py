@@ -1,29 +1,43 @@
 import random
 import networkx as nw
+import json
+import webbrowser
+import os
 
 class RoadNetwork(nw.Graph): 
     
-    def __init__(self, params):
+    def __init__(self):
         super(RoadNetwork, self).__init__()
     
-    def generate_charge(self, min_charge, max_charge, num_of_stations):
-        print("Generating" + num_of_stations + "charge stations with rates between:" + min_charge + "and" + max_charge)
+    # Generates random charge rates between min_charge and max_charge
+    # on n = num_of_stations random stations 
+    def generate_charge(self, min_charge, max_charge):
+        print("Generating charge rates between: " + str(min_charge) + " and " + str(max_charge))
         
-        for i in range(0, num_of_stations):
-            random_station = random.randint(0, len(self.nodes(False)))
-            random_charge = random.randint(min_charge, max_charge)
-            print(self.nodes(False)[random_station] + "gets:")
-            self.nodes(False)[random_station]
-            
-        
+        for node_id in self.nodes():
+            random_charge = random.randint(1, 10)
+            if random_charge == 1:
+                random_charge_rate = 0
+                self.node[node_id]['charge_rate'] = random_charge_rate
+            else:
+                random_charge_rate = random.randint(min_charge, max_charge)
+                self.node[node_id]['charge_rate'] = random_charge_rate    
+            #print(str(node_id) + " gets: " + str(random_charge_rate))
     
+                    
+    def charge_rate(self, node_id):
+        print(str(self.node[node_id]['charge_rate']))
+        
+    def visualize_roadnetwork(self):
+        json_rn = (json.dumps([{'title': str(node),'lat':self.node[node]['lat'], 'lng':self.node[node]['lon']} for node in self.nodes()]))
+        f = open('path.html','w')
+        asdf = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title></head><body><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script><script type="text/javascript">var markers =%s;window.onload = function () {var mapOptions = {center: new google.maps.LatLng(markers[0].lat, markers[0].lng), zoom: 10, mapTypeId: google.maps.MapTypeId.ROADMAP};var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);var infoWindow = new google.maps.InfoWindow();var lat_lng = new Array();var latlngbounds = new google.maps.LatLngBounds();for (i = 0; i < markers.length; i++) {var data = markers[i];var myLatlng = new google.maps.LatLng(data.lat, data.lng);lat_lng.push(myLatlng);var marker = new google.maps.Marker({position: myLatlng, map: map, title: data.title, visible: true});latlngbounds.extend(marker.position);(function (marker, data) {google.maps.vent.addListener(marker, "click", function (e) {infoWindow.setContent(data.description);infoWindow.open(map, marker);});})(marker, data);}map.setCenter(latlngbounds.getCenter());map.fitBounds(latlngbounds);var path = new google.maps.MVCArray();var service = new google.maps.DirectionsService();<!--var poly = new google.maps.Polyline({map: map, strokeColor: "#4986E7"-->});for (var i = 0; i < lat_lng.length; i++) {if ((i + 1) < lat_lng.length) {var src = lat_lng[i];var des = lat_lng[i + 1];path.push(src)poly.setPath(path);}}}</script><div id="dvMap" style="width: 1000px; height: 600px"></div></body></html>' % (json_rn)
+        f.write(asdf)
+        f.close()
+        webbrowser.open('file://' + os.path.realpath('path.html'))
 
-    def charge_rate(self, node):
-        pass
-    
-    def prune(self):
-        pass
         
-    
+        
+            
     
 
