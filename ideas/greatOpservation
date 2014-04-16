@@ -1,0 +1,12 @@
+En super nem måde at finde ud af om vi skal køre max hastighed
+er at finde tangent linjen i punktet p(Vmax,f(Vmax)) 
+og så finde udaf hvor denne linje skære linjen for charging speed.
+Hvis x-værdien for dette punkt er over Vmax kan det altid svare sig at kører max hastighed... 
+We ønsker at svare på hvor meget energi vi bruger pr time. 
+Converter ligning for wh/mile til wh pr tid
+
+
+så 1 find tangentens ligning i Vmax, enhed wh/mile 
+converter ligning til w eller kw
+find skæring mellem ladning of tangent linjen i w eller kw 
+yvurder om vi kan køre med max hastighed.   
