@@ -8,8 +8,6 @@ A Note on Two Problems in Connexion with Graphs E. W. DIJKSTRA1959
 http://scholar.google.dk/scholar?q=info:ChB_GcuUPYYJ:scholar.google.com/&output=instlink&hl=en&as_sdt=1,5&as_vis=1&scillfp=2153675613095033512&oi=lle
 
 
-
-
 Prioriteret:
 
 SHORTEST PATH PROBLEMS WITH RESOURCE CONSTRAINTS
