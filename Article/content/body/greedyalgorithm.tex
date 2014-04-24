@@ -20,11 +20,11 @@ represented in figure X. On the x-axis is the speed of the vehicle and on the y-
 spent passing the road. 
 
 The turning point of the graph, $v_{opt}($e$)$, is the optimal speed to drive at, 
-in order to pass the road fastest. The following function describes the speed which should be used, depending on the speed limits of $e$, $v_{min}(e)$ and $v_{max}(e)$.
+in order to pass the road fastest. The following function describes the speed which should be used, depending on the speed limits of $e$, $v_{min}(u_1, u_2)$ and $v_{max}(u_1, u_2)$.
 
-\[ T(v, e) = \left\{ 
+\[ T(v, (u_1, u_2)) = \left\{ 
   \begin{array}{l l l}
-    v_{max}(e) & \qquad \text{if $v_{opt}(e) \geq v_{max}(e)$}\\
-    v_{opt}(e) & \qquad \text{if $v_{min}(e) \geq v_{opt}(e) \geq v_{max}(e)$}\\
-    v_{min}(e) & \qquad \text{if $v_{opt}(e) \leq v_{min}(e)$}
+    v_{max}(u_1, u_2) & \qquad \text{if $v_{opt}(u_1, u_2) \geq v_{max}(u_1, u_2)$}\\
+    v_{opt}(u_1, u_2) & \qquad \text{if $v_{min}(u_1, u_2) \geq v_{opt}(u_1, u_2) \geq v_{max}(u_1, u_2)$}\\
+    v_{min}(u_1, u_2) & \qquad \text{if $v_{opt}(u_1, u_2) \leq v_{min}(u_1, u_2)$}
   \end{array} \right\} \]
