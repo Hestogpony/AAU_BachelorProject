@@ -9,7 +9,7 @@ import roadnetwork
 
 class Loader():
     def __init__(self):
-        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.64', user="d609f14", password="cocio")
+        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.228', user="d609f14", password="cocio")
         self.cur = self.conn.cursor()
 
     def create_graph(self,lonmin,latmin,lonmax,latmax):

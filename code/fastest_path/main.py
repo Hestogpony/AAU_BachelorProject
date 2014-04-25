@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 import os
 import time
-<<<<<<< HEAD
-import allsimplepathdist
+import naive
 
 loader = loader.Loader()   
 loader.create_graph(7.5256,54.4125,12.7881,57.6336) #aalborg
@@ -21,8 +19,9 @@ print P[0]
 #print allsimplepathdist.path_time(G, p)
 print time.time() - start
 print 'end'
-=======
-import networkx as nx
+
+
+'''import networkx as nx
 from loader import Loader
 import vehicle
 from rn_algorithms import *
@@ -48,7 +47,7 @@ def main():
     
 main()
      
-'''def shortest_path_through_all(G,s,t):
+def shortest_path_through_all(G,s,t):
         shortest_paths = []
         for node in G.nodes():
             if node != s and node != t:
