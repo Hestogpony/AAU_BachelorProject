@@ -1,5 +1,6 @@
 \subsection{Optimization algorithm}
-The main goal of this paper is to design an algorithm to find the fastest path for an EV, considering both the time spent driving and the time spent charging. The hard thing about finding the fastest path is and discussed in section \ref{sec:shortestnotfastest} there is no optimal substructure for this problem. The solution model we propose consists of continuous pruning and then solving the problem for the path with the lowest $T_{pmin}$, which is the time it takes to drive a path a maximum speed, without charging, until we end up with just a single path which is the fastest path. An initial way to prune is to find a path $P$ from $s$ to $t$, and solve it optimally. Solving $P$ optimally will return the time it will take to follow this path, we call this value $T_p$. We then observe that if another path $P'$ driven with max speed, ignoring the energy constraint, will take time $T_{p'}$. If $T_p \leq T_{p'}$ we can simply ignore the path $P'$, since the actual time used to drive $P'$ will be greater then or equal to $T_{p'}$. If we find a path which can be driven faster than $T_p$ we update $P$ and $T_{p'}$. When it comes to determining how a path is optimally solved, this will be discussed later in section \ref{sec:optimizingwithLP}. Using pruning and a way to find out how a path is optimally solved, we can produce an algorithm with finds the fastest path as follows. 
+The main goal of this paper is to design an algorithm to find the fastest path for an EV, considering both the time spent driving and the time spent charging. The hard thing about finding the fastest path is the fact that there is no optimal substructure for this problem. The solution model we propose consists of continuous pruning and then solving the problem for the path with the lowest $T_{pmin}$, which is the time it takes to drive a path a maximum speed, without charging, until we end up with just a single path which is the fastest path. An initial way to prune is to find a path $P$ from $s$ to $t$, and solve it optimally. Solving $P$ optimally will return the time it will take to follow this path, we call this value $T_p$. We then observe that if another path $P'$ driven with max speed, ignoring the energy constraint, will take time $T_{p'}$. If $T_p \leq T_{p'}$ we can simply ignore the path $P'$, since the actual time used to drive $P'$ will be greater then or equal to $T_{p'}$. If we find a path which can be driven faster than $T_p$ we update $P$ and $T_{p'}$. When it comes to determining how a path is optimally solved, this will be discussed later in section \ref{sec:optimizingwithLP}. Using pruning and a way to find out how a path is optimally solved, we can produce an algorithm with finds the fastest path as follows. 
+
 \begin{algorithmic}
 \Function{fastestPath}{$G,s,t$}
     \State $p \gets$ initialpath($G,s,t$)
@@ -21,6 +22,7 @@ The main goal of this paper is to design an algorithm to find the fastest path f
     \State \Return $(p, T_p)$
 \EndFunction
 \end{algorithmic}
+
 Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
 
 \subsection{Optimization problem}
@@ -40,7 +42,8 @@ Finding an estimated optimal solution to a path of length $n$. The paths the opt
     \end{tikzpicture}
     \caption{Example of a path of length $n$} \label{fig:pathexample}
 \end{figure} \\
-The objective function of the optimization problem is concerned with time, and can be expressed as follows.
+
+The objective function of the optimization problem is concerned with time, and can be expressed as follows:
 \begin{equation}
 \begin{aligned}
  & \underset{v_{1 \dots n},charge_{1 \dots n}}
@@ -48,26 +51,32 @@ The objective function of the optimization problem is concerned with time, and c
 & & \sum_{i=1}^{n} \frac{Distance_i}{v_i} + charge_i \\
 \end{aligned}
 \end{equation}\label{eq:objfunction}
+
 The purpose of this function is to minimize the time used on driving $\frac{distance_i}{v_i}$ plus the time used charging $charge_i$ for the entire path. 
 The problem needs to be solve accordingly to a set of constraints, the constraints can be formulated at follows: \\
-On all roadsegments the speed of the EV must be within the speedlimit, $v_i$ is the speed speed on roadsegment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit. 
+On all road segments the speed of the EV must be within the speed limit, $v_i$ is the speed speed on road segment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit.
+ 
 \begin{equation}
 \forall_{i \in 1 \dots n}: \; lb_i \leq v_i \leq up_i
 \end{equation}
-The battery level of the EV needs to be between $0$ and the max capacity of the battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each road segment and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV. 
+The battery level of the EV needs to be between $0$ and the max capacity of the battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each road segment and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV.
+
 \begin{equation}
 \begin{aligned}
 & \forall_{i \in 1 \dots n}: \; 0 \leq \sum_{j=1}^{i} \; chargerate_j*charge_j - \\
 &  \sum_{j=1}^{i} \; distance_j*C_R(v_j) \leq maxbattery \\
  \end{aligned}
 \end{equation}
+
 \begin{equation}
 \begin{aligned}
 & \forall_{i \in 1 \dots n-1}: \; 0 \leq \sum_{j=i}^{i+1} chargerate_j*charge_j - \\
 &   distance_i*C_R(v_i) \leq maxbattery \\
  \end{aligned}
 \end{equation}
+
 It should also not be possible for the EV to spend a negative amount of time at a charge station.
+
 \begin{equation}
 \forall_{i \in 1 \dots n}: \; 0 \leq charge_i 
 \end{equation}
@@ -75,6 +84,7 @@ It should also not be possible for the EV to spend a negative amount of time at 
 This optimization problem is almost a linear programming problem. We to however suffer from a non-linear constraint $distance_i*C_R(v_i)$ since the consumption rate $C_R(v)$ of the EV is not linear. The function can however be estimated using linearization. Using linearization we end up with the following linear programming problem.  
  
 minimizing the sum of time spend driving and the sum of time spend charging. 
+
 \begin{equation}
 \begin{aligned}
  & \underset{speed_{1 \dots n},charge_{1 \dots n}}
@@ -87,15 +97,19 @@ subject to:
 \begin{equation}
 \forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} Selectedlines[i,j] = 1
 \end{equation}
+
 \begin{equation}
 \forall_{i\in1 \dots n, j \in 1 \dots m}: \; \;0\leq Selectedlines[i,j] \leq 1
 \end{equation}
+
 \begin{equation}
 \forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \le Selectedlines[i,j] * Points1[i,j]
 \end{equation}
+
 \begin{equation}
 \forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \ge Selectedlines[i,j] * Points2[i,j]
 \end{equation}
+
 \begin{equation}
 \begin{split}
 \forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}chargerate[i]*charge[i]\\
@@ -104,4 +118,3 @@ subject to:
 \end{split}
 \end{equation}
 
-\todo[inline]{Describe a more naive solution based on heuristics}
