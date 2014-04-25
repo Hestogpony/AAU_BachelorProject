@@ -19,7 +19,7 @@ def naive_path(G, v, s, t):
                      (float(G.node[cur_node]['lat']),float(G.node[cur_node]['lon']))) <= car_range:
                 sp_char = nx.shortest_path(G, cur_node, node)
                 
-                if reachable(G, sp_char, v, bat):
+                if reachable(G, sp_char, v, bat) and len(sp_char) > 0:
                     sp_t = nx.shortest_path(G, node, t)
                     del sp_t[0] 
                     combined_path = path_length(G, sp_char + sp_t)
@@ -29,7 +29,7 @@ def naive_path(G, v, s, t):
 
             elif G.node[node] == t:
                 sp_t = nx.shortest_path(G, cur_node)
-                if reachable(G, sp_t, v, bat):
+                if reachable(G, sp_t, v, bat) and len(sp_char) > 0:
                     shortest_through_path = sp_t 
                     break
         if len(shortest_through_path) == 0:

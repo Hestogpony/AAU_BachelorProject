@@ -2,6 +2,7 @@
 import networkx as nx
 import vehicle
 import naive
+import road_network
 from loader import Loader
 
 loader = Loader()
@@ -10,6 +11,12 @@ loader.load_graph()
 road_network = loader.rn
 road_network.generate_charge(10,20)
 v = vehicle.ElectricalVehicle(80, 80)
+
+print 'removing non-connected nodes'
+G = nx.connected_components(road_network)
+for node in road_network.nodes():
+    if node not in G[0]:
+	    road_network.remove_node(node
 
 print 'graph loaded'
 #bfs = nx.bfs_edges(road_network,loader.street_node('Selma Lagerløfs Vej'))
