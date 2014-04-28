@@ -63,3 +63,8 @@ we have a way of deciding the time it will take to drive a road segment, while a
 	\State \Return $t.time, t.path$
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
+
+\subsubsection{Charge Station Cleanup}
+While the algorithm progresses through the graph, it need to maintain only a subset of all the visited charge stations, as the battery capacity and therefore range of the vehicle is limited. At every charge station the algorithm reaches, we record the current battery and the charge station's charge rate as a tuple (bat_cur, CR(vertex)). cur_bat is the battery charge of the vehicle at the moment the vehicle reached that charge station, CR(vertex) is the charge rate of the vertex of the charge station.\\
+\\
+We maintain this subset of tuples by managing a list of tuples only with bat_cur lower than the vehicles max battery capacity. This will of course always be the case when we reach a charge station, but as we progress through the graph and some distance is being traveled, an extra amount of energy is needed. We add more energy to the system by increasing the bat_cur in all the tuple of the charge stations in the list. The first tuple in the list will always be the the charge station with the best charge rate. If at some point the bat_cur, of the tuple with the best charge rate, reaches bat_cap then we remove that tuple. When a tuple is removed we also remove every tuple, between the first and the second best charge rate in the list. Finally, if we at some point find a charge station with a charge rate better than every recorded charge rate, i.e. the first tuple, we delete all the tuples and add the current vertex.
