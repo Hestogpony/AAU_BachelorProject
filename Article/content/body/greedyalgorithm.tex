@@ -1,8 +1,12 @@
 \subsection{Greedy Algorithm}
 By continuously picking the currently fastest path, and keep it updated throughout the graph we can find the fastest path. A locally best choice is to select the minimum of driving using the energy in the battery or charge and drive.
 The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charging is given by the following equation:
+\begin{equation}
+\begin{aligned}
+ & T(v,(u_1, u_2)) = \frac{D(u_1, u_2)}{v} + \frac{CS(v) * D(u_1, u_2) - B_{cur}}{u_1.preCH_0()}
+\end{aligned}
+\end{equation}\label{eq:drivingAndCharging}
 
-\[T(v,(u_1, u_2)) = \frac{D(u_1, u_2)}{v} + \frac{CS(v) * D(u_1, u_2) - B_{cur}}{u_1.preCH_0()}\]
 
 \begin{tikzpicture}
 %\begin{axis}[]
@@ -19,4 +23,6 @@ The turning point of the graph, $v_{opt}(e)$, is the optimal speed for the EV th
 
 The time spent driving an edge $(u_1, u_2)$ using the energy in the battery can be found by solving $B_{cur} - D(u_1, u_2) * CS(v) = 0$, if $v_{opt}(e)$ is lower than $v_{min}(e)$ the time used driving is set to infinity, since there is not enough energy in the battery the drive from $u_1$ to $u_2$, otherwise $v_{opt}$ is decided in the same way when charging is considered.   
 
-Combining the above in a function $travel_time(charge_stations, (u_1, u_2), curbat)$ we have a way of deciding the time it will take to drive a road segment, while accounting for the need of charging along the path. This function can be used in a modified version of Dijkstra's algorithm where we use time instead of distance. Just like Dijkstra's algorithm we keep track of the fastest path leading to each vertices, where fastest path means the path using less time, furthermore the previous charging stations which are still can be used for charging needs to be tracked, this way we can still charge at a station after leaving it if we do not violate the physical constraints in the system(no over charging). Lastly the algorithm needs to keep track of how much battery the EV have when it arrives at each charging station. Using this we can define a fastest path algorithm in the following way: 
+The above can do used to create a function, which help us find the optimal way to drive a road segment. 
+\[travel\_time(charge\_stations, (u_1, u_2), curbat) \]
+we have a way of deciding the time it will take to drive a road segment, while accounting for the need of charging along the path. This function can be used in a modified version of Dijkstra's algorithm where we use time instead of distance. Just like Dijkstra's algorithm we keep track of the fastest path leading to each vertices, where fastest path means the path using less time, furthermore the previous charging stations which are still can be used for charging needs to be tracked, this way we can still charge at a station after leaving it if we do not violate the physical constraints in the system(no over charging). Lastly the algorithm needs to keep track of how much battery the EV have when it arrives at each charging station. Using this we can define a fastest path algorithm in the following way: 
