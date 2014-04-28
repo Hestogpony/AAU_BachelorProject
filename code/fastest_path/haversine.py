@@ -2,7 +2,7 @@ import math
 
 #Converts latititude and longitude to distance in km
 
-def distance(origin, destination):
+def distance(origin, destination): # ((lat,lon),(lat,lon))
     lat1, lon1 = origin
     lat2, lon2 = destination
     radius = 6371 # km

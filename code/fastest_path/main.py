@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 import os
 import time
+import naive
 import allsimplepathdist
 
 #loader = loader.Loader()
@@ -18,9 +18,16 @@ import allsimplepathdist
 #p = allsimplepathdist.all_simple_paths(G,loader.street_node('Oxholmvej'), loader.street_node('Naurvej'), cutoff=cut)
 #print P[0]
 #print allsimplepathdist.path_time(G, p)
+print time.time() - start
+print 'end'
+
+
+'''import networkx as nx
+=======
 #print time.time() - start
 #print 'end'
 import networkx as nx
+>>>>>>> cc587eed162e0ad1271a5f16221bca920d147423
 from loader import Loader
 import vehicle
 from rn_algorithms import fastest_path_greedy
@@ -64,7 +71,7 @@ def main():
 main()
 
      
-'''def shortest_path_through_all(G,s,t):
+def shortest_path_through_all(G,s,t):
         shortest_paths = []
         for node in G.nodes():
             if node != s and node != t:
