@@ -1,65 +1,67 @@
 \subsection{Optimization algorithm}
-The main goal of this paper is to design an algorithm to find the fastest path for an EV, considering both the time spent driving and the time spent charging. The hard thing about finding the fastest path is the fact that there is no optimal substructure for this problem. The solution model we propose consists of continuous pruning and then solving the problem for the path with the lowest $T_{pmin}$, which is the time it takes to drive a path a maximum speed, without charging, until we end up with just a single path which is the fastest path. An initial way to prune is to find a path $P$ from $s$ to $t$, and solve it optimally. Solving $P$ optimally will return the time it will take to follow this path, we call this value $T_p$. We then observe that if another path $P'$ driven with max speed, ignoring the energy constraint, will take time $T_{p'}$. If $T_p \leq T_{p'}$ we can simply ignore the path $P'$, since the actual time used to drive $P'$ will be greater then or equal to $T_{p'}$. If we find a path which can be driven faster than $T_p$ we update $P$ and $T_{p'}$. When it comes to determining how a path is optimally solved, this will be discussed later in section \ref{sec:optimizingwithLP}. Using pruning and a way to find out how a path is optimally solved, we can produce an algorithm with finds the fastest path as follows. 
+The first solution model we propose for finding the fastest path between two points in a road network is based on a linear programming approach. 
+The algorithm consists of continuous pruning of paths in the road network, until we end up with a single path which is the optimal one. Initially, we pick a random path from $s$ to $t$, called $p$, and solve it optimally, which returns time $T_p$. For every other paths, $p'_i$, from $s$ to $t$ in the road network, we calculate the time it takes to pass it at maximum speed and without charging, which returns time $T_{p'_{i}}$. If $T_p \leq T_{p'_{i}}$ for any $p'_{i}$, we simply ignore it and all it's sub-paths. We can do this, since the optimally time spend driving $p'_i$ will be either greater than or equal to $T_{p'_{i}}$. If we find a path which can be driven faster than $T_p$ we update $p$ and $T_{p'}$. Determining how a path is optimally solved is described in section \ref{sec:optimizingwithLP}. But the overall algorithm for finding the fastest path looks as follows:
 
 \begin{algorithmic}
 \Function{fastestPath}{$G,s,t$}
-    \State $p \gets$ initialpath($G,s,t$)
-    \State $T_p \gets$ solve($p$)
-    \State $paths \gets$ getpaths($G,s,t,T_p$)
+    \State $p \gets$ initial\_path($G,s,t$) 
+    \State $T_p \gets$ solve\_optimally($p$)
+    \State $potential\_paths \gets$ get\_paths($G,s,t,T_p$)
     \Repeat 
-    	\State $T_{p1} \gets$ solve(paths[1])
-    	\If{$T_{p1} < T_p$} 
-    		\State $T_p \gets T_{p1}$
-    		\State $p \gets paths[1]$ 
-    	\EndIf 
-    	\State $paths.remove(paths[1])$
-    	\ForAll{$p \in paths$} 
+    	\State $T_{p_1} \gets$ solve\_optimally(potential\_paths[1])
+    	\If{$T_{p_1} < T_p$} 
+    		\State $T_p \gets T_{p_1}$
+    		\State $p \gets potential\_paths[1]$ 
+    	\EndIf  
+    	\State $paths.remove(potential\_paths[1])$
+    	\ForAll{$p \in potential\_paths$} 
     		\If{$T_p \leq p.min$}
-    			\State $paths.remove(p)$
+    			\State $potential\_paths.remove(p)$
     		\EndIf
     	\EndFor
-    \Until{$paths.size = 0$}
+    \Until{$potential\_paths.size = 0$}
     \State \Return $(p, T_p)$
 \EndFunction
 \end{algorithmic}
 
-Where $initialpath(G,s,t)$ is the initial path we choose to solve e.g. shortest path. $solve(p)$ is a function which estimates the optimal solution to a path i.e. optimal charging times for each charging station and driving speed for each road segment in a path. $getpaths(G,s,t,T_p)$ is a function which finds all paths in $G$ between $s$ and $t$ with a max travling time of $t$. Having the algorithm we now investigate how to estimate an optimal solution for a path.     
+$initial\_path(G,s,t)$ returns a randomly chosen path, $p$ which is solved optimally by $solve\_optimally(p)$. $get\_paths(G,s,t,T_p)$ returns a sorted list of paths in $G$ between $s$ and $t$ with a max travelling time of $T_p$.
 
 \subsection{Optimization problem}
-Finding an estimated optimal solution to a path of length $n$. The paths the optimization problem is intended to solve are modeled in the following way: \\
+We now describe how we calculate the speed to drive at and the amount of energy to charge at which charge stations, in order to pass a path optimally in terms of time. The paths the optimization problem is intended to solve are modelled in the following way: \\
 \begin{figure}[h!]
 \centering
     \begin{tikzpicture}[shorten >=1pt,node distance=2cm,>=stealth',thick]
-        \node[state] (1) {$v_1$};
-        \node[state] (2) [right of=1] {$v_2$};
+        \node[state] (1) {$u_1$};
+        \node[state] (2) [right of=1] {$u_2$};
         \node[] (dots) [right of=2] {$\dots$};
-        \node[state] (n) [right of=dots] {$v_n$};
-         \node[state,draw=none] (d1) [right of=n] {};
+        \node[state] (n) [right of=dots] {$u_n$};
+        \node[state,draw=none] (d1) [right of=n] {};
         \draw [->] (1) to[right] node[auto] {$e_1$} (2);
         \draw [->] (2) to[right] node[auto] {$e_2$} (dots);
-        \draw [->] (dots) to[right] node[auto] {$e_n-1$} (n);
+        \draw [->] (dots) to[right] node[auto] {$e_{n-1}$} (n);
         \draw [->] (n) to[right] node[auto] {$e_n$} (d1);
     \end{tikzpicture}
-    \caption{Example of a path of length $n$} \label{fig:pathexample}
+    \caption{Example of a path consisting of $n$ edges} \label{fig:pathexample}
 \end{figure} \\
 
-The objective function of the optimization problem is concerned with time, and can be expressed as follows:
+The objective of the optimization problem is to minimize the time spend driving 
+and the time spend charging for the entire path. The optimization problem can be expressed as follows:
+
 \begin{equation}
-\begin{aligned}
- & \underset{v_{1 \dots n},charge_{1 \dots n}}
-{\text{minimize:}}
-& & \sum_{i=1}^{n} \frac{Distance_i}{v_i} + charge_i \\
-\end{aligned}
+	\begin{aligned} & \underset{v_{e_{1}} \dots v_{e_{n}}}, charge\_time(u_1 \dots u_n)}}
+	{\text{minimize:}}
+	& & \sum_{i=1}^{n} \frac{D(e_i)}{v(e_i)} + charge\_time(u_i) \\
+	\end{aligned}
 \end{equation}\label{eq:objfunction}
 
-The purpose of this function is to minimize the time used on driving $\frac{distance_i}{v_i}$ plus the time used charging $charge_i$ for the entire path. 
-The problem needs to be solve accordingly to a set of constraints, the constraints can be formulated at follows: \\
-On all road segments the speed of the EV must be within the speed limit, $v_i$ is the speed speed on road segment $i$, $lb_i$ and $ub_i$ is the lower and upper bound of the speed limit.
+The problem needs to be solved accordingly to a set of constraints, the constraints can be formulated at follows: \\
+On all edges the speed of the electrical vehicle must be within the speed limits. $v(e_i)$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed limit. So we have that $v_{min}(e_i) <= v(e_i) <= v_{max}(e_i)$ for all .
  
 \begin{equation}
-\forall_{i \in 1 \dots n}: \; lb_i \leq v_i \leq up_i
+v_{min}(e_i) <= v(e_i) <= v_{max}(e_i) \text{for} i = 1..n  
 \end{equation}
-The battery level of the EV needs to be between $0$ and the max capacity of the battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each road segment and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV.
+
+The battery level of the EV, $B_{cur}$, needs to be between $0$ and the max capacity of the vehicles battery. This constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each edge and one ensuring that the EV can not over charge at any charging station. $C_R(v)$ is the the energy consumption function of the EV.
 
 \begin{equation}
 \begin{aligned}
