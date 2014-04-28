@@ -10,17 +10,22 @@ Each vertex is defined as a \textit{charge station}, described by the following 
 \[CH(v)\rightarrow c\]
 A road intersection is simply a vertex with charge rate $c = 0\si{\W}$, while a charge station is a vertex where $c > 0$. An electrical vehicle is specified by two parameters: It's battery capacity given in $\si{\Wh}$, and the consumption rate of the vehicle in $\si{\Wh\per\metre}$. The consumption rate is given by the following function:
 
-\[CS(v)=av^2+bv+c\]
+\begin{equation}
+\begin{aligned}
+ & CS(v)=av^2+bv+c
+\end{aligned}
+\end{equation}\label{eq:chargingFunc}
+
 % \[ 4,60272*10^{-5}*v^2+6,59187*10^{-4}*v+0,173117 \] tesla
 
-where $v$ is the speed of the vehicle. The constants $a$,$b$,$c$ are dependent on the the specific instance of the vehicle  
+where $v$ is the speed of the vehicle. The constants $a$,$b$,$c$ are dependent on the the specific instance of the vehicle.
 
 The charge of the battery given in $\si{\Wh}$ is a function of the start charge, the energy consumed and the energy charged. However we will abstract away from this, as this is uselessly complicated to write, and just denote $B_{cur}$ as the current battery charge.
 
 \todo[inline]{
 Alternativ notation\\
 graph \[G(N,E)\] \\
-charge station gives charge rate \[stn_{cha}(n) \rightarrow rate_{cha}\] \\
-consumption rate function \[rate_{con}=av^2+bv+c\ \] \\
-\[T(v,(u, n)) = \frac{D(u, n)}{v} + \frac{rate_{con}(v) * D(u, n) - Bat_{cur}}{stn_{cha}(n)}\]
+charge station gives charge rate \[CS(n) \rightarrow R_{cha}\] \\
+consumption rate function \[R_{con}=av^2+bv+c\ \] \\
+\[T(v,(u, n)) = \frac{D(u, n)}{v} + \frac{R_{con}(v) * D(u, n) - B_{cur}}{CS(n)}\]
 }

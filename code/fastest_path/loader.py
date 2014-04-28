@@ -6,11 +6,20 @@ import json
 import webbrowser
 import os
 import roadnetwork
+import networkx as nx
 
 class Loader():
     def __init__(self):
-        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.64', user="d609f14", password="cocio")
+        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.228', user="d609f14", password="cocio")
         self.cur = self.conn.cursor()
+
+    def remove_unconnected(self):
+        G = nx.connected_components(self.rn)
+        for node in self.rn.nodes():
+            if node not in G[0]:
+                self.cur.execute('delete from edges where node1 = %s or node2 = %s' %(node,node))
+                self.cur.execute('delete from nodes where id = %s' % (node))
+        self.conn.commit()
 
     def create_graph(self,lonmin,latmin,lonmax,latmax):
         self.lonmin = lonmin
@@ -27,7 +36,7 @@ class Loader():
             self.rn.add_edge(nexttuple[0],nexttuple[3],weight=dist, name=nexttuple[6], speed_limit=self.find_speed_limit(nexttuple[7]))
             self.rn.node[nexttuple[0]]['lon'] = str(nexttuple[2])
             self.rn.node[nexttuple[0]]['lat'] = str(nexttuple[1])
-            self.rn.node[nexttuple[3]]['lon']= str(nexttuple[5])
+            self.rn.node[nexttuple[3]]['lon'] = str(nexttuple[5])
             self.rn.node[nexttuple[3]]['lat'] = str(nexttuple[4])
             nexttuple = self.cur.fetchone()
 
