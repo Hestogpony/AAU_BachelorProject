@@ -7,13 +7,13 @@ The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charg
 \end{aligned}
 \end{equation}\label{eq:drivingAndCharging}
 
-
 \begin{tikzpicture}
-%\begin{axis}[]
-%\addplot[draw=red]{(50/x)+((0.01*(x^2)+x+10)*100)/40};
-%\end{axis}
+\begin{axis}[xlabel=velocity, ylabel=time]
+\addplot[draw=red,domain=0:200]{(5/x)+(((0.0286*x^2 + 0.4096*x + 107.57)*5)/5000)};
+\addplot[draw=black,domain=25:75]{0.295};
+% \addplot[mark=*, domain=25:75] coordinates {(37,295)};
+\end{axis}
 \end{tikzpicture}
-
 
 where $v$ is the speed of the vehicle, $D(u_1, u_2)$ is the distance between $u_1$ and $u_2$,
 $CS(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $preCH_0(u_1)$ is the charge rate of best charge station previous to $u_2$, which still can be used with overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + d/v + c$, due to the fact that $\textbf{CS(v)}$ is a quadratic function \ref{eq:chargingFunc} and the values: $v, CS(v), u_1.preCH_0()$ all being positive.
