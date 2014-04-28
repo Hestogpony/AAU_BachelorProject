@@ -5,9 +5,11 @@ The time spent getting from $u_1$ to $u_2$, an edge in the graph, is given by th
 \[T(v,(u_1, u_2)) = \frac{D(u_1, u_2)}{v} + \frac{CS(v) * D(u_1, u_2) - B_{cur}}{CH(u_1)}\]
 
 \begin{tikzpicture}
-%\begin{axis}[]
-%\addplot[draw=red]{(50/x)+((0.01*(x^2)+x+10)*100)/40};
-%\end{axis}
+\begin{axis}[xlabel=velocity, ylabel=time]
+\addplot[draw=red,domain=0:200]{(5/x)+(((0.0286*x^2 + 0.4096*x + 107.57)*5)/5000)};
+\addplot[draw=black,domain=25:75]{0.295};
+% \addplot[mark=*, domain=25:75] coordinates {(37,295)};
+\end{axis}
 \end{tikzpicture}
 
 
