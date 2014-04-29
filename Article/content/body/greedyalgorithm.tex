@@ -7,6 +7,7 @@ The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charg
 \end{aligned}
 \end{equation}\label{eq:drivingAndCharging}
 
+\begin{figure}
 \begin{tikzpicture}
 \begin{axis}[xlabel=velocity, ylabel=time]
 \addplot[draw=red,domain=0:200]{(5/x)+(((0.0286*x^2 + 0.4096*x + 107.57)*5)/5000)};
@@ -14,10 +15,12 @@ The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charg
 % \addplot[mark=*, domain=25:75] coordinates {(37,295)};
 \end{axis}
 \end{tikzpicture}
+\caption{Example of such a function and its optimal speed at the turning point}
+\end{figure}\label{fig:graph}
 
 where $v$ is the speed of the vehicle, $D(u_1, u_2)$ is the distance between $u_1$ and $u_2$,
-$CS(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $preCH_0(u_1)$ is the charge rate of best charge station previous to $u_2$, which still can be used with overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + d/v + c$, due to the fact that $\textbf{CS(v)}$ is a quadratic function \ref{eq:chargingFunc} and the values: $v, CS(v), u_1.preCH_0()$ all being positive.
-A, b, c and d are some constants. Represented in a coordinate system, this becomes a curve as represented in figure X. On the x-axis is the speed of the vehicle and on the y-axis is the time spent.
+$CS(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $preCH_0(u_1)$ is the charge rate of best charge station previous to $u_2$, which still can be used with overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + c$, due to the fact that Equation \ref{eq:chargingFunc} is a quadratic function and the values: $v, CS(v), u_1.preCH_0()$ all being positive.
+A, b and c are some constants. Represented in a coordinate system, this becomes a curve as represented in figure \ref{fig:graph}. On the x-axis is the speed of the vehicle and on the y-axis is the time spent.
 
 The turning point of the graph, $v_{opt}(e)$, is the optimal speed for the EV this point is easily solved by finding a tangent line with a slope of 0. If $v_{opt}(e)$ is smaller than $v_{min}(e)$, $v_{min}(e)$ defines the optimal speed on road segment $e$ similarly if $v_{opt}(e)$ is larger than $v_{max}(e)$, $v_{max}(e)$ defines the optimal speed.  
 
@@ -65,6 +68,7 @@ we have a way of deciding the time it will take to drive a road segment, while a
 \end{algorithmic}\label{alg:fastest_path}
 
 \subsubsection{Charge Station Cleanup}
-While the algorithm progresses through the graph, it need to maintain only a subset of all the visited charge stations, as the battery capacity and therefore range of the vehicle is limited. At every charge station the algorithm reaches, we record the current battery and the charge station's charge rate as a tuple (bat_cur, CR(vertex)). cur_bat is the battery charge of the vehicle at the moment the vehicle reached that charge station, CR(vertex) is the charge rate of the vertex of the charge station.\\
+While the algorithm progresses through the graph, it need to maintain only a subset of all the visited charge stations, as the battery capacity and therefore range of the vehicle is limited. At every charge station the algorithm reaches, we record the possible energy we can add at the charge station and the charge rate of the station as a tuple $(B_{possible}, CR(vertex))$.
 \\
-We maintain this subset of tuples by managing a list of tuples only with bat_cur lower than the vehicles max battery capacity. This will of course always be the case when we reach a charge station, but as we progress through the graph and some distance is being traveled, an extra amount of energy is needed. We add more energy to the system by increasing the bat_cur in all the tuple of the charge stations in the list. The first tuple in the list will always be the the charge station with the best charge rate. If at some point the bat_cur, of the tuple with the best charge rate, reaches bat_cap then we remove that tuple. When a tuple is removed we also remove every tuple, between the first and the second best charge rate in the list. Finally, if we at some point find a charge station with a charge rate better than every recorded charge rate, i.e. the first tuple, we delete all the tuples and add the current vertex.
+\\
+We maintain this subset of tuples by managing a list of tuples only with $B_{possible}$ higher than 0. This will of course always be the case when we reach a charge station, but as we progress through the graph and some distance is being traveled, the possible energy at each previous charge station decreses. The first tuple in the list will always be the the charge station with the best charge rate. When a tuple is removed we also remove every tuple, between the first and the second best charge rate in the list. Finally, if we at some point find a charge station with a charge rate better than every recorded charge rate, i.e. the first tuple, we delete all the tuples.
