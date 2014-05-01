@@ -1,6 +1,7 @@
 import vehicle
 from haversine import distance
 import networkx as nx
+import time
 
 def naive_path(G, v, s, t):
     consumption = v.consumption_rate(70) # kWh/mile
@@ -19,6 +20,10 @@ def naive_path(G, v, s, t):
                      (float(G.node[cur_node]['lat']),float(G.node[cur_node]['lon']))) <= car_range:
                 sp_char = nx.shortest_path(G, cur_node, node)
                 
+                if len(sp_char)==0:
+                    print sp_char, cur_node,node
+                    time.sleep(1)
+
                 if reachable(G, sp_char, v, bat) and len(sp_char) > 0:
                     sp_t = nx.shortest_path(G, node, t)
                     del sp_t[0] 
