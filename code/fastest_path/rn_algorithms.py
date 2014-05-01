@@ -1,4 +1,4 @@
-import copy
+from copy import copy
 from sympy import *
 from operator import itemgetter
 
@@ -130,11 +130,11 @@ def travel_time(charge_rates, e, ev):
 #end
 
 def fastest_path_greedy(G, s, t, ev):
-    G = copy.copy(G)
+    G = copy(G)
 
     for id,data in G.nodes(data=True):
         data['dist'] = float('inf')
-        data['path'] = [id]
+        data['path'] = None
         data['preCS'] = []
         data['myCS'] = [80, data['charge_rate']]
         data['curbat'] = 0
