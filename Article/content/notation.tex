@@ -1,31 +1,20 @@
-\section{Notation}
-In this section we will briefly explain the mathematical notation and model used in the paper. The graph representation consists of edges which represent road segments and vertices which represent either charge stations or road intersections. We define a \textbf{road network} as an ordered pair \(G=(V,E)\) comprising of a set $V$ of vertices together with a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
+\subsection{Notation}
+In this section we will briefly explain the mathematical notation and model used in the paper. The graph representation consists of edges which represent road segments and vertices which represent either charge stations or road intersections. We define a \textbf{road network} as a tuple $RN=(V,E,D,v_{max},v_{min},R_{CH})$ comprising of a set $V$ of vertices together with a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
 \[ D(e)\rightarrow d \] 
-\[ v_{max}(e)\rightarrow v \] 
-These total functions respectively return a distance or a velocity limit, with and edge $e$ as argument.
+\[ v_{max}(e)\rightarrow v \]
+\[ v_{min}(e)\rightarrow v \]
+These total functions respectively return a distance or a velocity limit, with edge $e$ as argument. $v_{min}$ gives the minimum speed for $e$ while $v_{max}$ gives maximum speed. Each vertex is defined as a \textit{charge station}, described by the following total function:
+\[R_{CH}(v)\rightarrow c\]
+$R_{CH}$ defines the charge rate of vertex $v$ given in electrical effect $\si{\W}$. A road intersection is simply a vertex with charge rate $c = 0\si{\W}$, while a charge station is a vertex where $c > 0$.
 
-We define a path of length k from a vertex $u$ to a vertex $u'$ in a graph as a sequence of vertices $\langle v_0,v_1,v_2,\dots,v_k \rangle$ such that $u=v_0$, $u'=v_k$ and $(v_{i}),v_{i+1})\in E$ for $i=1,2,\dots ,k-1$.
-
-Each vertex is defined as a \textit{charge station}, described by the following total function:
-\[CH(v)\rightarrow c\]
-A road intersection is simply a vertex with charge rate $c = 0\si{\W}$, while a charge station is a vertex where $c > 0$. An electrical vehicle is specified by two parameters: It's battery capacity given in $\si{\Wh}$, and the consumption rate of the vehicle in $\si{\Wh\per\metre}$. The consumption rate is given by the following function:
-
+An electrical vehicle $EV=(R_{CO},B_{cur},B_{cap})$ is a tuple given by three parameters: Its battery capacity $B_{cap}$ given in $\si{\Wh}$, the consumption rate of the $R_{CO}$ given in $\si{\Wh\per\metre}$. The consumption rate is given by the following function:
 \begin{equation}
 \begin{aligned}
- & CS(v)=av^2+bv+c
+ & R_{CO}(v)=av^2+bv+c
 \end{aligned}
 \end{equation}\label{eq:chargingFunc}
+where $v$ is the speed of the vehicle. The constants $a$,$b$,$c$ are dependent on the the specific instance of the vehicle. The charge of the battery is defined by the starting battery, the energy consumed and the energy charged. However we will abstract away from this, as this is uselessly complicated to write, and just denote $B_{cur}$ as the current battery charge, in a given situation.
 
-% \[ 4,60272*10^{-5}*v^2+6,59187*10^{-4}*v+0,173117 \] tesla
+Lastly we define a path of length k from a vertex $u$ to a vertex $u'$ in a graph as a sequence of vertices $\langle v_0,v_1,v_2,\dots,v_k \rangle$ such that $u=v_0$, $u'=v_k$ and $(v_{i}),v_{i+1})\in E$ for $i=1,2,\dots ,k-1$.
 
-where $v$ is the speed of the vehicle. The constants $a$,$b$,$c$ are dependent on the the specific instance of the vehicle.
 
-The charge of the battery given in $\si{\Wh}$ is a function of the start charge, the energy consumed and the energy charged. However we will abstract away from this, as this is uselessly complicated to write, and just denote $B_{cur}$ as the current battery charge.
-
-\todo[inline]{
-Alternativ notation\\
-graph \[G(N,E)\] \\
-charge station gives charge rate \[CS(n) \rightarrow R_{cha}\] \\
-consumption rate function \[R_{con}=av^2+bv+c\ \] \\
-\[T(v,(u, n)) = \frac{D(u, n)}{v} + \frac{R_{con}(v) * D(u, n) - B_{cur}}{CS(n)}\]
-}
