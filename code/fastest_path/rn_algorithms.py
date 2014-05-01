@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from copy import copy
-=======
-
->>>>>>> 8cf1457d6c590c71e833dba8c09f868b4d0b3dd0
 from sympy import *
 from operator import itemgetter
 from copy import copy, deepcopy
@@ -96,7 +91,7 @@ def travel_time(preCS, myCS, e, cur_battery):
     # Case 2
     chargeStations = getChargeRate(preCS, myCS) # 
     if (not chargeStations[0]) and time_case1 == float('inf'):
-        return (float('inf'), [[]], cur_battery, float('inf'))
+        return (float('inf'), [], cur_battery, float('inf'))
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
@@ -106,7 +101,8 @@ def travel_time(preCS, myCS, e, cur_battery):
     v_opt_case2 = getV(minSpeed, maxSpeed, v_opt_points_case2[0])
     additional_time = 0
     
-    while (consumption_rate(v_opt_case2)*dist) - cur_battery > possible_energy:  
+    while (consumption_rate(v_opt_case2)*dist) - cur_battery > possible_energy:
+        print "in while"
         cur_battery += possible_energy
         additional_time += (possible_energy / chargeRate)
         chargeStations.remove(0)
@@ -116,7 +112,8 @@ def travel_time(preCS, myCS, e, cur_battery):
          
     time_case2 = dist/v_opt_case2 + (((consumption_rate(v_opt_case2)*dist) - cur_battery)/chargeRate) + additional_time
     energy_used_case2 = (consumption_rate(v_opt_case2)*dist)
-    cur_battery_case2 = cur_battery - energy_used_case2
+
+    cur_battery_case2 = cur_battery
     
     if time_case1 < time_case2:
         preCS.append(myCS)
@@ -125,21 +122,14 @@ def travel_time(preCS, myCS, e, cur_battery):
     else:
         return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
 
-<<<<<<< HEAD
-def fastest_path_greedy(G, s, t, ev):
-    G = copy(G)
 
-    for id,data in G.nodes(data=True):
-        data['dist'] = float('inf')
-        data['path'] = None
-=======
+
 def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
     G = copy(graph)
 
     for id, data in G.nodes(data=True):
         data['time'] = float('inf')
         data['path'] = [id]
->>>>>>> 8cf1457d6c590c71e833dba8c09f868b4d0b3dd0
         data['preCS'] = []
         data['myCS'] = [battery_cap, data['charge_rate']]
         data['curbat'] = 0
@@ -149,6 +139,7 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
     open_nodes = sorted(G.nodes(data=True), key=lambda x: x[1]['time'])
     while open_nodes:
         node_id, node_data = open_nodes[0]
+        print "now working on: ", node_id
         open_nodes.remove(open_nodes[0])
         if node_data['time'] == float('inf'):
             print "The graph is not connected"
@@ -164,8 +155,12 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
                 node['path'] = node_id
                 node['curbat'] = curbat
                 if preCS:
-                    node['preCS'] = update_possible_energy(preCS, energyUsed)
+                    print "in pre"
+                    update_possible_energy(preCS, energyUsed)
                 node['myCS'][0] = battery_cap - curbat 
                 open_nodes.sort(key=lambda x: x[1]['time'])
 # print open_nodes
-    print G.node[t]
+    path =  G.node[t]['path']
+    while path != s:
+        print path
+        path = G.node[path]['path']
