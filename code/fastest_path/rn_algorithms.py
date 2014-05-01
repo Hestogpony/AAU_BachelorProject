@@ -1,27 +1,37 @@
-import copy
+
 from sympy import *
 from operator import itemgetter
+from copy import copy, deepcopy
 
-def getV(min_v, max_v, v):
-    if v < min_v:
-        return min_v
-    elif max_v < v:
-        return max_v
+# returns the optimal velocity v
+# between v_min and v_max
+def getV(v_min, v_max, v):
+    if v < v_min:
+        return v_min
+    elif v_max < v:
+        return v_max
     else:
         return v
 
-def cleanPreCs(preCS, myCS, curbat):
-    myCS[0] -= curbat
-    if myCS[1] > preCS[0][1]:
-        return [myCS]
-    preCS.append(myCS)
-    return preCS
+def update_possible_energy(preCS, energyUsed):
+    for CS in preCS:
+        CS[0] -= energyUsed
 
-#Start
-def UpdateCSAfterCharging(chargeStations, usedEnergy):
+def updateCSAfterCharging(chargeStations, usedEnergy):
     for chargeStation in chargeStations:
         if chargeStation:
             chargeStation[0] -= usedEnergy
+            
+def updateCS(charge_stations):
+    
+    bestCS = charge_stations[0]
+    
+    for CS in charge_stations:
+        if CS[1] >= bestCS[1]:
+            bestCS = CS
+                            
+    place = charge_stations.index(bestCS)
+    return charge_stations[:place]
 
 def getBestChargeStation(chargeStations):
     if not chargeStations:
@@ -35,147 +45,114 @@ def getBestChargeStation(chargeStations):
     place = chargeStations.index(bestStation)
     return chargeStations[:place]
 
-def getChargeRate(chargeStations, maxEnergy):
-    if len(chargeStations) == 0:
-        print "No charging Stations"
-        return ([[]], 0, 0)
-    max_energy = chargeStations[0][0]
-    max_rate = chargeStations[0][1]
-    if max_energy > maxEnergy:
-        return (chargeStations, 0, 0)
+# Function checks if newly added charge station (currentCS)
+# is faster than all of the previous charge stations (preCS)
+# returns currentCS if true else returns preCS 
+def getChargeRate(preCS, currentCS):
+    current_rate = currentCS[1]
+    if current_rate == 0:
+        return preCS
+    if len(preCS) == 0:
+        return [currentCS]
+    max_rate = preCS[0][1]
+    
+    if max_rate > current_rate:
+        preCS.append(currentCS)
+        return preCS
     else:
-        timeUsed = max_energy/max_rate
-        addedBat = max_energy
-        chargeStations.remove(chargeStations[0])
-        UpdateCSAfterCharging(chargeStations, addedBat)
-        chargeStations = updateChargeStation(chargeStations)
-        return (chargeStations, timeUsed, addedBat)
-#End
-
-def f(v):
+        return [currentCS]
+    
+def consumption_rate(v):
     return ((0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3))
 
 
-def travel_time(charge_rates, e, ev):
-#print charge_rates
-#Works
+def travel_time(preCS, myCS, e, cur_battery):
+
     dist = e[2]['weight']
     maxSpeed = e[2]['speed_limit']
-    minSpeed = e[2]['speed_limit']-10
+    minSpeed = e[2]['speed_limit']*0.8
     
+    # Case 1
     x = Symbol('x')
     try:
-        v_dont = solve( dist*((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3)) - ev)
-        v_dont = getV(minSpeed, maxSpeed, v_dont[1])
+        v_opt_points_case1 = solve( dist*((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3)) - cur_battery)
+        v_opt_case1 = getV(minSpeed, maxSpeed, v_opt_points_case1[1])
     except:
-        v_dont = float('inf')
-    if dist*f(v_dont) > ev:
-        t_dont = float('inf')
+        v_opt_case1 = float('inf')
+        
+    if dist*consumption_rate(v_opt_case1) > cur_battery:
+        time_case1 = float('inf')
     else:
-        t_dont = dist/v_dont
-    ev_dont = ev-(dist*f(v_dont))
-    if t_dont < float('inf') and v_dont == maxSpeed: #If we have the energy needed to drive at max speed we do so.
-        #print "returned from 1: ", t_dont, charge_rates, ev_dont
-        return (t_dont, charge_rates , ev_dont)
-#End of works :)
-#Start
-    print charge_rates
-    chargeStations, addedTime, addedEnergy = getChargeRate(charge_rates, dist*f(maxSpeed)) # kald indtil addedTime eller addedEnergy not eq 0.
-    if not chargeStations[0]:
-        t_do = float('inf')
-        if t_dont < t_do:
-            print "returned from 2: ", t_dont, charge_rates, ev_dont
-            return (t_dont, charge_rates , ev_dont)
-        else:
-            print "returned from 3: ", t_do, chargeStations, ev
-            return (t_do, chargeStations, ev)
+        time_case1 = dist/v_opt_case1  
+    energy_used_case1 = (dist*consumption_rate(v_opt_case1))
+    cur_battery_case1 = cur_battery-energy_used_case1
+    if time_case1 < float('inf') and v_opt_case1 == maxSpeed: #If we have the energy needed to drive at max speed we pick case 1 right away.
+        return (time_case1, preCS , cur_battery_case1, energy_used_case1)
+    
+    # Case 2
+    chargeStations = getChargeRate(preCS, myCS) # 
+    if (not chargeStations[0]) and time_case1 == float('inf'):
+        return (float('inf'), [[]], cur_battery, float('inf'))
 
-
-    UpdateCSAfterCharging(chargeStations, addedEnergy)
-    i = 0
-    while (not addedTime ==  0) and i < 10000: #fix i morgen pls
-        chargeStations, time, energy = getChargeRate(chargeStations, charge_rate, dist*f(maxSpeed))
-        addedTime += time
-        addedEnergy += energy
-        if not chargeStations[0]:
-            t_do = float('inf')
-            if t_dont < t_do:
-                print "returned from 4: ", t_dont, charge_rates, ev_dont, i
-                return (t_dont, charge_rates , ev_dont)
-            else:
-                print "returned from 5: ", t_do, chargeStations, ev
-                return (t_do, chargeStations, ev)
-        UpdateCSAfterCharging(chargeStations, energy)
-        if time == 0:
-            break
-        i += 1
-
-
-    chargeRate = chargeStations[0][1] #The charging speed of the selected charging station.
-    #  print dist
-    y = dist/x + ((((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3))*dist)/chargeRate)
-    yprime = y.diff()
-    v_do = solve(yprime)
-    v_do = getV(minSpeed, maxSpeed, v_do[0])
-    t_do = dist/v_do + ((f(v_do)*dist)/chargeRate) + addedTime
-    ev_do = ev + addedEnergy
-#Update all charge rates by subtracting the amount of energy used from amount on all other charging stations.
-    UpdateCSAfterCharging(chargeStations, dist*f(v_do))
-    if t_dont < t_do:
-        print "returned from 6: ", t_dont, charge_rates, ev_dont
-        return (t_dont, charge_rates , ev_dont)
+    chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
+    possible_energy = chargeStations[0][0]
+    edge_time = dist/x + ((((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3))*dist)/chargeRate)
+    edge_time_prime = edge_time.diff()
+    v_opt_points_case2 = solve(edge_time_prime)
+    v_opt_case2 = getV(minSpeed, maxSpeed, v_opt_points_case2[0])
+    additional_time = 0
+    
+    while (consumption_rate(v_opt_case2)*dist) - cur_battery > possible_energy:  
+        cur_battery += possible_energy
+        additional_time += (possible_energy / chargeRate)
+        chargeStations.remove(0)
+        chargeStations = updateCS(chargeStations)
+        possible_energy = chargeStations[0][0]
+        chargeRate = chargeStations[0][1] 
+         
+    time_case2 = dist/v_opt_case2 + (((consumption_rate(v_opt_case2)*dist) - cur_battery)/chargeRate) + additional_time
+    energy_used_case2 = (consumption_rate(v_opt_case2)*dist)
+    cur_battery_case2 = cur_battery - energy_used_case2
+    
+    if time_case1 < time_case2:
+        preCS.append(myCS)
+        chargeStations = updateCS(preCS)
+        return (time_case1, chargeStations, cur_battery_case1, energy_used_case1)
     else:
-        print "returned from 7: ", t_do, chargeStations, ev_do
-        return (t_do, chargeStations, ev_do)
-#end
+        return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
 
-def fastest_path_greedy(G, s, t, ev):
-    G = copy.copy(G)
+def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
+    G = copy(graph)
 
-    for id,data in G.nodes(data=True):
-        data['dist'] = float('inf')
+    for id, data in G.nodes(data=True):
+        data['time'] = float('inf')
         data['path'] = [id]
         data['preCS'] = []
-        data['myCS'] = [80, data['charge_rate']]
+        data['myCS'] = [battery_cap, data['charge_rate']]
         data['curbat'] = 0
-    G.node[s]['dist'] = 0
+    G.node[s]['time'] = 0
     G.node[s]['path'] = [s]
-    G.node[s]['curbat'] = 0.3
-    G.node[s]['preCS'] = [[80, 20]]
-    Q = sorted(G.nodes(data=True), key=lambda x: x[1]['dist'])
-    while Q:
-        u,data = Q[0]
-        Q.remove(Q[0])
-        print u, data, "\n\n"
-        if data['dist'] == float('inf'):
+    G.node[s]['curbat'] = init_battery
+    open_nodes = sorted(G.nodes(data=True), key=lambda x: x[1]['time'])
+    while open_nodes:
+        node_id, node_data = open_nodes[0]
+        open_nodes.remove(open_nodes[0])
+        if node_data['time'] == float('inf'):
             print "The graph is not connected"
             break
-        for e in G.edges([u], data=True):
-            #print data['preCS'], data['myCS']
-            #returns time, new list of chargeStations and current battery level
-            #print data['preCS']
-            dist, pre, curbat = travel_time(copy.deepcopy(data['preCS']), e, data['curbat'])
-            #print u, dist, pre, curbat
-            if dist == float('inf'):
+        for e in G.edges([node_id], data=True):
+            time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, node_data['curbat'])
+            if time == float('inf'):
                 print "The path is not possible"
                 break
             node = G.node[e[1]]
-            #print node['dist'], data['dist'], dist
-            #print "pre:  ", pre
-            if node['dist'] > data['dist'] + dist:
-                #print "updataing"
-                #print "updated a chargeStation"
-                node['dist'] = dist + data['dist']
-                node['path'].extend(data['path'])
+            if node['time'] > node_data['time'] + time:
+                node['time'] = time + node_data['time']
+                node['path'] = node_id
                 node['curbat'] = curbat
-                #print "pre: ", pre
-                if pre:
-                    # print "in pre"
-                    #print pre
-                    node['preCS'] = cleanPreCs(pre, node['myCS'], curbat)
-                #print node['preCS']
-                else:
-                    node['preCS'] = [node['myCS']]
-                Q.sort(key=lambda x: x[1]['dist'])
-# print Q
+                if preCS:
+                    node['preCS'] = update_possible_energy(preCS, energyUsed)
+                node['myCS'][0] = battery_cap - curbat 
+                open_nodes.sort(key=lambda x: x[1]['time'])
+# print open_nodes
     print G.node[t]
