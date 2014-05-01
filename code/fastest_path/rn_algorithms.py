@@ -7,20 +7,19 @@ from sympy import *
 from operator import itemgetter
 from copy import copy, deepcopy
 
-def getV(min_v, max_v, v):
-    if v < min_v:
-        return min_v
-    elif max_v < v:
-        return max_v
+# returns the optimal velocity v
+# between v_min and v_max
+def getV(v_min, v_max, v):
+    if v < v_min:
+        return v_min
+    elif v_max < v:
+        return v_max
     else:
         return v
 
-def cleanPreCs(preCS, myCS, curbat):
-    myCS[0] -= curbat
-    if myCS[1] > preCS[0][1]:
-        return [myCS]
-    preCS.append(myCS)
-    return preCS
+def update_possible_energy(preCS, energyUsed):
+    for CS in preCS:
+        CS[0] -= energyUsed
 
 def updateCSAfterCharging(chargeStations, usedEnergy):
     for chargeStation in chargeStations:
@@ -88,21 +87,17 @@ def travel_time(preCS, myCS, e, cur_battery):
     if dist*consumption_rate(v_opt_case1) > cur_battery:
         time_case1 = float('inf')
     else:
-        time_case1 = dist/v_opt_case1    
-    cur_battery_case1 = cur_battery-(dist*consumption_rate(v_opt_case1))
-    
+        time_case1 = dist/v_opt_case1  
+    energy_used_case1 = (dist*consumption_rate(v_opt_case1))
+    cur_battery_case1 = cur_battery-energy_used_case1
     if time_case1 < float('inf') and v_opt_case1 == maxSpeed: #If we have the energy needed to drive at max speed we pick case 1 right away.
-        return (time_case1, preCS , cur_battery_case1)
+        return (time_case1, preCS , cur_battery_case1, energy_used_case1)
     
     # Case 2
     chargeStations = getChargeRate(preCS, myCS) # 
-    if chargeStations[0]:
-        time_case2 = float('inf')
-        if time_case1 < time_case2:
-            return (time_case1, preCS, cur_battery_case1)
-        else:
-            return (time_case2, chargeStations, cur_battery)
-    
+    if (not chargeStations[0]) and time_case1 == float('inf'):
+        return (float('inf'), [[]], cur_battery, float('inf'))
+
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
     edge_time = dist/x + ((((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3))*dist)/chargeRate)
@@ -120,14 +115,15 @@ def travel_time(preCS, myCS, e, cur_battery):
         chargeRate = chargeStations[0][1] 
          
     time_case2 = dist/v_opt_case2 + (((consumption_rate(v_opt_case2)*dist) - cur_battery)/chargeRate) + additional_time
-    cur_battery_case2 = cur_battery - (consumption_rate(v_opt_case2)*dist) 
+    energy_used_case2 = (consumption_rate(v_opt_case2)*dist)
+    cur_battery_case2 = cur_battery - energy_used_case2
     
     if time_case1 < time_case2:
         preCS.append(myCS)
         chargeStations = updateCS(preCS)
-        return (time_case1, chargeStations, cur_battery_case1)
+        return (time_case1, chargeStations, cur_battery_case1, energy_used_case1)
     else:
-        return (time_case2, chargeStations, cur_battery_case2)
+        return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
 
 <<<<<<< HEAD
 def fastest_path_greedy(G, s, t, ev):
@@ -158,7 +154,7 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
             print "The graph is not connected"
             break
         for e in G.edges([node_id], data=True):
-            time, preCS, curbat = travel_time(deepcopy(node_data['preCS']), node_data['myCS'], e, node_data['curbat'])
+            time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, node_data['curbat'])
             if time == float('inf'):
                 print "The path is not possible"
                 break
@@ -168,9 +164,8 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
                 node['path'] = node_id
                 node['curbat'] = curbat
                 if preCS:
-                    node['preCS'] = cleanPreCs(preCS, node['myCS'], curbat)
-                else:
-                    node['preCS'] = [node['myCS']]
+                    node['preCS'] = update_possible_energy(preCS, energyUsed)
+                node['myCS'][0] = battery_cap - curbat 
                 open_nodes.sort(key=lambda x: x[1]['time'])
 # print open_nodes
     print G.node[t]
