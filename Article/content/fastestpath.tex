@@ -1,0 +1,6 @@
+\section{Fastest Path}
+Finding a shortest path from vertex $s$ to $t$ can easily be done with an algorithm like Dijkstra's algorithm, if we have a single weight on the edges. In the case of the fastest path problem, we want to minimize the time it takes to travel from $s$ to $t$. However, this time-weight cannot be pre-computed or generalized for edges as paths, charge rates of charge stations, consumption rate and speed of the vehicle all change depending on $s$ and $t$. All of these parameters dictates that there exist no optimal sub-structure of the problem. The topology of road networks also dictate that the triangle inequality will not always hold. An optimal solution asks for all simple paths to be solved independently, which is too complex to run on a country-sized road network in practice.\\
+
+The only approach is thus to change the problem or the procedure to a solution, where an optimal sub-structure is exist and where the mathematical model of the road is build to satisfy the triangle inequality as often as possible, with minimal loss in path-time.\\
+\todo[inline]{figure?}
+\todo[inline]{talk datastructures that holds for both the greedy and LP approach}
