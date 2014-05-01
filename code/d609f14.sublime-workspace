@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"osm",
+				"OSMParser"
+			],
+			[
+				"shor",
+				"shortest_path_through_all"
+			],
+			[
+				"sho",
+				"shortest_paths"
+			],
+			[
 				"jso",
 				"jsonlatlonpath"
 			],
@@ -34,14 +46,6 @@
 			[
 				"co",
 				"copenhagen"
-			],
-			[
-				"sho",
-				"shortest_path"
-			],
-			[
-				"osm",
-				"osmloader"
 			],
 			[
 				"conn",
@@ -173,6 +177,9 @@
 			]
 		]
 	},
+	"buffers":
+	[
+	],
 	"build_system": "",
 	"command_palette":
 	{
@@ -269,6 +276,9 @@
 	},
 	"file_history":
 	[
+		"/Users/mikkel/projects/osmparser.py",
+		"/Users/mikkel/projects/d609f14/code/fastest_path/main.py",
+		"/Users/mikkel/projects/d609f14/code/fastest_path/loader.py",
 		"/Users/mikkel/projects/d609f14/code/graph/asdf.js",
 		"/Users/mikkel/Documents/asdf.py",
 		"/Users/mikkel/projects/d609f14/code/graph/graphload.py",
@@ -393,10 +403,7 @@
 		"/Users/mikkel/projects/D502e13/report/frontpage.tex",
 		"/Users/mikkel/projects/D502e13/report/appendix/coefficients.tex",
 		"/Users/mikkel/projects/D502e13/report/content/design/forecasting.tex",
-		"/Users/mikkel/projects/D502e13/report/content/evaluation/forecasttest.tex",
-		"/Users/mikkel/projects/D502e13/report/content/implementation/forecasting.tex",
-		"/Users/mikkel/projects/D502e13/report/content/design/scheduling/idea.tex",
-		"/Users/mikkel/projects/D502e13/report/content/implementation/scheduling.tex"
+		"/Users/mikkel/projects/D502e13/report/content/evaluation/forecasttest.tex"
 	],
 	"find":
 	{
@@ -563,6 +570,14 @@
 		"whole_word": false,
 		"wrap": true
 	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
 	"incremental_find":
 	{
 		"height": 25.0
@@ -596,12 +611,13 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 229.0
+		"height": 467.0
 	},
 	"output.find_results":
 	{
 		"height": 0.0
 	},
+	"project": "d609f14.sublime-project",
 	"replace":
 	{
 		"height": 64.0
@@ -810,7 +826,7 @@
 		[
 			[
 				"",
-				"~/projects/d609f14/code/untitled.sublime-workspace"
+				"~/Dropbox/Programmering/project_euler/euler.sublime-project"
 			]
 		],
 		"width": 380.0

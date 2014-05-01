@@ -1,5 +1,8 @@
 \subsection{Greedy Algorithm}
-By continuously picking the currently fastest path, and keep it updated throughout the graph we can find the fastest path. A locally best choice is to select the minimum of driving using the energy in the battery or charge and drive.
+\todo[inline]{klarlæg og beskriv den anvendte datastruktur}
+By following Dijkstra's algorithm, continuously picking the currently fastest path, and keep it updated throughout the graph we can find the fastest path. A locally best choice is to select the path, with the least amount of time spend driving.
+
+the minimum of driving using the energy in the battery or charge and drive.
 The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charging is given by the following equation:
 \begin{equation}
 \begin{aligned}
@@ -68,6 +71,7 @@ we have a way of deciding the time it will take to drive a road segment, while a
 \end{algorithmic}\label{alg:fastest_path}
 
 \subsubsection{Charge Station Cleanup}
+\todo[inline]{dette afsnit skal formentlig op til introduktionen af alg.}
 While the algorithm progresses through the graph, it need to maintain only a subset of all the visited charge stations, as the battery capacity and therefore range of the vehicle is limited. At every charge station the algorithm reaches, we record the possible energy we can add at the charge station and the charge rate of the station as a tuple $(B_{possible}, CR(vertex))$.
 \\
 \\
