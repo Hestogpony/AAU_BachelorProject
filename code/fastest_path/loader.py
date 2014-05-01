@@ -10,7 +10,7 @@ import networkx as nx
 
 class Loader():
     def __init__(self):
-        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.253.228', user="d609f14", password="cocio")
+        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.248.244', user="d609f14", password="cocio")
         self.cur = self.conn.cursor()
 
     def remove_unconnected(self):
