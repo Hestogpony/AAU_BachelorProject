@@ -54,14 +54,14 @@ Using this we can define a fastest path algorithm in the following way: \\
 		\ForAll{$adj(u)$} 
 			\State $travel = travel\_time(u.preCS, (u, v), B_{cur})$
 			\State $time = travel[1]$
-			\State $preCS = travel[2]$
-			\State $B_{cur} = travel[3]$
+			\State $preCH = travel[2]$
+			\State $curbat = travel[3]$
 			\If{t$ime == infinity$} break \EndIf
 			\If{$v.time > u.time + time$} 
 				\State $v.time = u.time + time$
 				\State $v.path = u.path + [v]$
 				\State $v.B_{cur} = curbat$
-				\State $v.preCS = cleanCS(preCS, u, burbat)$
+				\State $v.preCS = cleanCS(preCS, u, curbat)$
 				\State reposition $v$ in $Q$
 			\EndIf
 
@@ -70,3 +70,5 @@ Using this we can define a fastest path algorithm in the following way: \\
 	\State \Return $t.time, t.path$
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
+\todo[inline]{hvor bliver den bedste charge station valgt?\\
+hvor bliver charge stations ryde op?}
