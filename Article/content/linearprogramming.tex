@@ -1,4 +1,4 @@
-\subsection{Optimization algorithm}
+\subsection{Linear Program Approach}
 The first solution model we propose for finding the fastest path between two points in a road network is based on a linear programming approach. 
 The algorithm consists of continuous pruning of paths in the road network, until we end up with a single path which is the optimal one. Initially, we pick a random path from $s$ to $t$, called $p$, and solve it optimally, which returns time $T_p$. For every other paths, $p'_i$, from $s$ to $t$ in the road network, we calculate the time it takes to pass it at maximum speed and without charging, which returns time $T_{p'_{i}}$. If $T_p \leq T_{p'_{i}}$ for any $p'_{i}$, we simply ignore it and all it's sub-paths. We can do this, since the optimally time spend driving $p'_i$ will be either greater than or equal to $T_{p'_{i}}$. If we find a path which can be driven faster than $T_p$ we update $p$ and $T_{p'}$. Determining how a path is optimally solved is described in section \ref{sec:optimizingwithLP}. But the overall algorithm for finding the fastest path looks as follows:
 
@@ -27,6 +27,7 @@ The algorithm consists of continuous pruning of paths in the road network, until
 $initial\_path(G,s,t)$ returns a randomly chosen path, $p$ which is solved optimally by $solve\_optimally(p)$. $get\_paths(G,s,t,T_p)$ returns a sorted list of paths in $G$ between $s$ and $t$ with a max travelling time of $T_p$.
 
 \subsection{Optimization problem}
+\todo[inline]{the problem definition should come before the algorithm solution}
 We now describe how we calculate the speed to drive at and the amount of energy to charge at which charge stations, in order to pass a path optimally in terms of time. The paths the optimization problem is intended to solve are modelled in the following way: \\
 \begin{figure}[h!]
 \centering

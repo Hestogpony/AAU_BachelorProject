@@ -47,8 +47,8 @@ def main():
     print road_network.nodes()[-1]
     for e in road_network.edges([1394577375L], data=True):
         print e
-    
-    fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
+    print nx.shortest_path(road_network,road_network.nodes()[0], road_network.nodes()[-1], "weight")
+# fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
     
 main()
 
