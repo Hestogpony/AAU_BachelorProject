@@ -6,7 +6,7 @@ def getLines(function, range, presion):
 	konstants = []
 	x = xmin
 	x2 = 0
-	while x+presion < xmax:
+	while x+presion <= xmax:
 		y = function(x)
 		x2 = x + presion	
 		y2 = function(x2)
@@ -18,8 +18,8 @@ def getLines(function, range, presion):
 		x = x2
 	return slopes, points, konstants
 
-def f(x):
-	return 0.0286*x*x + 0.4096*x + 107.57
+def f(v):
+	return ((0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3))
 
 points = []
 points1 = []
@@ -28,7 +28,7 @@ lineb = []
 def produceData(speedLimits, presion):
 
 	for speedLimit in speedLimits:
-		data = getLines(f, (speedLimit-30,speedLimit), presion)
+		data = getLines(f, (64,80), 3.2)
 		#print data
 		ps = []
 		ps1 = []
