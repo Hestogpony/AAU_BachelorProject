@@ -1,11 +1,10 @@
 \subsection{Greedy-Heuristics-Approach}
 \todo[inline]{klarlæg og beskriv den anvendte datastruktur}
-Using Dijkstra's approach to a shortest path, where we propagate the weights throughout the graph, together with a look-back technique, we present a greedy-heuristic algorithm that continuously pick the currently and locally fastest path and propagate the time on that path throughout the graph.\\
-
-The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charging, is given by the following equation:
+Using Dijkstra's approach to a shortest path, together with a look-back technique, we present a greedy-heuristic algorithm that continuously pick the currently and locally fastest path and propagate the time-weight on that path throughout the graph.\\
+The time spent driving an edge $(u_1, u_2)$ in the graph, is given by the following equation:
 \begin{equation}
 \begin{aligned}
- & T(v,(u_1, u_2)) = \frac{D(u_1, u_2)}{v} + \frac{CS(v) * D(u_1, u_2) - B_{cur}}{preCH_0(u_1)}
+ & T(v,(u_1, u_2)) = \frac{D(u_1, u_2)}{v} + \frac{R_{CO}(v) * D(u_1, u_2) - B_{cur}}{Best_{CH}(u_1)}
 \end{aligned}
 \end{equation}\label{eq:drivingAndCharging}
 
@@ -21,18 +20,21 @@ The time spent driving an edge $(u_1, u_2)$ in the graph, when driving and charg
 \end{tikzpicture}% 
 \caption{In this instance of $T(v,(u_1, u_2))$, going from $u_1$ to $u_2$, we have a distance of 5 miles and a chargespeed of 5kW on $u_1$. The optimal speed in this case is 42.12, which takes 25.2 minutes}
 \end{figure}\label{fig:graph}
-
 where $v$ is the speed of the vehicle, $D(u_1, u_2)$ is the distance between $u_1$ and $u_2$,
-$CS(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $preCH_0(u_1)$ is the charge rate of best charge station previous to $u_1$, which still can be used without overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + c$, due to the fact that Equation \ref{eq:chargingFunc} is a quadratic function and the values: $v, CS(v), u_1.preCH_0()$ all being positive.
-A, b and c are some constants. Represented in a coordinate system, this becomes a curve as represented in figure \ref{fig:graph}. On the x-axis is the speed of the vehicle and on the y-axis is the time spent.
+$R_{CO}(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $Best_{CH}(u_1)$ is the charge rate of best charge station previous to $u_1$, which can be used without overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + c$, due to the fact that Equation \ref{eq:chargingFunc} is a quadratic function and the values: $v, R_{CO}(v), Best_{CH}(u_1)$ all being with positive values. $a$,$b$ and $c$ are some constants. Represented in a coordinate system, this becomes a curve as represented in figure \ref{fig:graph}. On the x-axis is the speed of the vehicle and on the y-axis is the time spent.\\
+The turning point of the graph, $v_{opt}(e)$, is the optimal speed for the edge. This point is easily solved by finding a tangent line with a slope of 0. If $v_{opt}(e)$ is smaller than $v_{min}(e)$, $v_{min}(e)$ defines the optimal speed the edge segment $e$. Similarly if $v_{opt}(e)$ is larger than $v_{max}(e)$, $v_{max}(e)$ defines the optimal speed.  \\
+The time spent driving an edge $(u_1, u_2)$, using the energy in the battery, can be found by solving:
+\[B_{cur} - D(u_1, u_2) * R_{CO}(v) = 0\] 
+if $v_{opt}(e)$ is lower than $v_{min}(e)$ the time used driving is set to infinity, since there is not enough energy in the battery to drive from $u_1$ to $u_2$. Otherwise $v_{opt}$ is decided in the same way when charging is considered.\\
 
-The turning point of the graph, $v_{opt}(e)$, is the optimal speed for the EV this point is easily solved by finding a tangent line with a slope of 0. If $v_{opt}(e)$ is smaller than $v_{min}(e)$, $v_{min}(e)$ defines the optimal speed on road segment $e$ similarly if $v_{opt}(e)$ is larger than $v_{max}(e)$, $v_{max}(e)$ defines the optimal speed.  
+The above can bo used to create a function, which help us find the optimal way to drive a road segment. 
+\[travel\_time(charge\_stations, (u_1, u_2), B_{cur}) \]
+we have a way of deciding the time it will take to drive a road segment, while accounting for the need of charging along the path. This function is used with Dijkstra's algorithm where we use the time instead of distance. Just like Dijkstra's algorithm we keep track of the fastest path leading to each vertices, where shortest path in turn means the path using least time. Furthermore all previous charging stations on the current path, that are within range and can still be used for charging, needs to be stored on each vertex. This way we will charge at a station after leaving it, if we do not violate the physical constraints in the system(i.e. no over-charging). Lastly the algorithm need also to keep track of how much battery the EV have, when it first arrives at a charging station.\\
 
-The time spent driving an edge $(u_1, u_2)$ using the energy in the battery can be found by solving $B_{cur} - D(u_1, u_2) * CS(v) = 0$, if $v_{opt}(e)$ is lower than $v_{min}(e)$ the time used driving is set to infinity, since there is not enough energy in the battery to drive from $u_1$ to $u_2$. Otherwise $v_{opt}$ is decided in the same way when charging is considered.   
+While the algorithm progresses through the graph, it need to store a subset of the charge stations on the current path. At every reached charge station, we record the possible energy we can add to the system, defined by $b_{cap}-B_{cur}$ and the charge rate of the station as a tuple: $(B_{possible}, R_{CH}(vertex))$.\\
+We maintain a subset of tuples on every vertex by using a list of tuples only with $B_{possible}$ above 0. This will of course always be the case when we reach a charge station, but as we progress through the graph and some distance is being traveled, the possible energy at each previous charge station decreses. The first tuple in the list will always be the the charge station with the best charge rate. A tuple is removed either when $B_{possible}$ hit 0, or when new tuple, with a higher charge rate is found. We make sure to store the best charge station at position 0 in the list, by remove every tuple between the first and second best charge rate in the list.\\
 
-The above can do used to create a function, which help us find the optimal way to drive a road segment. 
-\[travel\_time(charge\_stations, (u_1, u_2), curbat) \]
-we have a way of deciding the time it will take to drive a road segment, while accounting for the need of charging along the path. This function can be used in a modified version of Dijkstra's algorithm where we use time instead of distance. Just like Dijkstra's algorithm we keep track of the fastest path leading to each vertices, where fastest path means the path using less time, furthermore the previous charging stations which are still can be used for charging needs to be tracked, this way we can still charge at a station after leaving it if we do not violate the physical constraints in the system(no over charging). Lastly the algorithm needs to keep track of how much battery the EV have when it arrives at each charging station. Using this we can define a fastest path algorithm in the following way: 
+Using this we can define a fastest path algorithm in the following way: \\
 
 \begin{algorithmic}
 \Function{fastestPath}{$G,s,t$}
@@ -54,14 +56,14 @@ we have a way of deciding the time it will take to drive a road segment, while a
 		\ForAll{$adj(u)$} 
 			\State $travel = travel\_time(u.preCS, (u, v), B_{cur})$
 			\State $time = travel[1]$
-			\State $preCS = travel[2]$
-			\State $B_{cur} = travel[3]$
+			\State $preCH = travel[2]$
+			\State $curbat = travel[3]$
 			\If{t$ime == infinity$} break \EndIf
 			\If{$v.time > u.time + time$} 
 				\State $v.time = u.time + time$
 				\State $v.path = u.path + [v]$
 				\State $v.B_{cur} = curbat$
-				\State $v.preCS = cleanCS(preCS, u, burbat)$
+				\State $v.preCS = cleanCS(preCS, u, curbat)$
 				\State reposition $v$ in $Q$
 			\EndIf
 
@@ -70,10 +72,5 @@ we have a way of deciding the time it will take to drive a road segment, while a
 	\State \Return $t.time, t.path$
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
-
-\subsubsection{Charge Station Cleanup}
-\todo[inline]{dette afsnit skal formentlig op til introduktionen af alg.}
-While the algorithm progresses through the graph, it need to maintain only a subset of all the visited charge stations, as the battery capacity and therefore range of the vehicle is limited. At every charge station the algorithm reaches, we record the possible energy we can add at the charge station and the charge rate of the station as a tuple $(B_{possible}, CR(vertex))$.
-\\
-\\
-We maintain this subset of tuples by managing a list of tuples only with $B_{possible}$ higher than 0. This will of course always be the case when we reach a charge station, but as we progress through the graph and some distance is being traveled, the possible energy at each previous charge station decreses. The first tuple in the list will always be the the charge station with the best charge rate. When a tuple is removed we also remove every tuple, between the first and the second best charge rate in the list. Finally, if we at some point find a charge station with a charge rate better than every recorded charge rate, i.e. the first tuple, we delete all the tuples.
+\todo[inline]{hvor bliver den bedste charge station valgt?\\
+hvor bliver charge stations ryde op?}
