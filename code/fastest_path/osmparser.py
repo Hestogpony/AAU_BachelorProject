@@ -62,7 +62,7 @@ class OSMGraph (sax.ContentHandler):
         elif name == 'way':
             self.way = []
 
-    def parse_osm(filename):
+    def parse_osm(self, filename):
         fp = open(filename,"r")
         osmintersections = OSMIntersections()
         parser = sax.make_parser()  
