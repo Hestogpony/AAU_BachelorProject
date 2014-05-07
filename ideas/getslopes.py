@@ -1,3 +1,4 @@
+
 lowestSpeed = 64.0
 highestSpeed = 80.0
 edgeDist = [70.0]
@@ -11,7 +12,8 @@ for x in range(0, len(edgeDist)):
 def f(v):
     return (0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3)
 
-
+print 
+print f(64)*70
 x = 86.4
 x2 = 90
 

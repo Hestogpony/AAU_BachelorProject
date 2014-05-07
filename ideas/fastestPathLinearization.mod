@@ -22,10 +22,10 @@ var x{i in 1..n, j in 1..m}; #The optimal speed for each road segment.
 
 var z{i in 1..n, j in 1..m}, integer; #Used to ensure only one line segment is choosen. 
 
-var y{i in 1..n}, integer, >= 0; #The optimal charging time at each charging station. 
+var y{i in 1..n}, >= 0; #The optimal charging time at each charging station.
 
 
-minimize obj: sum{i in 1..n} y[i] + (sum{i in 1..n} (speedDistanceRelation[i,1]*(sum{j in 1..m} x[i,j]) + speedDistanceRelation[i,2])); #The objective function to be solved. 
+
 
 
 
@@ -39,19 +39,22 @@ s.t. NoOverCharge{k in 1..n-1}: 0 <= sum{i in 1..k+1}(chargeConstants[i]*y[i]) -
 #Todo fik all units to ensure that all mesures of energy have the exact same units and can be comparied. 
 s.t. battery{k in 1..n}: 0 <= sum{i in 1..k}(chargeConstants[i]*y[i]) - (sum{i in 1..k} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j])) <= batCap;
 
+minimize time: sum{i in 1..n} (y[i]+speedDistanceRelation[i,1]*(sum{j in 1..m} x[i,j])+speedDistanceRelation[i,2]);
 solve; 
 
 
 display y;
-display z; 
-display edgeDist;
-display sum{i in 1..n} chargeConstants[i]*y[i];
-display sum{i in 1..n} edgeDist[i];
-display obj;
+display{i in 1..n} chargeConstants[i]*y[i];
+display time;
 display x;
+display sum{i in 1..n} (y[i]+speedDistanceRelation[i,1]*(sum{j in 1..m} x[i,j])+speedDistanceRelation[i,2]);
+display{i in 1..n} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j]);
+display{i in 1..n} edgeDist[i]/sum{j in 1..m} x[i,j];
+display sum{i in 1..n} ((edgeDist[i]/sum{j in 1..m} x[i,j]) + (edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j])/chargeConstants[i]));
 
-display{k in 1..n}: (sum{i in 1..k} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j]))-(sum{i in 1..k-1} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j]));
-display{k in 1..n}: k,  sum{i in 1..k}(chargeConstants[i]*y[i]) - (sum{i in 1..k} edgeDist[i]*(sum{j in 1..m}(linesA[i,j]*x[i,j]) + sum{j in 1..m} linesB[i,j]*z[i,j]));
+display sum{i in 1..n} ((edgeDist[i]/sum{j in 1..m} x[i,j]) + (y[i]));
+display sum{i in 1..n} ((speedDistanceRelation[i,1]*(sum{j in 1..m} x[i,j])+speedDistanceRelation[i,2]) + (y[i]));
+
 data;
 
 param n := 3;
@@ -70,7 +73,7 @@ param speedDistanceRelation:
 3 	-0.013671875        1.83203125
 ;
 
-param points: 
+param points:
 	1   2       3       4       5	:=
 1	64  67.2    70.4    73.6    76.8
 2   72  75.6    79.2    82.8    86.4
@@ -91,7 +94,7 @@ param linesA:
 3	0.00416192	0.00434496  0.004528    0.00471104      0.00489408
 ;
 
-param linesB: 
+param linesB:
 	1           2            3              4           5	 :=
 1	-0.01543288 -0.027733168 -0.040619184  -0.054090928 -0.0681484
 2   -0.04810552 -0.063673072 -0.079981936  -0.097032112 -0.1148236
