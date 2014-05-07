@@ -43,9 +43,6 @@ class Loader():
     def street_node(self,street):
         return [n[0] for n in self.rn.edges_iter(data=True) if n[2]['name'] == street][0]
 
-    def node_street(self,node):
-        pass #fix this
-
     def visualize_path(self,p):
         jsonpath = (json.dumps([{'title': str(n),'lat':self.rn.node[n]['lat'], 'lng':self.rn.node[n]['lon']} for n in p]))
         f = open('path.html','w')
