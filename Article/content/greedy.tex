@@ -18,7 +18,7 @@ The time spent driving an edge $(u_1, u_2)$ in the graph, is given by the follow
 % \addplot[mark=*, domain=25:75] coordinates {(37,295)};
 \end{axis}
 \end{tikzpicture}% 
-\caption{In this instance of $T(v,(u_1, u_2))$, going from $u_1$ to $u_2$, we have a distance of 5 miles and a chargespeed of 5kW on $u_1$. The optimal speed in this case is 42.12, which takes 25.2 minutes}
+\caption{In this instance of $T(v,(u_1, u_2))$, going from $u_1$ to $u_2$, we have a distance of 5 miles and a chargespeed of 5kW on $u_1$. The optimal speed in this case is $42.12\si{\miles\per\hour}$, which takes 25.2 minutes}
 \end{figure}\label{fig:graph}
 where $v$ is the speed of the vehicle, $D(u_1, u_2)$ is the distance between $u_1$ and $u_2$,
 $R_{CO}(v)$ is the consumption rate of the vehicle at the speed $v$, $B_{cur}$ is the current battery of the vehicle and $Best_{CH}(u_1)$ is the charge rate of best charge station previous to $u_1$, which can be used without overcharging the battery at that station. The above equation yields a function on the form: $av^2 + bv + c$, due to the fact that Equation \ref{eq:chargingFunc} is a quadratic function and the values: $v, R_{CO}(v), Best_{CH}(u_1)$ all being with positive values. $a$,$b$ and $c$ are some constants. Represented in a coordinate system, this becomes a curve as represented in figure \ref{fig:graph}. On the x-axis is the speed of the vehicle and on the y-axis is the time spent.\\
