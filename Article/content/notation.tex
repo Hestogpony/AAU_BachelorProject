@@ -1,11 +1,11 @@
 \subsection{Notation}
-In this section we will briefly explain the mathematical notation and model used in the paper. The graph representation consists of edges which represent road segments and vertices which represent either charge stations or road intersections. We define a \textbf{road network} ($RN$) as a tuple $RN=(V,E,D,v_{max},v_{min},R_{CH})$ comprising of a set $V$ of vertices and a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
+In this section we will briefly explain the mathematical notation and model used in the paper. The graph representation consists of edges which represent road segments and vertices which represent either charge stations or road intersections. We define a road network, $RN$, as a tuple $RN=(V,E,D,v_{max},v_{min},R_{CH})$ comprising of a set $V$ of vertices and a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
 \[ D(e)\rightarrow d \] 
 \[ v_{max}(e)\rightarrow v \]
 \[ v_{min}(e)\rightarrow v \]
 These total functions respectively returns the distance of edge $e$, the maximum speed of edge $e$ and the minimum speed of edge $e$. The minimum speed of a given edge is defined as 30 \% less than the max speed of the edge. Each vertex is defined as a charge station or road intersection, described by the following total function:
 \[R_{CH}(u)\rightarrow c\]
-$R_{CH}$ is the charge rate of vertex $u$ given in kilo-Watt. A road intersection is simply a vertex with charge rate $c = 0\si{\kW}$, while a charge station is a vertex where $c > 0$.
+$c$ is the charge rate of vertex $u$ given in kilo-Watt. A road intersection is simply a vertex with charge rate $c = 0\si{\kW}$, while a charge station is a vertex where $c > 0$.
 
 An electrical vehicle $EV=(R_{CO},B_{cur},B_{cap})$ is a tuple given by three parameters: Its battery capacity $B_{cap}$ given in $\si{\kWh}$, the consumption rate of the $R_{CO}$ given in $\si{\kWh\per\km}$. The consumption rate is given by the following function:
 \begin{equation}
