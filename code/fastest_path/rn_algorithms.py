@@ -1,6 +1,7 @@
 from sympy import *
 from operator import itemgetter
 from copy import copy, deepcopy
+from heapq import heappop, heappush
 
 # returns the optimal velocity v
 # between v_min and v_max
@@ -123,7 +124,6 @@ def travel_time(preCS, myCS, e, cur_battery):
         return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
 
 
-
 def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
     G = copy(graph)
 
@@ -136,21 +136,24 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
     G.node[s]['time'] = 0
     G.node[s]['path'] = [s]
     G.node[s]['curbat'] = init_battery
-    open_nodes = sorted(G.nodes(data=True), key=lambda x: x[1]['time'])
+    open_nodes = []
+    heappush(open_nodes, (0, s))
     while open_nodes:
-        node_id, node_data = open_nodes[0]
+        node_id = heappop(open_nodes)[1]
+        node_data = G.node[node_id]
         print "now working on: ", node_id
-        open_nodes.remove(open_nodes[0])
         if node_data['time'] == float('inf'):
             print "The graph is not connected"
             break
         for e in G.edges([node_id], data=True):
             time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, node_data['curbat'])
+            
             if time == float('inf'):
                 print "The path is not possible"
                 break
             node = G.node[e[1]]
-            if node['time'] > node_data['time'] + time:
+            totalTime = node_data['time'] + time
+            if node['time'] > totalTime:
                 node['time'] = time + node_data['time']
                 node['path'] = node_id
                 node['curbat'] = curbat
@@ -158,9 +161,10 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
                     print "in pre"
                     update_possible_energy(preCS, energyUsed)
                 node['myCS'][0] = battery_cap - curbat 
-                open_nodes.sort(key=lambda x: x[1]['time'])
+                heappush(open_nodes, (totalTime, e[1]))
 # print open_nodes
     path =  G.node[t]['path']
+    print G.node[t]['time']
     while path != s:
         print path
         path = G.node[path]['path']

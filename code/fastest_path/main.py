@@ -32,23 +32,20 @@ def main():
     loader.load_graph()
     road_network = loader.rn
     road_network.generate_charge(10, 20)
-    G = nx.connected_components(road_network)
-    for node in road_network.nodes():
-        if node not in G[0]:
-            road_network.remove_node(node)
-            print nx.shortest_path(road_network, road_network.nodes()[0], road_network.nodes()[-1])
     
-    for e in road_network.edges():
-        if e[0] == e[1]:
-            road_network.remove_edge(e[0], e[1])
+    for node in road_network.nodes():
+        try:
+            nx.shortest_path(road_network,road_network.nodes()[0], node, "weight")
+        except:
+            road_network.remove_node(node)
 
+    
     print road_network.edges()
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
-    for e in road_network.edges([1394577375L], data=True):
-        print e
-    print nx.shortest_path(road_network,road_network.nodes()[0], road_network.nodes()[-1], "weight")
-# fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
+    print nx.shortest_path(road_network,road_network.nodes()[0], road_network.nodes()[-1], "t")
+
+    fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
     
 main()
 

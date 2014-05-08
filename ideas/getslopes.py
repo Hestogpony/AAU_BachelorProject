@@ -25,3 +25,4 @@ slope = (y2-y)/(x2-x)
 
 konstant = y-slope*x
 print konstant, slope
+
