@@ -68,7 +68,7 @@ def reachable(G, P, v, energy):
     for x in xrange(len(P)-1): # for each edge
         edge = G[P[x]][P[(x+1)]]
         edge_distance = edge['weight']
-        speed_limit = edge['speed_limit']    
+        speed_limit = edge['speed_limit']
         needed_energy += (edge_distance/v.consumption_rate(speed_limit))
     return needed_energy <= energy
 

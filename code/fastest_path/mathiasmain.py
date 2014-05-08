@@ -14,7 +14,10 @@ v = vehicle.ElectricalVehicle(80, 80)
 
 print 'graph loaded'
 roadnetwork.visualize()
-print 'driving from %s to %s' %(loader.street_node('Prins Buris Vej'), loader.street_node('Lænkebjerg'))
-path, time = naive.naive_path(roadnetwork, v, loader.street_node('Prins Buris Vej'), loader.street_node('Lænkebjerg'))
+
+print nx.shortest_path(roadnetwork,loader.street_node('Danmarksgade'), loader.street_node('Læsøgade'))
+print 'driving from %s to %s' %(loader.street_node('Danmarksgade'), loader.street_node('Listedvej'))
+path, time = naive.naive_path(roadnetwork, v, loader.street_node('Danmarksgade'), loader.street_node('Læsøgade'))
+
 print path, time
 roadnetwork.visualize_path(path)

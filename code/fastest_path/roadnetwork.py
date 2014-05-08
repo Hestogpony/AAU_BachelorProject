@@ -16,7 +16,9 @@ class RoadNetwork(nw.Graph):
         print("Generating charge rates between: " + str(min_charge) + " and " + str(max_charge))
         counter = 0
         for node_id in self.nodes():
-            if counter % 2000 == 0:
+
+            if counter % 1000 == 0:
+                
                 random_charge_rate = random.randint(min_charge, max_charge)
                 self.node[node_id]['charge_rate'] = random_charge_rate
             else:
