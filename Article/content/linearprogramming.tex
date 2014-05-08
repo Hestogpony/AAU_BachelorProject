@@ -1,4 +1,4 @@
-\subsection{Linear Program Approach}
+\subsection{Linear Programming Approach}
 The first solution model we propose for finding the fastest path between two points in a road network is based on a linear programming approach. 
 The algorithm consists of continuous pruning of paths in the road network, until we end up with a single path which is the optimal one. Initially, we pick a random path from $s$ to $t$, called $p$, and solve it optimally, which returns time $T_p$. For every other paths, $p'_i$, from $s$ to $t$ in the road network, we calculate the time it takes to pass it at maximum speed and without charging, which returns time $T_{p'_{i}}$. If $T_p \leq T_{p'_{i}}$ for any $p'_{i}$, we simply ignore it and all it's sub-paths. We can do this, since the optimally time spend driving $p'_i$ will be either greater than or equal to $T_{p'_{i}}$. If we find a path which can be driven faster than $T_p$ we update $p$ and $T_{p'}$. Determining how a path is optimally solved is described in section \ref{sec:optimizingwithLP}. But the overall algorithm for finding the fastest path looks as follows:\\
 
@@ -49,7 +49,7 @@ The objective of the optimization problem is to minimize the time spend driving
 and the time spend charging for the entire path. The optimization problem can be expressed as follows:
 
 \begin{equation}
-	\begin{aligned} & \underset{v_{e_{1}} \dots v_{e_{n}}, charge\_time(u_1 \dots u_n)}
+	\begin{aligned} & \underset{v_{e_{1}} \dots v_{e_{n}}, charge\_time(u_i \dots u_n)}
 	{\text{minimize:}}
 	& & \sum_{i=1}^{n} \frac{D(e_i)}{v(e_i)} + charge\_time(u_i) \\
 	\end{aligned}
@@ -62,7 +62,7 @@ On all edges the speed of the electrical vehicle must be within the speed limits
 v_{min}(e_i) \leq v(e_i) \leq v_{max}(e_i) \text{ for } i = 1..n  
 \end{equation}
 
-The battery level of the EV, $B_{cur}$, has to be between $0$ and the max battery capacity of the vehicle, $B_{max}$. The constraint is split up in two constraints, one ensuring that the EV will have enough energy to drive each edge and one ensuring that the EV can not over charge at any charging station. $R_{CO}(v)$ is the the energy consumption rate of the EV, given the speed $v$. $EC(u_j)$ is the energy charged at charge station $u_j$ and $ES(e_j)$ is the
+The battery level of the EV, $B_{cur}$, has to be between $0$ and the max battery capacity of the vehicle, $B_{max}$. The constraint is split up in two constraints which looks quite similar. The first constraint is ensuring that the EV will have enough energy to drive each edge and the second constraint is ensuring that the EV can not over charge at any charge station. $R_{CO}(v)$ is the the energy consumption rate of the EV, given the speed $v$. $EC(u_j)$ is the energy charged at charge station $u_j$ and $ES(e_j)$ is the
 energy spend on edge $e_j$.  
 
 \begin{equation}
@@ -89,17 +89,7 @@ It should also not be possible for the EV to spend a negative amount of time at 
 0 \leq charge\_time(u_i) \text{ for } i = 1..n 
 \end{equation}
 
-This optimization problem is almost a linear programming problem. We to however suffer from a non-linear constraint $distance_i*C_R(v_i)$ since the consumption rate $C_R(v)$ of the EV is not linear. The function can however be estimated using linearization. Using linearization we end up with the following linear programming problem.  
- 
-minimizing the sum of time spend driving and the sum of time spend charging. 
-
-\begin{equation}
-\begin{aligned}
- & \underset{speed_{1 \dots n},charge_{1 \dots n}}
-{\text{minimize}}
-& & \sum_{i=1}^{n} \frac{Distance_i}{speed_i} + charge_i \\
-\end{aligned}
-\end{equation}\label{eq:objfunction}
+This optimisation problem is almost a linear programming problem. However, we suffer from a non-linear constraint: $D(e_i)*R_{CO}(v(e_i))$ since the consumption rate $R_{CO}(v(e_i))$ of the EV is not linear. The function can however be estimated using linearisation. 
 
 subject to: 
 \begin{equation}
@@ -111,11 +101,11 @@ subject to:
 \end{equation}
 
 \begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \le Selectedlines[i,j] * Points1[i,j]
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \le Selectedlines[i,j] * Points1[i,j]
 \end{equation}
 
 \begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}:\; speed[i,j] \ge Selectedlines[i,j] * Points2[i,j]
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \ge Selectedlines[i,j] * Points2[i,j]
 \end{equation}
 
 \begin{equation}
