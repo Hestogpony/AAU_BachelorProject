@@ -11,7 +11,8 @@ def naive_path(G, v, s, t):
     cur_node = s
     route_plan_time = 0
     while cur_node is not t:
-        shortest_through = float('inf') 
+        shortest_through = float('inf')
+        shortest_through_path = []
         for node in G.nodes(): #find all charge stations within car_range as the crows flies
             if node == t: #can the car reach t from s
                 sp_t = nx.shortest_path(G, cur_node, t)
@@ -20,7 +21,7 @@ def naive_path(G, v, s, t):
                     break
             elif G.node[node]['charge_rate'] != 0 and\
             distance((float(G.node[node]['lat']),float(G.node[node]['lon'])), 
-                     (float(G.node[cur_node]['lat']),float(G.node[cur_node]['lon']))) <= car_range:
+                     (float(G.node[cur_node]['lat']),float(G.node[cur_node]['lon']))) <= car_range and node != cur_node:
                 try:
                     sp_char = nx.shortest_path(G, cur_node, node) # can the car reach a charge station with roads
                 except:
@@ -32,10 +33,12 @@ def naive_path(G, v, s, t):
                     if shortest_through > path_length(G, combine_path):
                         shortest_through = path_length(G, combine_path)
                         shortest_through_path = sp_char
+        
         route_plan_time += path_time(G, shortest_through_path) + charge_time(G, shortest_through_path, v) #add time spend driven and charging for this sub-path
         cur_node = shortest_through_path[-1]
         del shortest_through_path[0]
         driven_path += shortest_through_path
+        print cur_node
         #print G.node[cur_node]['name'], driven_path
     return driven_path, route_plan_time
 
@@ -65,7 +68,7 @@ def reachable(G, P, v, energy):
     for x in xrange(len(P)-1): # for each edge
         edge = G[P[x]][P[(x+1)]]
         edge_distance = edge['weight']
-        speed_limit = edge['speed_limit']    
+        speed_limit = edge['speed_limit']
         needed_energy += (edge_distance/v.consumption_rate(speed_limit))
     return needed_energy <= energy
 
