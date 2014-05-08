@@ -6,7 +6,7 @@ import roadnetwork
 from loader import Loader
 
 loader = Loader()
-loader.create_graph(9.913101,57.038115,9.965286,57.052682) # fucking Aalborg
+loader.create_graph(7.72,54.46,12.96,57.84) # fucking DANMARK
 loader.load_graph()
 
 roadnetwork = loader.rn
@@ -14,6 +14,7 @@ roadnetwork.generate_charge(10,20)
 v = vehicle.ElectricalVehicle(80, 80)
 
 print 'graph loaded'
-print 'driving from %s to %s' %(loader.street_node('Danmarksgade'), loader.street_node('Læsøgade'))
+print 'driving from %s to %s' %(loader.street_node('Danmarksgade'), loader.street_node('Listedvej'))
 path, time = naive.naive_path(roadnetwork, v, loader.street_node('Danmarksgade'), loader.street_node('Læsøgade'))
 print path, time
+roadnetwork.visualize_path(path)
