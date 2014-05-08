@@ -2,7 +2,7 @@ import math
 
 class ElectricalVehicle(object):
     def __init__(self, battery_capacity, curbat):
-        self.battery_capacity = battery_capacity # capacity in kWh    
+        self.battery_capacity = battery_capacity # capacity in kWh 
         self.curbat = curbat
 
     # consumption rate in kWh/mile
