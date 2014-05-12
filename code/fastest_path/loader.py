@@ -10,7 +10,7 @@ import networkx as nx
 
 class Loader():
     def __init__(self):
-        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='127.0.0.1', user="d609f14", password="cocio")
+        self.conn = psycopg2.connect(database="osmgraph",port='5432', host='172.31.250.5', user="d609f14", password="cocio")
         self.cur = self.conn.cursor()
 
     def remove_unconnected(self):
@@ -45,7 +45,7 @@ class Loader():
 
     def node_street_path(self, p):
         return [self.node_street(n) for n in p]
-    
+
     def find_speed_limit(self, road_type):
             if road_type == "living_street":
                 return 50
@@ -77,11 +77,5 @@ class Loader():
                 return 80
             elif road_type == "trunk_link":
                 return 80
-            else: 
+            else:
                 return 50
-
-
-
-
-
-
