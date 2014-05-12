@@ -5,29 +5,29 @@ import webbrowser
 import os
 import time
 
-class RoadNetwork(nw.Graph): 
-    
+class RoadNetwork(nw.Graph):
+
     def __init__(self):
         super(RoadNetwork, self).__init__()
-    
+
     # Generates random charge rates between min_charge and max_charge
-    # on n = num_of_stations random stations 
+    # on n = num_of_stations random stations
     def generate_charge(self, min_charge, max_charge):
         print("Generating charge rates between: " + str(min_charge) + " and " + str(max_charge))
         counter = 0
         for node_id in self.nodes():
 
-            if counter % 1000 == 0:
-                
+            if counter % 5000 == 0:
+
                 random_charge_rate = random.randint(min_charge, max_charge)
                 self.node[node_id]['charge_rate'] = random_charge_rate
             else:
                 self.node[node_id]['charge_rate'] = 0
             counter += 1
-                    
+
     def charge_rate(self, node_id):
         return self.node[node_id]['charge_rate']
-        
+
     def visualize(self):
         json_rn = (json.dumps([{'title': str(node),'lat':self.node[node]['lat'], 'lng':self.node[node]['lon'], 'charge_rate':self.node[node]['charge_rate']} for node in self.nodes()]))
         f = open('path.html','w')
