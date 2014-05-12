@@ -45,7 +45,7 @@ class Loader():
 
     def node_street_path(self, p):
         return [self.node_street(n) for n in p]
-    
+
     def find_speed_limit(self, road_type):
             if road_type == "living_street":
                 return 50
@@ -77,11 +77,5 @@ class Loader():
                 return 80
             elif road_type == "trunk_link":
                 return 80
-            else: 
+            else:
                 return 50
-
-
-
-
-
-
