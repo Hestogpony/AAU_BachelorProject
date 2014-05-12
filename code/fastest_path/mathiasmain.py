@@ -18,5 +18,6 @@ rn.visualize()
 print 'driving from %s to %s' %(loader.street_node('Fredrik Bajers Vej'), loader.street_node('Simmerstedvej'))
 path, time = naive.naive_path(rn, v, loader.street_node('Fredrik Bajers Vej'), loader.street_node('Simmerstedvej'))
 
+
 print path, time
 rn.visualize_path(path)
