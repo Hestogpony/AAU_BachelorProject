@@ -1,3 +1,5 @@
+*.html
+*.dat
 *.aux
 *.log
 *.out
