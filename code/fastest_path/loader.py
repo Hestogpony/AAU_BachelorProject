@@ -2,9 +2,6 @@
 from haversine import distance
 
 import psycopg2
-import json
-import webbrowser
-import os
 import roadnetwork
 import networkx as nx
 
@@ -33,7 +30,7 @@ class Loader():
         nexttuple = self.cur.fetchone()
         while nexttuple is not None:
             dist = distance((float(nexttuple[1]),float(nexttuple[2])),(float(nexttuple[4]),float(nexttuple[5])))
-            self.rn.add_edge(nexttuple[0],nexttuple[3],weight=dist, name=nexttuple[6], speed_limit=self.find_speed_limit(nexttuple[7]))
+            self.rn.add_edge(nexttuple[0],nexttuple[3],weight=dist, name=nexttuple[6], speed_limit=self.find_speed_limit(nexttuple[7]), t=dist/self.find_speed_limit(nexttuple[7]))
             self.rn.node[nexttuple[0]]['lon'] = str(nexttuple[2])
             self.rn.node[nexttuple[0]]['lat'] = str(nexttuple[1])
             self.rn.node[nexttuple[3]]['lon'] = str(nexttuple[5])
