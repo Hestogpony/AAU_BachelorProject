@@ -2,7 +2,6 @@
 import os
 import time
 import naive
-import allsimplepathdist
 
 #loader = loader.Loader()
 #loader.create_graph(7.5256,54.4125,12.7881,57.6336) #aalborg
@@ -31,12 +30,11 @@ def main():
     loader.create_graph(9.95842,57.007187,10.002193,57.022981)
     loader.load_graph()
     road_network = loader.rn
-    road_network.generate_charge(10, 20)
+    road_network.generate_charge(10, 20, 1000)
     G = nx.connected_components(road_network)
     for node in road_network.nodes():
         if node not in G[0]:
             road_network.remove_node(node)
-            print nx.shortest_path(road_network, road_network.nodes()[0], road_network.nodes()[-1])
     
     for e in road_network.edges():
         if e[0] == e[1]:
@@ -47,8 +45,8 @@ def main():
     print road_network.nodes()[-1]
     for e in road_network.edges([1394577375L], data=True):
         print e
-    print nx.shortest_path(road_network,road_network.nodes()[0], road_network.nodes()[-1], "weight")
-# fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
+    #print nx.shortest_path(road_network,road_network.nodes()[0], road_network.nodes()[-1], "weight")
+    #fastest_path_greedy(road_network,road_network.nodes()[0], road_network.nodes()[-1], 0, 0, 80)
     
 main()
 

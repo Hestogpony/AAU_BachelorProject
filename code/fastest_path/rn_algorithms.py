@@ -1,6 +1,7 @@
 from sympy import *
 from operator import itemgetter
 from copy import copy, deepcopy
+from fastest_path.demo import v_do
 
 # returns the optimal velocity v
 # between v_min and v_max
@@ -72,13 +73,14 @@ def travel_time(preCS, myCS, e, cur_battery):
     minSpeed = e[2]['speed_limit']*0.8
     
     # Case 1
-    x = Symbol('x')
-    try:
-        v_opt_points_case1 = solve( dist*((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3)) - cur_battery)
-        v_opt_case1 = getV(minSpeed, maxSpeed, v_opt_points_case1[1])
-    except:
-        v_opt_case1 = float('inf')
-        
+
+    v_opt_case1 = float('inf')
+    for x in drange(minSpeed, maxSpeed+1, 0.1):
+        temp = (dist*((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3)) - cur_battery)
+        if temp > 0: 
+            v_opt_case1 = x
+    #v_opt_case1 = getV(minSpeed, maxSpeed, v_opt_points_case1)
+    
     if dist*consumption_rate(v_opt_case1) > cur_battery:
         time_case1 = float('inf')
     else:
@@ -95,12 +97,16 @@ def travel_time(preCS, myCS, e, cur_battery):
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
-    edge_time = dist/x + ((((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3))*dist)/chargeRate)
-    edge_time_prime = edge_time.diff()
-    v_opt_points_case2 = solve(edge_time_prime)
-    v_opt_case2 = getV(minSpeed, maxSpeed, v_opt_points_case2[0])
-    additional_time = 0
     
+    v_opt_case2 = float('inf')
+    best_time = float('inf')
+    for x in drange(minSpeed, maxSpeed+1, 0.1):
+        temp = dist/x + ((((0.0286 * x**2 + 0.4096 * x + 107.57) * 10**(-3))*dist)/chargeRate)
+        if temp > best_time:
+            best_time = temp 
+            v_opt_case2 = x 
+    
+    additional_time = 0
     while (consumption_rate(v_opt_case2)*dist) - cur_battery > possible_energy:
         print "in while"
         cur_battery += possible_energy
@@ -164,3 +170,8 @@ def fastest_path_greedy(graph, s, t, ev, init_battery, battery_cap):
     while path != s:
         print path
         path = G.node[path]['path']
+        
+def drange(start, stop, step):
+    while start < stop:
+            yield start
+            start += step

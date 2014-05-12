@@ -12,19 +12,30 @@ class RoadNetwork(nw.Graph):
     
     # Generates random charge rates between min_charge and max_charge
     # on n = num_of_stations random stations 
-    def generate_charge(self, min_charge, max_charge):
-        print("Generating charge rates between: " + str(min_charge) + " and " + str(max_charge))
+    def generate_charge(self, min_charge, max_charge, density):
+        print("Generating charge rates between: " + str(min_charge) + " and " + str(max_charge) + " for every " + str(density) + " nodes")
         counter = 0
         for node_id in self.nodes():
 
-            if counter % 1000 == 0:
+            if counter % density == 0:
                 
                 random_charge_rate = random.randint(min_charge, max_charge)
                 self.node[node_id]['charge_rate'] = random_charge_rate
             else:
                 self.node[node_id]['charge_rate'] = 0
             counter += 1
-                    
+    
+    
+    #Scales all roads in a new instance of a road network by scale_factor
+    #returns the new instance of the road network: road_network
+    def scale_road_network(self, scale_factor):
+        road_network = self
+        print("scaling distancens by: " + str(scale_factor))
+        for edge in road_network.edges(data = True):
+            new_dist = edge['weight'] * scale_factor
+            edge['weight'] = new_dist
+        return road_network
+    
     def charge_rate(self, node_id):
         return self.node[node_id]['charge_rate']
         
