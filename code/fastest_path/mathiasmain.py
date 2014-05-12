@@ -15,8 +15,8 @@ v = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 print 'graph loaded'
 roadnetwork.visualize()
 
-print 'driving from %s to %s' %(loader.street_node('Fredrik Bajers Vej'), loader.street_node('Simmerstedvej'))
-path, time = naive.naive_path(roadnetwork, v, loader.street_node('Fredrik Bajers Vej'), loader.street_node('Simmerstedvej'))
+print 'driving from %s to %s' %(loader.street_node('Fredrik Bajers Vej'), loader.street_node('Pantheonsgade'))
+path, time = naive.naive_path(roadnetwork, v, loader.street_node('Fredrik Bajers Vej'), loader.street_node('Pantheonsgade'))
 
 print path, time
 roadnetwork.visualize_path(path)
