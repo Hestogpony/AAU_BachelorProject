@@ -11,10 +11,15 @@ lonmin, latmin, lonmax, latmax
 """
 import importer
 import networkx as nx
+import fastest_path.roadnetwork
 from fastest_path.haversine import distance
 from fastest_path.roadnetwork import RoadNetwork
 
+rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 
+#charge_station_density(rn,5)
+
+#rn.visualize()
 
 def bounding_box(rn,lonmin,latmin,lonmax,latmax):
 	print rn.number_of_nodes()
@@ -25,17 +30,5 @@ def bounding_box(rn,lonmin,latmin,lonmax,latmax):
 	print rn.number_of_nodes()
 
 
-def scale_road_network(rn, scale_factor):
-	print("scaling distancens by: " + str(scale_factor))
-	for edge in rn.edges(data = True):
-		new_dist = edge['weight'] * scale_factor
-		edge['weight'] = new_dist
 
-def charge_station_density(rn, dist):
-	for node in rn.nodes():
-		print nx.single_source_dijkstra(rn,node,cutoff=dist,weight='weight')
 
-g = nx.read_gpickle('pickle_experiment')
-rn = RoadNetwork()
-
-charge_station_density(rn,5)

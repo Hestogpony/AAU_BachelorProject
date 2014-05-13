@@ -6,6 +6,7 @@ import os
 import time
 
 class RoadNetwork(nw.Graph):
+
     def __init__(self,graph=None):
         super(RoadNetwork, self).__init__(graph)
 
