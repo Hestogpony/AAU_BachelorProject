@@ -1,7 +1,7 @@
 """
 Generate bounding boxes of varying sizes - 10km to Denmark
 Produce S and T vertice, at the edge of the problem - something like 100 times
-Make sure two execusions generate the same results: 
+Make sure two execusions generate the same results:
 	Use the same bounding box and the same nodes as charge stations with the same charge speeds
 return runtime
 
@@ -12,28 +12,23 @@ lonmin, latmin, lonmax, latmax
 import importer
 import networkx as nx
 import fastest_path.roadnetwork
-from fastest_path.loader import Loader
 from fastest_path.haversine import distance
+from fastest_path.roadnetwork import RoadNetwork
 
-lonmin = 8.91
-lonmax = 11.89
-latmin = 55.46
-latmax = 56.86
+rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 
-rn = roadnetwork.RoadNetwork(nx.read_gpickle('pickle_experiment'))
-
-s_and_t(rn)
+#charge_station_density(rn,5)
 
 #rn.visualize()
-def s_and_t(rn):
-	node_count = rn.number_of_nodes()
-	number = random.randint(1, node_count)
-	print number
 
-def bounding_box(lonmin,latmin,lonmax,latmax,rn):
+def bounding_box(rn,lonmin,latmin,lonmax,latmax):
 	print rn.number_of_nodes()
 	for node in rn.nodes():
 		if not ((latmin <= float(rn.node[node]['lat']) <= latmax)\
 		and (lonmin <= float(rn.node[node]['lon']) <= lonmax)):
 			rn.remove_node(node)
 	print rn.number_of_nodes()
+
+
+
+

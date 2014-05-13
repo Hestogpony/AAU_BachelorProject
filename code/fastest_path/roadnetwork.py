@@ -7,7 +7,7 @@ import time
 
 class RoadNetwork(nw.Graph):
 
-    def __init__(self, graph):
+    def __init__(self,graph=None):
         super(RoadNetwork, self).__init__(graph)
 
     # Generates random charge rates between min_charge and max_charge
