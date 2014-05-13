@@ -34,10 +34,8 @@ def scale_road_network(rn, scale_factor):
 def charge_station_density(rn, dist):
 	for node in rn.nodes():
 		print nx.single_source_dijkstra(rn,node,cutoff=dist,weight='weight')
-		break
+
 g = nx.read_gpickle('pickle_experiment')
+rn = RoadNetwork()
 
-
-# rn = RoadNetwork()
-
-# charge_station_density(rn,dist)
+charge_station_density(rn,5)
