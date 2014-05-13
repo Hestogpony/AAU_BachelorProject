@@ -8,7 +8,7 @@ chargeRate = 50
 ev = 0
 
 
-def f(v):
+def consumption_rate(v):
     return ((0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3))
 
 try:
@@ -22,8 +22,8 @@ v_do = solve(yprime)
 print v_do
 v_do = v_do[0]
 v_do = 60
-print dist*f(v_do)
-t_do = dist/v_do + ((f(v_do)*dist)/chargeRate)
+print dist*consumption_rate(v_do)
+t_do = dist/v_do + ((consumption_rate(v_do)*dist)/chargeRate)
 
 print "hvis vi ikke lader er v: ", v_dont[0]
 print "Hvis vi lader er v: ", v_do

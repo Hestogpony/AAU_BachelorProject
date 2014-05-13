@@ -4,7 +4,7 @@ ChargeConstants = [10, 0 , 0, 0, 0 , 15, 12, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0,20 ,0
 edgeDists = [10, 80 , 5, 2, 4 , 15, 12, 5, 15, 3, 4, 6, 2, 7, 10, 1, 2,20 ,9 ,4,5 ,2 ,3]
 edgeSpeeds = [90, 80,101, 116 , 115, 112, 114 , 110, 120, 50, 100, 73, 84, 80, 50, 70, 100, 100, 102,120 ,90 ,40,50]
 
-def f(v):
+def consumption_rate(v):
 	return ((0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3))
 
 def getSlope(lowerX, higherX, lowerY, higherY):
@@ -44,9 +44,9 @@ for i in range(0, len(edgeDists)):
 		lowerXes += "%s " % lowerX
 		higherX = minSpeed + stepSize
 		higherXes += "%s " % higherX
-		slope = getSlope(lowerX, higherX, f(lowerX), f(higherX))
+		slope = getSlope(lowerX, higherX, consumption_rate(lowerX), consumption_rate(higherX))
 		lineA += "%s " % slope
-		lineB += "%s " % (f(higherX)-slope*higherX)
+		lineB += "%s " % (consumption_rate(higherX)-slope*higherX)
 		minSpeed += stepSize
 
 	points += lowerXes + "\n"

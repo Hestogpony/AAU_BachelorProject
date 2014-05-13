@@ -1,5 +1,4 @@
-from sympy import *
-from operator import itemgetter
+
 from copy import copy, deepcopy
 from heapq import heappop, heappush
 import subprocess
@@ -96,6 +95,7 @@ def travel_time(preCS, myCS, e, cur_battery):
     maxSpeed = e[2]['speed_limit']
     minSpeed = e[2]['speed_limit']*0.8
     # Case 1
+
     v_opt_case1 = fastSolveCase1(cur_battery, dist, minSpeed, maxSpeed)
     if v_opt_case1 < float('inf'):
         v_opt_case1 = int(v_opt_case1)
@@ -130,6 +130,7 @@ def travel_time(preCS, myCS, e, cur_battery):
     v_opt_case2 = fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate)
     additional_time = 0
     print v_opt_case2
+
     while (consumption_rate(v_opt_case2)*dist) - cur_battery > possible_energy:
         print "in while"
         cur_battery += possible_energy
@@ -154,10 +155,7 @@ def travel_time(preCS, myCS, e, cur_battery):
         return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
 
 def getSlope(lowerX, higherX, lowerY, higherY):
-	return (higherY-lowerY)/(higherX-lowerX)
-
-def f(v):
-	return ((0.0286 * v**2 + 0.4096 * v + 107.57) * 10**(-3))
+    return (higherY-lowerY)/(higherX-lowerX)
 
 def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, batteryCap):
     n = "param n := {0};\n".format(len(edgeDists))
@@ -201,9 +199,9 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, batteryCap):
             lowerXes += "%s " % lowerX
             higherX = minSpeed + stepSize
             higherXes += "%s " % higherX
-            slope = getSlope(lowerX, higherX, f(lowerX), f(higherX))
+            slope = getSlope(lowerX, higherX, consumption_rate(lowerX), consumption_rate(higherX))
             lineA += "%s " % slope
-            lineB += "%s " % (f(higherX)-slope*higherX)
+            lineB += "%s " % (consumption_rate(higherX)-slope*higherX)
             minSpeed += stepSize
     
         points += lowerXes + "\n"
@@ -211,19 +209,19 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, batteryCap):
         speedDists += speedDist + "\n"
         linesA += lineA + "\n"
         linesB += lineB + "\n"
-    file = open("LPData.dat", "w")
-
-    file.write(n)
-    file.write(m)
-    file.write(batCap)
-    file.write(points + ";")
-    file.write(points2 + ";")
-    file.write(speedDists + ";")
-    file.write(linesA + ";")
-    file.write(linesB + ";")
-    file.write(edgeDist + ";")
-    file.write(chargeConstants + ";")
-    file.close()
+    
+    output_file = open("LPData.dat", "w")
+    output_file.write(n)
+    output_file.write(m)
+    output_file.write(batCap)
+    output_file.write(points + ";")
+    output_file.write(points2 + ";")
+    output_file.write(speedDists + ";")
+    output_file.write(linesA + ";")
+    output_file.write(linesB + ";")
+    output_file.write(edgeDist + ";")
+    output_file.write(chargeConstants + ";")
+    output_file.close()
     proc = subprocess.Popen("glpsol  --model fastestPathLinearization.mod --data LPData.dat", stdout=subprocess.PIPE, shell=True)
     print "Test :"
     pathTime = float('inf')
@@ -269,9 +267,9 @@ def linearProgramming(G, preNode, curNode):
 def fastest_path_greedy(graph, s, t, algorithm, init_battery, battery_cap):
     G = copy(graph)
 
-    for id, data in G.nodes(data=True):
+    for node_id, data in G.nodes(data=True):
         data['time'] = float('inf')
-        data['path'] = [id]
+        data['path'] = [node_id]
         data['preCS'] = []
         data['myCS'] = [battery_cap, data['charge_rate']]
         data['curbat'] = 0
@@ -328,6 +326,7 @@ def fastest_path_greedy(graph, s, t, algorithm, init_battery, battery_cap):
 # print open_nodes
     Path = []
     path =  G.node[t]['path']
+        
     print G.node[t]['time']
     print "Path: "
     Path.append(t)

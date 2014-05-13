@@ -24,7 +24,12 @@ def naive_path(G, v, s, t):
             distance((float(G.node[node]['lat']),float(G.node[node]['lon'])),
                      (float(G.node[cur_node]['lat']),float(G.node[cur_node]['lon']))) <= car_range and node != cur_node:
                 try:
-                    sp_char = nx.shortest_path(G, cur_node, node, weight='weight')
+                    s = time.time()
+                    if (shortest_through != float('inf')):
+                        sp_char = nx.shortest_path(G, cur_node, node, weight='weight', cutoff=shortest_through)
+                    else:
+                        sp_char = nx.shortest_path(G, cur_node, node, weight='weight')
+                    print time.time()-s
                 except:
                     continue
                 if reachable(G, sp_char, v, bat):
@@ -36,12 +41,14 @@ def naive_path(G, v, s, t):
                         print 'previous: ', shortest_through, '\n'
                         shortest_through = path_length(G, combine_path)
                         shortest_through_path = sp_char
-
-        route_plan_time += path_time(G, shortest_through_path) + charge_time(G, shortest_through_path, v) #add time spend driven and charging for this sub-path
-        cur_node = shortest_through_path[-1]
-        del shortest_through_path[0]
-        driven_path += shortest_through_path
-        print cur_node,node,t
+        if shortest_through_path:
+            route_plan_time += path_time(G, shortest_through_path) + charge_time(G, shortest_through_path, v) #add time spend driven and charging for this sub-path
+            cur_node = shortest_through_path[-1]
+            del shortest_through_path[0]
+            driven_path += shortest_through_path
+            print cur_node,node,t
+        else:
+            return None
     return driven_path, route_plan_time
 
 def path_length(G, P):

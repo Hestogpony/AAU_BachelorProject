@@ -2,9 +2,6 @@
 from haversine import distance
 
 import psycopg2
-import json
-import webbrowser
-import os
 import roadnetwork
 import networkx as nx
 
