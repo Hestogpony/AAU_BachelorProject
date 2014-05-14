@@ -10,30 +10,35 @@ lonmin, latmin, lonmax, latmax
 7.91 , 54.46 , 12.89 , 57.86
 """
 import networkx as nx
+from path_time_cs_density import charge_station_density
 from fastest_path.haversine import distance
 from fastest_path.roadnetwork import RoadNetwork
 
 rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
+charge_station_density(rn,25)
 
-#charge_station_density(rn,5)
-
-rn.visualize()
-
-def set_box_size(rn, num_nodes):
-	lonmin = 7.91
-	latmin = 54.46
+def set_roadnetwork_complexity(rn, num_nodes):
 	lonmax = 12.89
-	latmax = 57.86
-	print("number of connected nodes: " + nx.connected_components(rn)) 	 
-	while len(nx.connected_components(rn)) > num_nodes:
-		latmax -= 0.02
+	#latmax = 57.86
+	connected_components = nx.connected_components(rn)	
+	sorted(connected_components, key=len)
+	
+	while len(connected_components[0]) > num_nodes:
+		
+		print(len(connected_components[0]))
+		#latmax -= 0.02
 		lonmax -= 0.02
 		for node in rn.nodes():
-			if not ((latmin <= float(rn.node[node]['lat']) <= latmax) or (lonmin <= float(rn.node[node]['lon']) <= lonmax)):
+			if (float(rn.node[node]['lon']) >= lonmax):
 				rn.remove_node(node)
+		connected_components = nx.connected_components(rn)	
+		sorted(connected_components, key=len)
+		
+	for list_of_nodes in connected_components[1:]:
+		for node in list_of_nodes:
+			rn.remove_node(node)
 	return rn
 
 
-#set_box_size(rn, 50000)
-#rn.visualize()
+
 
