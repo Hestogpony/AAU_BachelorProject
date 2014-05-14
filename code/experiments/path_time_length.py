@@ -24,7 +24,7 @@ def s_and_t(rn, distance): #max distance 500km
 			if (distance * 1.01) > path_dist > (distance * 0.99):
 				return node, vertex, path_dist
 
-	
+
 
 def scale_road_network(rn, scale_factor):
 	print("scaling distancens by: " + str(scale_factor))
@@ -36,13 +36,13 @@ print 'loading roadnetwork'
 rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 
 print 'reducing cs density'
-charge_station_density(rn, 40)
+charge_station_density(rn, 5)
 
 v = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 f = open('dist.csv', 'a')
 f.write('dist,time\n')
-for distance in range(1, 500):
+for distance in range(200, 500):
 	print 'Finding s and t'
 	s,t,dist = s_and_t(rn, distance)
 	print 'Finding a naive path'
