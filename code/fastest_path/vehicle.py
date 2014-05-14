@@ -1,4 +1,4 @@
-import math
+
 
 class EV():
     def __init__(self, battery_capacity, curbat, consumption_rate):
