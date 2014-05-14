@@ -12,8 +12,8 @@ def naive_path(G, v, s, t):
     cur_node = s
     route_plan_time = 0
     while cur_node != t:
-        shortest_through = float('inf')
         shortest_through_path = []
+        shortest_through = float('inf')
         for node in G.nodes(): #find all charge stations within car_range as the crows flies
             if node == t:
                 sp_t = nx.shortest_path(G, cur_node, t, weight='weight')
@@ -36,9 +36,7 @@ def naive_path(G, v, s, t):
                     sp_t = nx.shortest_path(G, node, t, weight='weight')
                     del sp_t[0]
                     combine_path = sp_char + sp_t
-                    if shortest_through > path_length(G, combine_path):
-                        #print 'best path: ', path_length(G, combine_path)
-                        #print 'previous: ', shortest_through, '\n'
+                    if shortest_through > path_length(G, sp_t):
                         shortest_through = path_length(G, combine_path)
                         shortest_through_path = sp_char
         if shortest_through_path:
@@ -48,7 +46,7 @@ def naive_path(G, v, s, t):
             driven_path += shortest_through_path
             #print cur_node,node,t
         else:
-            return None
+            return [],float('inf')
     return driven_path, route_plan_time
 
 def path_length(G, P):

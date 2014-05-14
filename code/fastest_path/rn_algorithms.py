@@ -331,11 +331,14 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
     Path = []
     path =  G.node[t]['path']
         
-    print G.node[t]['time']
+    totaltime =  G.node[t]['time']
+    if totaltime == float('inf'):
+        return ([], totaltime)
     print "Path: "
     Path.append(t)
     while path !=s:
         Path.append(path)
         path = G.node[path]['path']
     Path.append(s)
-    return Path
+    Path.reverse()
+    return (Path, totaltime)

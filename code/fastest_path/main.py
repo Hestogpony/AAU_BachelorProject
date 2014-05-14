@@ -29,7 +29,7 @@ def main():
     loader.create_graph(7.96,54.55,12.93,57.81)
     loader.load_graph()
     road_network = loader.rn
-    road_network.generate_charge(1500, 2000, 100)
+    road_network.generate_charge(150, 200, 100)
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
     
@@ -41,8 +41,8 @@ def main():
     path = rn_algorithms.fastest_path_greedy(road_network, s, t, 1, tesla)
     end_time = time.time()
     
-    
     road_network.visualize_path(path)
     print "time: ", end_time - start_time
+
 main()
 
