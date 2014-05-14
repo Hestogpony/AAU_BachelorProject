@@ -31,10 +31,10 @@ def main():
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
     s = loader.street_node('Fredrik Bajers Vej')
-    road_network.node[s]['charge_rate'] = 20
-    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, 0, 80)
+    road_network.node[s]['charge_rate'] = 150
+    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, 0, 800)
     print path
-    road_network.visualize_path(path)
+    road_network.visualize_path(path[0])
 
 main()
 
