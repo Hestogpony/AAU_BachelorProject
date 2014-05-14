@@ -28,7 +28,3 @@ def bounding_box(rn,lonmin,latmin,lonmax,latmax):
 		and (lonmin <= float(rn.node[node]['lon']) <= lonmax)):
 			rn.remove_node(node)
 	print rn.number_of_nodes()
-
-
-
-
