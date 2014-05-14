@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import vehicle
+from vehicle import EV
 import math
 import rn_algorithms
 import loader as LD
 
 def main():
     
+    tesla = EV(80, 80, lambda speed: ((0.04602*speed**2 +  0.6591*speed + 173.1174)* 10**(-3)))
     #===========================================================================
-    # tesla = vehicle(80, 80, lambda speed: ((0.0286 * math.pow(speed, 2) + 0.4096 * speed + 107.57) * 10**(-3)))
+    # 
     # tesla_worse = vehicle(40, 40, lambda speed: ((0.0350 * math.pow(speed, 2) + 0.8096 * speed + 107.57) * 10**(-3)))
     # tesla_better = vehicle(120, 120, lambda speed: ((0.0190 * math.pow(speed, 2) + 0.2096 * speed + 107.57) * 10**(-3)))
     # 
@@ -31,8 +32,9 @@ def main():
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
     s = loader.street_node('Fredrik Bajers Vej')
-    road_network.node[s]['charge_rate'] = 150
-    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, 0, 800)
+
+    road_network.node[s]['charge_rate'] = 20
+    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
     print path
     road_network.visualize_path(path[0])
 
