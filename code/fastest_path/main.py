@@ -3,6 +3,7 @@ from vehicle import EV
 import math
 import rn_algorithms
 import loader as LD
+import time
 
 def main():
     
@@ -31,11 +32,17 @@ def main():
     road_network.generate_charge(1500, 2000, 100)
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
+    
     s = loader.street_node('Fredrik Bajers Vej')
+    t = loader.street_node('Gugvej')
     road_network.node[s]['charge_rate'] = 20
-    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
-    print path
+    
+    start_time = time.time()
+    path = rn_algorithms.fastest_path_greedy(road_network, s, t, 1, tesla)
+    end_time = time.time()
+    
+    
     road_network.visualize_path(path)
-
+    print "time: ", end_time - start_time
 main()
 

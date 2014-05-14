@@ -2,6 +2,8 @@
 from copy import copy, deepcopy
 from heapq import heappop, heappush
 import subprocess
+import networkx as nx
+from haversine import distance
 
 # returns the optimal velocity v
 # between v_min and v_max
@@ -253,17 +255,19 @@ def linearProgramming(G, preNode, curNode):
         edgeSpeeds.append(edge['speed_limit'])
         edgeDists.append(edge['weight'])
     #print edge
-#ChargeConstants.append(G.node[nodes[-1]]['charge_rate'])
+    #ChargeConstants.append(G.node[nodes[-1]]['charge_rate'])
     print ChargeConstants, len(ChargeConstants)
     print edgeSpeeds, len(edgeSpeeds)
     print edgeDists, len(edgeDists)
     time = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 5, 50)
     return time
-# print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
+    # print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
 
 def fastest_path_greedy(graph, s, t, algorithm, ev):
     G = copy(graph)
-
+    print("shortest path initiated")
+    shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5 
+    print("shortest path terminated")
     for node_id, data in G.nodes(data=True):
         data['time'] = float('inf')
         data['path'] = [node_id]
@@ -288,7 +292,10 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
             #print e, node_data, node_id
             if node_data['time'] > node['time']:
                 continue
-
+            print   "huhiuwhiu :", distance((float(node['lat']),float(node['lon'])), (float(G.node[t]['lat']), float(G.node[t]['lon']))), shortest_path_time
+            if distance((float(node['lat']),float(node['lon'])), (float(G.node[t]['lat']), float(G.node[t]['lon']))) > shortest_path_time:
+                print "FUCK YOUUUU"
+                continue
             if algorithm == 1:
                 time, preCS, ev.curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev)
                 totalTime = node_data['time'] + time
@@ -320,7 +327,7 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
                     update_possible_energy(node['preCS'], energyUsed)
                 node['myCS'][0] = ev.battery_capacity - ev.curbat 
                 heappush(open_nodes, (totalTime, e[1]))
-# print open_nodes
+    # print open_nodes
     Path = []
     path =  G.node[t]['path']
         
