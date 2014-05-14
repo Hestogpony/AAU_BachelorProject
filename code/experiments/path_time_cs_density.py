@@ -10,8 +10,6 @@ from fastest_path.haversine import distance
 from fastest_path.roadnetwork import RoadNetwork
 import time
 
-rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-
 def charge_station_density(rn, dist):
 	for node in rn.nodes():
 		if (node in rn):
@@ -20,8 +18,3 @@ def charge_station_density(rn, dist):
 				for vertex,dval in dists.items():
 					if vertex != node:
 						rn.node[vertex]['charge_rate'] = 0
-
-print rn.number_of_nodes()
-charge_station_density(rn, 40)
-print rn.number_of_nodes()
-rn.visualize()

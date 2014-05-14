@@ -29,7 +29,7 @@ def naive_path(G, v, s, t):
                         sp_char = nx.shortest_path(G, cur_node, node, weight='weight', cutoff=shortest_through)
                     else:
                         sp_char = nx.shortest_path(G, cur_node, node, weight='weight')
-                    print time.time()-s
+                    #print time.time()-s
                 except:
                     continue
                 if reachable(G, sp_char, v, bat):
@@ -37,8 +37,8 @@ def naive_path(G, v, s, t):
                     del sp_t[0]
                     combine_path = sp_char + sp_t
                     if shortest_through > path_length(G, combine_path):
-                        print 'best path: ', path_length(G, combine_path)
-                        print 'previous: ', shortest_through, '\n'
+                        #print 'best path: ', path_length(G, combine_path)
+                        #print 'previous: ', shortest_through, '\n'
                         shortest_through = path_length(G, combine_path)
                         shortest_through_path = sp_char
         if shortest_through_path:
@@ -46,7 +46,7 @@ def naive_path(G, v, s, t):
             cur_node = shortest_through_path[-1]
             del shortest_through_path[0]
             driven_path += shortest_through_path
-            print cur_node,node,t
+            #print cur_node,node,t
         else:
             return None
     return driven_path, route_plan_time

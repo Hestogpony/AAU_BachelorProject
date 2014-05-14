@@ -37,7 +37,3 @@ def set_box_size(rn, num_nodes):
 #set_box_size(rn, 50000)
 #rn.visualize()
 
-
-
-
-
