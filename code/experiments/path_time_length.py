@@ -40,15 +40,26 @@ charge_station_density(rn, 40)
 
 v = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
-f = open('dist.csv', 'a')
+f = open('path_time_length(1-500).csv', 'a')
 f.write('dist,time\n')
-for distance in range(1, 500):
-	print 'Finding s and t'
-	s,t,dist = s_and_t(rn, distance)
-	print 'Finding a naive path'
-	naive_p, naive_t = naive_path(rn, v, s, t)
-	print 'From S:%s to T:%s - Distance:%sKm +-%s - %shours'%(s,t,distance,abs(distance-dist),naive_t)
-	# run LP
-	# run Greedy
-	f.write('%s,%s\n' % (distance,naive_t))
 f.close()
+for distance in range(1, 500):
+	x = 0
+	while x <= 10:
+		s,t,dist = s_and_t(rn, distance)
+		naive_p, naive_t = naive_path(rn, v, s, t)
+		if naive_t == 'inf':
+			f = open('path_time_length(1-500).csv', 'a')
+			f.write('%s,%s\n' % (distance,naive_t))
+			f.close()
+		# run LP
+		# run Greedy
+		else:
+			sum_time = naive_t
+			x += 1
+			print 'From S:%s to T:%s - Distance:%sKm +-%s - %shours'%(s,t,distance,abs(distance-dist),naive_t)
+	avg_time = sum_time/10
+	print avg_time
+	f = open('path_time_length(1-500).csv', 'a')
+	f.write('%s,%s\n' % (distance,naive_t))
+	f.close()
