@@ -1,5 +1,6 @@
 import networkx as nx
 import random
+from fastest_path.vehicle import EV
 
 def scale_charge_rates(rn, scale_factor):
     for n in rn:
@@ -39,3 +40,25 @@ def scale_cons_rate(pct):
         multiplier = 1+(x/100.0)
         evs.append(EV(80, 80,lambda x, copy=multiplier: ((0.04602*x**2+0.6591*x+173.1174)*10**(-3))*copy))
     return evs
+
+def set_roadnetwork_complexity(rn, num_nodes):
+    lonmax = 12.89
+    #latmax = 57.86
+    connected_components = nx.connected_components(rn)  
+    sorted(connected_components, key=len)
+    
+    while len(connected_components[0]) > num_nodes:
+        
+        #print(len(connected_components[0]))
+        #latmax -= 0.02
+        lonmax -= 0.02
+        for node in rn.nodes():
+            if (float(rn.node[node]['lon']) >= lonmax):
+                rn.remove_node(node)
+        connected_components = nx.connected_components(rn)  
+        sorted(connected_components, key=len)
+        
+    for list_of_nodes in connected_components[1:]:
+        for node in list_of_nodes:
+            rn.remove_node(node)
+    return rn
