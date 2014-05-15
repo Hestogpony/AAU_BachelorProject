@@ -3,6 +3,7 @@ import networkx as nw
 import json
 import webbrowser
 import os
+import tempfile
 import time
 
 class RoadNetwork(nw.Graph):
@@ -39,17 +40,27 @@ class RoadNetwork(nw.Graph):
 
     def visualize(self):
         json_rn = (json.dumps([{'title': str(node),'lat':self.node[node]['lat'], 'lng':self.node[node]['lon'], 'charge_rate':self.node[node]['charge_rate']} for node in self.nodes()]))
-        consumption_rate = open('path.html','w')
+        fd,p = tempfile.mkstemp()
+        f = open(p,'w')
         asdf = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title></head><body><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script><script type="text/javascript">var markers =%s; window.onload = function () {var mapOptions = {center: new google.maps.LatLng(markers[0].lat, markers[0].lng),zoom: 10,mapTypeId: google.maps.MapTypeId.ROADMAP};var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);var infoWindow = new google.maps.InfoWindow();var lat_lng = new Array();var latlngbounds = new google.maps.LatLngBounds();for (i = 0; i < markers.length; i++) {var data = markers[i];if (data.charge_rate > 0) {var myLatlng = new google.maps.LatLng(data.lat, data.lng);lat_lng.push(myLatlng);var marker = new google.maps.Marker({position: myLatlng,map: map,title: data.title,visible: true});latlngbounds.extend(marker.position);(function (marker, data) {google.maps.event.addListener(marker, "click", function (e) {infoWindow.setContent(data.description);infoWindow.open(map, marker);});})(marker, data);}}map.setCenter(latlngbounds.getCenter());map.fitBounds(latlngbounds);var path = new google.maps.MVCArray();var service = new google.maps.DirectionsService();var poly = new google.maps.Polyline({ map: map, strokeColor: "#4986E7" });/*for (var i = 0; i < lat_lng.length; i++) {if ((i + 1) < lat_lng.length) {var src = lat_lng[i];var des = lat_lng[i + 1];path.push(src);poly.setPath(path);}}*/}</script><div id="dvMap" style="width: 1000px; height: 600px"></div></body></html>' % (json_rn)
-        consumption_rate.write(asdf)
-        consumption_rate.close()
-        webbrowser.open('file://' + os.path.realpath('path.html'))
+        f.write(asdf)
+        f.close()
+        webbrowser.open('file://' + p)
 
     def visualize_path(self,p):
         jsonpath = (json.dumps([{'title': str(n),'lat':self.node[n]['lat'], 'lng':self.node[n]['lon'], 'charge_rate':self.node[n]['charge_rate']} for n in p]))
-        consumption_rate = open('path.html','w')
+        fd,p = tempfile.mkstemp()
+        f = open(p,'w')
         asdf = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title></head><body><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script><script type="text/javascript">var markers =%s; window.onload = function () {var mapOptions = {center: new google.maps.LatLng(markers[0].lat, markers[0].lng),zoom: 10,mapTypeId: google.maps.MapTypeId.ROADMAP};var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);var infoWindow = new google.maps.InfoWindow();var lat_lng = new Array();var latlngbounds = new google.maps.LatLngBounds();for (i = 0; i < markers.length; i++) {var data = markers[i];if (data.charge_rate > 0) {var myLatlng = new google.maps.LatLng(data.lat, data.lng);lat_lng.push(myLatlng);var marker = new google.maps.Marker({position: myLatlng,map: map,title: data.title,visible: true});latlngbounds.extend(marker.position);(function (marker, data) {google.maps.event.addListener(marker, "click", function (e) {infoWindow.setContent(data.description);infoWindow.open(map, marker);});})(marker, data);} else {var myLatlng = new google.maps.LatLng(data.lat, data.lng);lat_lng.push(myLatlng);var marker = new google.maps.Marker({position: myLatlng,map: map,title: data.title,visible: false});latlngbounds.extend(marker.position);(function (marker, data) {google.maps.event.addListener(marker, "click", function (e) {infoWindow.setContent(data.description);infoWindow.open(map, marker);});})(marker, data);}}map.setCenter(latlngbounds.getCenter());map.fitBounds(latlngbounds);var path = new google.maps.MVCArray();var service = new google.maps.DirectionsService();var poly = new google.maps.Polyline({ map: map, strokeColor: "#4986E7" });for (var i = 0; i < lat_lng.length; i++) {if ((i + 1) < lat_lng.length) {var src = lat_lng[i];var des = lat_lng[i + 1];path.push(src);poly.setPath(path);}}}</script><div id="dvMap" style="width: 1000px; height: 600px"></div></body></html>' % (jsonpath)
-        consumption_rate.write(asdf)
-        consumption_rate.close()
-        time.sleep(1)
-        webbrowser.open('file://' + os.path.realpath('path.html'))
+        f.write(asdf)
+        f.close()
+        webbrowser.open('file://' + p)
+
+    def visualize_nodes(self,nodes):
+        json_nodes = (json.dumps([{'title': str(node),'lat':self.node[node]['lat'], 'lng':self.node[node]['lon'], 'charge_rate':self.node[node]['charge_rate']} for node in nodes]))
+        fd,p = tempfile.mkstemp()
+        f = open(p,'w')
+        asdf = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title></title></head><body><script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script><script type="text/javascript">var markers =%s; window.onload = function () {var mapOptions = {center: new google.maps.LatLng(markers[0].lat, markers[0].lng),zoom: 10,mapTypeId: google.maps.MapTypeId.ROADMAP};var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);var infoWindow = new google.maps.InfoWindow();var lat_lng = new Array();var latlngbounds = new google.maps.LatLngBounds();for (i = 0; i < markers.length; i++) {var data = markers[i];if (true) {var myLatlng = new google.maps.LatLng(data.lat, data.lng);lat_lng.push(myLatlng);var marker = new google.maps.Marker({position: myLatlng,map: map,title: data.title,visible: true});latlngbounds.extend(marker.position);(function (marker, data) {google.maps.event.addListener(marker, "click", function (e) {infoWindow.setContent(data.description);infoWindow.open(map, marker);});})(marker, data);}}map.setCenter(latlngbounds.getCenter());map.fitBounds(latlngbounds);var path = new google.maps.MVCArray();var service = new google.maps.DirectionsService();var poly = new google.maps.Polyline({ map: map, strokeColor: "#4986E7" });/*for (var i = 0; i < lat_lng.length; i++) {if ((i + 1) < lat_lng.length) {var src = lat_lng[i];var des = lat_lng[i + 1];path.push(src);poly.setPath(path);}}*/}</script><div id="dvMap" style="width: 1000px; height: 600px"></div></body></html>' % (json_nodes)
+        f.write(asdf)
+        f.close()
+        webbrowser.open('file://' + p)
