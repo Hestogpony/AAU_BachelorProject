@@ -61,4 +61,4 @@ def set_roadnetwork_complexity(rn, num_nodes):
     for list_of_nodes in connected_components[1:]:
         for node in list_of_nodes:
             rn.remove_node(node)
-    return rn
+    return rn, rn.number_of_nodes()
