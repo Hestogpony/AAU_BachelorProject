@@ -10,12 +10,15 @@ def main():
     
     tesla = EV(80, 80, lambda speed: ((0.04602*speed**2 +  0.6591*speed + 173.1174)* 10**(-3)))
     
-	print 'loading road network'
-    road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-    print 'done'
-    
-    s = road_network.street_node('Fredrik Bajers Vej')
-    t = road_network.street_node('Pantheonsgade')
+    loader = LD.Loader()
+    loader.create_graph(7.96,54.55,12.93,57.81)
+    loader.load_graph()
+    road_network = loader.rn
+
+    road_network.generate_charge(50, 100, 1000)
+
+    print road_network.nodes()[0]
+    print road_network.nodes()[-1]
     
     print 'setting charge station density'
     test_utils.charge_station_density(road_network, 30)

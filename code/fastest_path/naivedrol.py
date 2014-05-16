@@ -53,7 +53,7 @@ def pathconcat(totalpath, newpath):
 
 def getPathTime(graph, path, charge_stations, ev):
     initial_battery = ev.curbat
-    charge_rate = 50
+    charge_rate = 0
     time = 0
     for i in range(0, len(path)-1):
         node = path[i]
@@ -91,7 +91,7 @@ def get_navie_path(graph, s, t, ev):
             charge_stations.append(closest_cs)
             total_path = pathconcat(total_path, path)
             start = closest_cs
-            battery_procent = 0.2
+            battery_procent = 0.1
             ev.curbat = ev.battery_capacity
             total_path = pathconcat(total_path,nx.shortest_path(graph, node, closest_cs, 't'))
             path, node, closest_cs = drive_naive(graph, closest_cs, t, ev, battery_procent)
