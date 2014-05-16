@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from vehicle import EV
+from naivedrol import get_navie_path
 import math
 import rn_algorithms
+import inRange
 import loader as LD
+
 
 def main():
     
@@ -28,15 +31,19 @@ def main():
     loader.create_graph(7.96,54.55,12.93,57.81)
     loader.load_graph()
     road_network = loader.rn
-    road_network.generate_charge(150, 200, 100)
+    road_network.generate_charge(150, 200, 10)
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
     s = loader.street_node('Fredrik Bajers Vej')
-
-    road_network.node[s]['charge_rate'] = 20
-    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
-    print path
-    road_network.visualize_path(path[0])
+    #print inRange.inRange(road_network, 308352913, loader.street_node('Pantheonsgade'), tesla)
+    #road_network.node[s]['charge_rate'] = 20
+    #nodes = inRange.inRange(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    path = get_navie_path(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    #print len(nodes)
+#print len(road_network.nodes())
+#path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
+# print path
+    road_network.visualize_path(path)
 
 main()
 

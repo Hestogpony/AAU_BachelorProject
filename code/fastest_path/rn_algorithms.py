@@ -87,7 +87,7 @@ def fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev):
 
 
 def travel_time(preCS, myCS, e, ev):
-    
+    print "Pre and my CS", preCS, myCS
     dist = e[2]['weight']
     maxSpeed = e[2]['speed_limit']
     minSpeed = e[2]['speed_limit']*0.8
@@ -314,8 +314,9 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
                 node['time'] = totalTime
                 node['path'] = node_id
                 node['curbat'] = ev.curbat
+                print preCS
                 if preCS:
-                    print "in pre"
+                    print "in pre    \n \n \n \n \n \n"
                     node['preCS'] = preCS
                     update_possible_energy(node['preCS'], energyUsed)
                 node['myCS'][0] = ev.battery_capacity - ev.curbat 
