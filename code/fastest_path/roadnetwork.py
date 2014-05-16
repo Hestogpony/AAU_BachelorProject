@@ -33,7 +33,9 @@ class RoadNetwork(nw.Graph):
             new_dist = edge['weight'] * scale_factor
             edge['weight'] = new_dist
         return road_network
-
+    
+    def street_node(self,street):
+        return [n[0] for n in self.edges_iter(data=True) if n[2]['name'] == street][0]
 
     def charge_rate(self, node_id):
         return self.node[node_id]['charge_rate']
