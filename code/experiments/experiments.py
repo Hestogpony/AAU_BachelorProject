@@ -52,7 +52,8 @@ def experiment_runtime_compexity(ev, num_iterations, num_experiments, path_dista
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 	print 'reducing charge stations'
 	charge_station_density(rn, CS_density)
-	number_of_nodes = 400000
+	#rn.visualize()
+	number_of_nodes = 500000
 	iteration_size = number_of_nodes/num_experiments
 	
 	file_name = 'complexity_size500k_itt100_csd40.csv'
@@ -65,32 +66,30 @@ def experiment_runtime_compexity(ev, num_iterations, num_experiments, path_dista
 		f = open(file_name, 'a')
 		dijkstra_time_sum = 0
 		greedy_time_sum = 0
-		for x in range(0, num_iterations):
+		for x in range(1, num_iterations+1):
 			s,t,dist = s_and_t(rn, path_distance)
 		
 			### Dijksras
-			print s, t
 			print 'running Dijkstras'
 			start_time = time.time()
 			nx.single_source_dijkstra_path_length(rn, s, weight='weight')
 			dijkstra_time_sum += time.time() - start_time
-		
+			#if greedy_return[1] == float('inf'):
 			### LP
 
 			### Greedy
 			print 'running greedy'
 			start_time = time.time()
 			greedy_return = fastest_path_greedy(rn, s, t, 1, ev)
-			rn.visualize()
-			print greedy_return 
-			if greedy_return[0]:
-				greedy_time_sum += time.time() - start_time
-			else:
+			if greedy_return[1] == float('inf'):
 				print 'greedy returns empty path'
-		print '%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/num_iterations, greedy_time_sum/num_iterations)
+			else:
+				print greedy_return[1]
+				rn.visualize_path(greedy_return[0])
+				greedy_time_sum += time.time() - start_time
+			print '%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum, greedy_time_sum)
 		f.write('%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/num_iterations, greedy_time_sum/num_iterations))
 		f.close()
-
 
 		number_of_nodes -= iteration_size
 
@@ -220,15 +219,16 @@ def experiment_driving_dist(ev, CS_density, max_distance):
 											lp_fails/10.0))
 	f.close()
 
-road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
+ev = EV(80, 80, lambda x: ((0.04602*x**2 + 0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_cs_density(ev, 10, 100)
 
-experiment_runtime_compexity(ev, 1, 100, 200, 20)
+experiment_runtime_compexity(ev, 1, 100, 150, 40)
 
 #experiment_ev_consumption(10, 100, 40)
 
+#print 'loading road network'
+#road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 #experiment_charge_rate(road_network, ev, 10, 100, 50)
 
 #experiment_driving_dist(ev, 20, 500)
