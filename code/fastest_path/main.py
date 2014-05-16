@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from vehicle import EV
+from naivedrol import get_navie_path
 import math
 import rn_algorithms
+import inRange
 import loader as LD
 import time
+
 
 def main():
     
@@ -29,12 +32,24 @@ def main():
     loader.create_graph(7.96,54.55,12.93,57.81)
     loader.load_graph()
     road_network = loader.rn
+
     road_network.generate_charge(10, 20, 500)
+
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
     
     s = loader.street_node('Fredrik Bajers Vej')
-    t = loader.street_node('Simmerstedvej')
+
+    #print inRange.inRange(road_network, 308352913, loader.street_node('Pantheonsgade'), tesla)
+    #road_network.node[s]['charge_rate'] = 20
+    #nodes = inRange.inRange(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    #path = get_navie_path(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    #print len(nodes)
+#print len(road_network.nodes())
+    path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
+    print path
+    road_network.visualize_path(path[0])
+    '''t = loader.street_node('Simmerstedvej')
     road_network.node[s]['charge_rate'] = 20
     
     start_time = time.time()
@@ -42,7 +57,8 @@ def main():
     end_time = time.time()
     print(path, totaltime)
     road_network.visualize_path(path)
-    print "time: ", end_time - start_time, " seconds to find greedy path"
+    print "time: ", end_time - start_time, " seconds to find greedy path"'''
+
 
 main()
 

@@ -1,4 +1,31 @@
 \subsection{Linear Programming Approach}
+This optimisation problem is almost a linear programming problem. However, we suffer from a non-linear constraint: $D(e_i)*R_{CO}(v(e_i))$ since the consumption rate $R_{CO}(v(e_i))$ of the EV is not linear. The function can however be estimated using linearisation. 
+
+subject to: 
+\begin{equation}
+\forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} Selectedlines[i,j] = 1
+\end{equation}
+
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m}: \; \;0\leq Selectedlines[i,j] \leq 1
+\end{equation}
+
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \le Selectedlines[i,j] * Points1[i,j]
+\end{equation}
+
+\begin{equation}
+\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \ge Selectedlines[i,j] * Points2[i,j]
+\end{equation}
+
+\begin{equation}
+\begin{split}
+\forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}chargerate[i]*charge[i]\\
+-\sum_{i=1}^{k} distance[i](\sum_{j=1}^{m} LinesA[i,j]*speed[i,j]\\
++\sum_{j=1}^{m} Selectedlines[i,j]*LinesB[i,j]) \le maxbattery\;capacity
+\end{split}
+\end{equation}
+
 The first solution model we propose for finding the fastest path between two points in a road network is based on a linear programming approach. 
 The algorithm consists of continuous pruning of paths in the road network, until we end up with a single path which is the optimal one. Initially, we pick a random path from $s$ to $t$, called $p$, and solve it optimally, which returns time $T_p$. For every other paths, $p'_i$, from $s$ to $t$ in the road network, we calculate the time it takes to pass it at maximum speed and without charging, which returns time $T_{p'_{i}}$. If $T_p \leq T_{p'_{i}}$ for any $p'_{i}$, we simply ignore it and all it's sub-paths. We can do this, since the optimally time spend driving $p'_i$ will be either greater than or equal to $T_{p'_{i}}$. If we find a path which can be driven faster than $T_p$ we update $p$ and $T_{p'}$. Determining how a path is optimally solved is described in section \ref{sec:optimizingwithLP}. But the overall algorithm for finding the fastest path looks as follows:\\
 
