@@ -38,20 +38,20 @@ The battery level of the EV, $B_{cur}$, has to be between $0$ and the max batter
 energy spend on edge $e_j$.  
 
 \begin{equation}
-EC(u_j) = R_{CH}(u_j) * charge\_time(u_j)
+\forall_{j\in1 \dots n }:\; EC(u_j) = R_{CH}(u_j) * charge\_time(u_j)
 \end{equation}
 
 \begin{equation}
-ES(e_j) = D(e_j)*R_{CO}(v(e_j))
+\forall_{j\in1 \dots n }:\; ES(e_j) = D(e_j)*R_{CO}(v(e_j))
 \end{equation} 
 
 \begin{equation}
-0 \leq \sum_{j=1}^{i} EC(u_j) - ES(e_j) \leq B_{max} \text{ for } i = 1..n
+\forall_{i\in1 \dots n }:\;0 \leq \sum_{j=1}^{i} EC(u_j) - ES(e_j) \leq B_{max} 
 \end{equation}
 
 \begin{equation}
 \begin{aligned}
-0 \leq \sum_{j=i}^{i+1} EC(u_j) - ES(e_j) \leq B_{max} \text{ for } i = 1..n
+\forall_{i\in1 \dots n-1}:\;0 \leq \sum_{j=1}^{i+1} EC(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max} 
 \end{aligned}
 \end{equation}
 
@@ -61,29 +61,4 @@ It should also not be possible for the EV to spend a negative amount of time at 
 0 \leq charge\_time(u_i) \text{ for } i = 1..n 
 \end{equation}
 
-This optimisation problem is almost a linear programming problem. However, we suffer from a non-linear constraint: $D(e_i)*R_{CO}(v(e_i))$ since the consumption rate $R_{CO}(v(e_i))$ of the EV is not linear. The function can however be estimated using linearisation. 
 
-subject to: 
-\begin{equation}
-\forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} Selectedlines[i,j] = 1
-\end{equation}
-
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}: \; \;0\leq Selectedlines[i,j] \leq 1
-\end{equation}
-
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \le Selectedlines[i,j] * Points1[i,j]
-\end{equation}
-
-\begin{equation}
-\forall_{i\in1 \dots n, j \in 1 \dots m}:\; v(e_i) \ge Selectedlines[i,j] * Points2[i,j]
-\end{equation}
-
-\begin{equation}
-\begin{split}
-\forall_{k\in1 \dots n}\;:\;0 \le\sum_{i=1}^{k}chargerate[i]*charge[i]\\
--\sum_{i=1}^{k} distance[i](\sum_{j=1}^{m} LinesA[i,j]*speed[i,j]\\
-+\sum_{j=1}^{m} Selectedlines[i,j]*LinesB[i,j]) \le maxbattery\;capacity
-\end{split}
-\end{equation}

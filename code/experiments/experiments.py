@@ -68,8 +68,9 @@ def experiment_runtime_compexity(ev, num_iterations, num_experiments, path_dista
 		greedy_time_sum = 0
 		for x in range(0, num_iterations):
 			s,t,dist = s_and_t(rn, path_distance)
-			
+		
 			### Dijksras
+			print s, t
 			print 'running Dijkstras'
 			start_time = time.time()
 			nx.single_source_dijkstra_path_length(rn, s, weight='weight')
