@@ -33,7 +33,7 @@ def main():
     loader.load_graph()
     road_network = loader.rn
 
-    road_network.generate_charge(10, 20, 500)
+    road_network.generate_charge(50, 100, 50)
 
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
@@ -43,12 +43,14 @@ def main():
     #print inRange.inRange(road_network, 308352913, loader.street_node('Pantheonsgade'), tesla)
     #road_network.node[s]['charge_rate'] = 20
     #nodes = inRange.inRange(road_network, s, loader.street_node('Pantheonsgade'), tesla)
-    #path = get_navie_path(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    path = get_navie_path(road_network, s, loader.street_node('Pantheonsgade'), tesla)
+    road_network.visualize_path(path)
     #print len(nodes)
 #print len(road_network.nodes())
     path = rn_algorithms.fastest_path_greedy(road_network, s, loader.street_node('Pantheonsgade'), 1, tesla)
     print path
     road_network.visualize_path(path[0])
+
     '''t = loader.street_node('Simmerstedvej')
     road_network.node[s]['charge_rate'] = 20
     
