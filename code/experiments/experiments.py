@@ -1,6 +1,6 @@
 import importer
 import networkx as nx
-from fastest_path.naive import naive_path
+from fastest_path.naive import naive
 from fastest_path.vehicle import EV
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
