@@ -1,71 +1,8 @@
-import vehicle
-from haversine import distance
+import importer
 import networkx as nx
-import time
-
-
-def naive_path(rn, v, s, t):
-    bat = v.curbat #kwh
-    car_range = bat / v.consumption_rate(70) # car_range in crow flight, based on average speed (70) on roads
-    shortest_through_path = []
-    driven_path = [s]
-    cur_node = s
-    route_plan_time = 0
-    while cur_node != t:
-        shortest_through_path = []
-        shortest_through = float('inf')
-        d,sp = nx.single_source_dijkstra(rn, cur_node, cutoff=car_range)
-        for node in rn.nodes(): #find all charge stations within car_range as the crows flies
-            if node == t:
-                sp_t = nx.shortest_path(rn, cur_node, t, weight='weight')
-                if reachable(rn, sp_t, v, bat):
-                    shortest_through_path = sp_t
-                    break
-            elif rn.node[node]['charge_rate'] != 0 and\
-            distance((float(rn.node[node]['lat']),float(rn.node[node]['lon'])),
-                     (float(rn.node[cur_node]['lat']),float(rn.node[cur_node]['lon']))) <= car_range and cur_node != node:
-                if node in sp:
-                    sp_char = sp[node]
-                else:
-                    continue
-                if reachable(rn, sp_char, v, bat):
-                    # sp_t = nx.shortest_path(rn, node, t, weight='weight')
-                    # del sp_t[0]
-                    haversine_t = distance((float(rn.node[node]['lat']),float(rn.node[node]['lon'])),(float(rn.node[t]['lat']),float(rn.node[t]['lon'])))
-                    if shortest_through > haversine_t:
-                        shortest_through = haversine_t
-                        shortest_through_path = sp_char
-        if shortest_through_path:
-            route_plan_time += path_time(rn, shortest_through_path) + charge_time(rn, shortest_through_path, v) #add time spend driven and charging for this sub-path
-            print 'cur: ',cur_node, 'next:',shortest_through_path[-1]
-            cur_node = shortest_through_path[-1]
-            del shortest_through_path[0]
-            driven_path += shortest_through_path
-            rn.visualize_nodes([s,cur_node,t])
-        else:
-            return [],float('inf')
-    return driven_path, route_plan_time
-
-def path_length(rn, P):
-    """returns the length of the path"""
-    return sum([rn[P[x]][P[(x+1)]]['weight'] for x in xrange(len(P)-1)])
-
-def charge_time(rn, P, v):
-    """returns the time spend charging"""
-    needed_energy = 0
-    edge_distance = 0
-    for x in xrange(len(P)-1): # for each edge
-        edge = rn[P[x]][P[(x+1)]]
-        edge_distance = edge['weight']
-        speed_limit = edge['speed_limit']
-        needed_energy += (edge_distance*v.consumption_rate(speed_limit))
-    if rn.node[P[-1]]['charge_rate'] == 0: #case: target node, no need to charge
-        return 0
-    return needed_energy/rn.node[P[-1]]['charge_rate']
-
-def path_time(rn, P):
-    """returns the time spent travelling the path P given """
-    return sum([(rn[P[x]][P[(x+1)]]['weight'])*1.0/(rn[P[x]][P[(x+1)]]['speed_limit']) for x in xrange(len(P)-1)])
+from fastest_path.vehicle import EV
+from fastest_path.roadnetwork import RoadNetwork
+import operator
 
 def reachable(rn, P, v, energy):
     """returns subpath of P if nodes are reachable given energy"""
@@ -77,3 +14,54 @@ def reachable(rn, P, v, energy):
         speed_limit = edge['speed_limit']
         needed_energy += (edge_distance*v.consumption_rate(speed_limit))
     return needed_energy <= energy
+
+def getPathTime(rn, path, ev):
+    initial_battery = ev.curbat
+    charge_rate = 0
+    time = 0
+    for i in range(0, len(path)-1):
+        node = path[i]
+        nextnode = path[i+1]
+        edge = rn.edge[node][nextnode]
+        energy_consumed = edge['weight']*ev.consumption_rate(edge['speed_limit'])
+        if rn.node[node]['charge_rate'] != 0:
+            charge_rate = rn.node[node]['charge_rate']
+        if energy_consumed <= initial_battery:
+            time += edge['t']
+        else:
+            time += edge['t']
+            charge_time = (energy_consumed)/charge_rate
+            time += charge_time
+        initial_battery -= energy_consumed
+    return time
+
+def naive(rn,s,t,v):
+    bat = v.curbat
+    driven_path = [s]
+    sp = nx.shortest_path(rn,s,t,weight='weight')
+    time = 0
+    while driven_path[-1] != t:
+        x = 0
+        while bat > (v.battery_capacity * 0.4):
+            edge = rn[sp[x]][sp[x+1]]
+            bat -= edge['weight']*v.consumption_rate(edge['speed_limit'])
+            driven_path.append(sp[x+1])
+            if driven_path[-1] == t:
+                break
+            x+=1
+        if driven_path[-1] == t:
+            continue
+        d,p = nx.single_source_dijkstra(rn,sp[x+1],weight='weight')
+        sorted_d = sorted(d.iteritems(), key=operator.itemgetter(1))
+        next_guy = sorted_d[0][0]
+        while not ((rn.node[next_guy]['charge_rate'] != 0) and reachable(rn,p[next_guy],v,bat)):
+            if sorted_d:
+                del sorted_d[0]
+            next_guy = sorted_d[0][0]
+        if len(sorted_d)!=0:
+            driven_path += p[next_guy]
+            bat = v.battery_capacity
+            sp = nx.shortest_path(rn,next_guy,t,weight='weight')
+        else:
+            return ([],float('inf'))
+    return (driven_path, getPathTime(rn,driven_path,v))
