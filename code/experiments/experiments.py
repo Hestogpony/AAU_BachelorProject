@@ -4,6 +4,7 @@ from path_time_cs_density import charge_station_density
 from fastest_path.naive import naive_path
 from fastest_path.vehicle import EV
 from fastest_path.roadnetwork import RoadNetwork
+from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
 import time
 
@@ -19,74 +20,83 @@ def experiment_cs_density():
 	f.write('CS dist,path time,fail rate\n')
 	f.close()
 
-	for cs_dist in range(1,100):
+	for cs_dist in range(0,100):
 		print 'loading graph'
 		rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 		print 'reducing charge stations'
 		charge_station_density(rn, cs_dist)
 		sum_of_time_naive = 0
 		f = open(file_name, 'a')
-		for itteration in range(1,number_of_itterations):
+		for itteration in range(0,number_of_itterations):
+			s,t,dist = s_and_t(rn, path_distance)
 			### naive
 			print 'running naive'
-			
-			s,t,dist = s_and_t(rn, path_distance)
 			naive_p, naive_t = naive_path(rn, v, s, t)
-
 			if naive_t == float('inf'):
 				fails += 1
 				print 'fail'
 			else:
 				sum_of_time_naive += naive_t
 				print 'CS dist:%s - Hours:%s'%(cs_dist, naive_t)
-		print 'CS dist:%s - Hours:%s - Fail rate:%s'%(cs_dist, sum_of_time_naive/number_of_itterations, fails/number_of_itterations)
-		f.write('%s,%s,%s\n' % (cs_dist, sum_of_time_naive/number_of_itterations, fails/number_of_itterations))
-		f.close()			
+			
 
 			### LP
 
 			### Greedy
-
+		print 'CS dist:%s - Hours:%s - Fail rate:%s'%(cs_dist, sum_of_time_naive/number_of_itterations, fails/number_of_itterations)
+		f.write('%s,%s,%s\n' % (cs_dist, sum_of_time_naive/number_of_itterations, fails/number_of_itterations))
+		f.close()			
 
 
 
 
 def experiment_runtime_compexity():
 	### PARAMETERS ###
-	itterations = 10
+	itterations = 1
 	print 'loading graph'
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 	print 'reducing charge stations'
 	charge_station_density(rn, 40)
-	path_distance = 1 #km
+	path_distance = 200 #km
 	number_of_experiments = 100
-	problem_max = 500000
-	itteration_size = problem_max/number_of_experiments
+	number_of_nodes = rn.number_of_nodes()
+	itteration_size = number_of_nodes/number_of_experiments
 	file_name = 'complexity_size500k_itt100_csd40.csv'
+	v = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 	
 	f = open(file_name, 'a')
 	f.write('problem size,time\n')
 	f.close()
 
-	while problem_max > 0:
-		rn = set_roadnetwork_complexity(rn,problem_max)
+	while number_of_nodes > 0:
+		rn, real_num_nodes = set_roadnetwork_complexity(rn,number_of_nodes)
 		f = open(file_name, 'a')
 		dijkstra_time_sum = 0
-		for x in range(1, itterations):
+		greedy_time_sum = 0
+		for x in range(0, itterations):
 			s,t,dist = s_and_t(rn, path_distance)
+			print s, t
 			print 'running Dijkstras'
 			start_time = time.time()
 			nx.single_source_dijkstra_path_length(rn, s, weight='weight')
 			dijkstra_time_sum += time.time() - start_time
-		print '%s,%s\n' % (problem_max, dijkstra_time_sum/itterations)
-		f.write('%s,%s\n' % (problem_max, dijkstra_time_sum/itterations))
+		
+			### LP
+
+			### Greedy
+			print 'running greedy'
+			start_time = time.time()
+			greedy_return = fastest_path_greedy(rn, s, t, 1, v)
+			if greedy_return[0]:
+				greedy_time_sum += time.time() - start_time
+			else:
+				print 'greedy returns empty path'
+		print '%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/itterations, greedy_time_sum/itterations)
+		f.write('%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/itterations, greedy_time_sum/itterations))
 		f.close()
 
-		### LP
 
-		### Greedy
-
-		problem_max -= itteration_size
+		number_of_nodes -= itteration_size
 
 def experiment_ev_consumption():
 	### PARAMETERS ###
@@ -108,7 +118,7 @@ def experiment_ev_consumption():
 	f.close()
 
 	print 'chosing paths'
-	for x in range(1,number_of_itterations):
+	for x in range(0,number_of_itterations):
 		s,t,dist = s_and_t(rn, path_distance)
 		list_of_paths.append((s,t))	
 
@@ -200,7 +210,7 @@ def experiment_driving_dist():
 #experiment_driving_dist()
 #experiment_charge_rate()
 #experiment_ev_consumption()
-#experiment_runtime_compexity()
-experiment_cs_density()
+experiment_runtime_compexity()
+#experiment_cs_density()
 
 
