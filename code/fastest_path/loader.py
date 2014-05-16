@@ -37,9 +37,6 @@ class Loader():
             self.rn.node[nexttuple[3]]['lat'] = str(nexttuple[4])
             nexttuple = self.cur.fetchone()
 
-    def street_node(self,street):
-        return [n[0] for n in self.rn.edges_iter(data=True) if n[2]['name'] == street][0]
-
     def node_street_path(self, p):
         return [self.node_street(n) for n in p]
 
