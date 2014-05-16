@@ -14,9 +14,9 @@ def drive_naive(graph, s, t, ev, battery_procent):
         energy_used = edge['weight']*ev.consumption_rate(edge['speed_limit'])
         path.append(node)
         if ev.curbat - energy_used < ev.battery_capacity*battery_procent:
-            print ev.curbat, ev.battery_capacity
+            #print ev.curbat, ev.battery_capacity
             possible_cs = inRange(graph, shortest_path[i], t, ev)
-            print possible_cs
+            #print possible_cs
             length = float('inf')
             for CS in possible_cs:
                 lengthToCS = distance((float(graph.node[node]['lat']),float(graph.node[node]['lon'])), (float(graph.node[CS]['lat']), float(graph.node[CS]['lon'])))
@@ -48,7 +48,7 @@ def pathconcat(totalpath, newpath):
     index_newpath = newpath.index(common_node)
     p2 = newpath[index_newpath:]
 
-    print p1+p2
+    #print p1+p2
     return p1+p2
 
 def getPathTime(graph, path, charge_stations, ev):
@@ -61,7 +61,7 @@ def getPathTime(graph, path, charge_stations, ev):
         try:
             edge = graph.edge[node][nextnode]
             energy_consumed = edge['weight']*ev.consumption_rate(edge['speed_limit'])
-            print energy_consumed
+            #print energy_consumed
             if node in charge_stations:
                 charge_rate = graph.node[node]['charge_rate']
             if energy_consumed < initial_battery:
@@ -107,7 +107,7 @@ def get_navie_path(graph, s, t, ev):
     ev.curbat = initial_battery
     total_path += path
     total_path = total_path
-    print getPathTime(graph, total_path, charge_stations, ev)
-    return total_path
+    #print 
+    return (total_path, getPathTime(graph, total_path, charge_stations, ev))
 
 
