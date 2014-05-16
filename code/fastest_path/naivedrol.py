@@ -13,6 +13,8 @@ def drive_naive(graph, s, t, ev, battery_procent):
         edge = graph.edge[node][shortest_path[i+1]]
         energy_used = edge['weight']*ev.consumption_rate(edge['speed_limit'])
         path.append(node)
+        if graph.node[node]['charge_rate']:
+            ev.curbat = ev.battery_capacity
         if ev.curbat - energy_used < ev.battery_capacity*battery_procent:
             print ev.curbat, ev.battery_capacity
             possible_cs = inRange(graph, shortest_path[i], t, ev)
