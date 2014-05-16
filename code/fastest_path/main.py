@@ -33,7 +33,7 @@ def main():
     loader.load_graph()
     road_network = loader.rn
 
-    road_network.generate_charge(50, 100, 50)
+    road_network.generate_charge(50, 100, 1000)
 
     print road_network.nodes()[0]
     print road_network.nodes()[-1]
