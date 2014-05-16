@@ -47,7 +47,6 @@ def experiment_cs_density(ev, num_iterations, path_distance):
 		f.write('%s,%s,%s\n' % (cs_dist, sum_of_time_naive/num_iterations, fails/num_iterations))
 		f.close()			
 
-
 def experiment_runtime_compexity(ev, num_iterations, num_experiments, path_distance, CS_density):
 	print 'loading graph'
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
@@ -153,7 +152,7 @@ def experiment_charge_rate(road_network, ev, CS_density, path_distance, charge_r
 	f.write('scale factor,time\n')
 
 	print 'chosing paths'
-	for x in range(1,10):
+	for x in range(0,10):
 		s,t,dist = s_and_t(road_network, path_distance)
 		list_of_paths.append((s,t))	
 		
@@ -175,7 +174,6 @@ def experiment_charge_rate(road_network, ev, CS_density, path_distance, charge_r
 		print 'Scale factor:%s - Hours:%s'%(1+(scale_factor/100.0), sum_of_time/10)
 	f.close()
 
-
 def experiment_driving_dist(ev, CS_density, max_distance):
 	print 'loading roadnetwork'
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
@@ -185,7 +183,7 @@ def experiment_driving_dist(ev, CS_density, max_distance):
 	
 	f = open('path_time_length(1-500).csv', 'a')
 	f.write('dist,time,fail_rate\n')
-	for distance in range(1, max_distance, ):
+	for distance in range(1, max_distance, 50):
 		sum_time, fails = 0,0
 		for x in xrange(0,10):
 			s,t,dist = s_and_t(rn, distance)
@@ -219,6 +217,6 @@ experiment_runtime_compexity(ev, 1, 100, 200, 20)
 
 #experiment_charge_rate(road_network, ev, 10, 100, 50)
 
-#experiment_driving_dist(ev, 20, 100)
+#experiment_driving_dist(ev, 20, 500)
 
 
