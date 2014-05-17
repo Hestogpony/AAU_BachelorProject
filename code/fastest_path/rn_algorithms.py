@@ -27,9 +27,7 @@ def updateCSAfterCharging(chargeStations, usedEnergy):
             chargeStation[0] -= usedEnergy
             
 def updateCS(charge_stations):
-    
     bestCS = charge_stations[0]
-    
     for CS in charge_stations:
         if CS[1] >= bestCS[1]:
             bestCS = CS
@@ -39,7 +37,6 @@ def updateCS(charge_stations):
 
 def getBestChargeStation(chargeStations):
     if not chargeStations:
-
         return [[]]
     bestStation = chargeStations[0]
     for chargeStation in chargeStations:
@@ -50,7 +47,12 @@ def getBestChargeStation(chargeStations):
     return chargeStations[:place]
 
 def update_stations(charge_stations, energy):
-    possible_energy = charge_stations[0][0]
+    if not charge_stations:
+        return [[]], 0, 0
+    try:
+        possible_energy = charge_stations[0][0]
+    except:
+        return [[]], 0, 0
     energy = 0
     time = 0    
     if possible_energy < energy:
@@ -118,8 +120,7 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 
     if time_case1 < float('inf') and v_opt_case1 == maxSpeed: #If we have the energy needed to drive at max speed we pick case 1 right away.
         chargeStations = getChargeRate(preCS, myCS) #maybe update chargestations here
-        charge_stations, energy, time = update_stations(chargeStations, energy_used_case1)
-        return (time_case1+time, charge_stations , cur_battery_case1+energy, energy_used_case1)
+        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
     # Case 2
     chargeStations = getChargeRate(preCS, myCS)
     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
@@ -129,37 +130,21 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
     #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
     if (not chargeStations):
         chargeStations = getChargeRate(preCS, myCS)
-        charge_stations, energy, time = update_stations(chargeStations, energy_used_case1)
-        return (time_case1+time, charge_stations , cur_battery_case1+energy, energy_used_case1)
+        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
     #finds the optimal way to drive an edge using a chargestation
-    v_opt_case2 = fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev) #
+    v_opt_case2 = fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev)
     additional_time = 0
-
-    #If the amount of energy we can charge at our best charge staion is less than the energy need to drive at the optimal speed we charge the amount we can and moves on till the next charge station
-    while (ev.consumption_rate(v_opt_case2)*dist) - nodecurbat > possible_energy: 
-
-        nodecurbat += possible_energy
-        additional_time += (possible_energy / chargeRate)
-        try:
-            chargeStations.remove(0)
-            chargeStations = updateCS(chargeStations)
-            possible_energy = chargeStations[0][0]
-            chargeRate = chargeStations[0][1]
-        except:
-	    if time_case1 == float('inf'): #If we can't solve an edge using the preCs or the battery we return float('inf') = no posible path
-            	return (float('inf'), [], nodecurbat, float('inf')) 
-	    else: #othervice we drive the path using the energy in the battery
-		    chargeStations = getChargeRate(preCS, myCS) #maybe update chargestations here
-       		charge_stations, energy, time = update_stations(chargeStations, energy_used_case1)
-            return (time_case1+time, charge_stations , cur_battery_case1+energy, energy_used_case1)
-
 
     #If we can drive the edge using previous charge stations we calculate the time used to drive this way
     time_case2 = dist/v_opt_case2 + (((ev.consumption_rate(v_opt_case2)*dist) - nodecurbat)/chargeRate) + additional_time
     energy_used_case2 = (ev.consumption_rate(v_opt_case2)*dist)
+
+    if energy_used_case2 > possible_energy:
+        chargeStations.remove(0)
+
 
     cur_battery_case2 = nodecurbat - energy_used_case2
 
@@ -168,11 +153,9 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 
     if time_case1 < time_case2:
         chargeStations = getChargeRate(preCS, myCS)
-        charge_stations, energy, time = update_stations(chargeStations, energy_used_case1)
-        return (time_case1+time, charge_stations , cur_battery_case1+energy, energy_used_case1)
+        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
     else:
-        charge_stations, energy, time = update_stations(chargeStations, energy_used_case2)
-        return (time_case2+time, charge_stations , cur_battery_case2+energy, energy_used_case2)
+        return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
        
 
 def getSlope(lowerX, higherX, lowerY, higherY):
@@ -285,9 +268,12 @@ def linearProgramming(G, preNode, curNode):
     return time
     # print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
 
+def age(charge_stations, energy):
+    for i in range(0, len(charge_stations)):
+        charge_stations[i][0] -= energy
 def fastest_path_greedy(graph, s, t, algorithm, ev):
     G = deepcopy(graph)
-
+    print "Started"
     #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5 
 
     for node_id, data in G.nodes(data=True):
@@ -304,11 +290,15 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
     while open_nodes:
         node_id = heappop(open_nodes)[1]
         node_data = G.node[node_id]
+        #print node_id
         if node_data['time'] == float('inf'):
-	    print "NO PATH FOUND", len(open_nodes)
+            print "NO PATH FOUND", len(open_nodes)
             break
         for e in G.edges([node_id], data=True):
             node = G.node[e[1]]
+
+            if node['time'] < node_data['time']:
+                continue
 
             if algorithm == 1:
                 time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat']) #HER
@@ -327,12 +317,13 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
             if time == float('inf'):
                 continue
 
+
             if node['time'] > totalTime:
                 node['time'] = totalTime
                 node['path'] = node_id
                 node['curbat'] = curbat
-
                 if preCS:
+                    #age(preCS, energyUsed)
                     node['preCS'] = preCS
                 node['myCS'][0] = ev.battery_capacity - curbat
                 heappush(open_nodes, (totalTime, e[1]))
@@ -352,3 +343,6 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
     Path.append(s)
     Path.reverse()
     return (Path, totaltime)
+
+
+# fix, make sure that all but aging of the charging stations work, then make sure charge stations work propperly
