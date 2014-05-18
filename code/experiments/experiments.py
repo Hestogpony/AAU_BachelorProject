@@ -1,7 +1,7 @@
 import importer
 import networkx as nx
-from fastest_path.naive import naive
-from fastest_path.naivedrol import get_navie_path
+# from fastest_path.naive import naive
+from fastest_path.naivedrol import naive_path
 from fastest_path.vehicle import EV
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
@@ -9,204 +9,208 @@ from test_utils import *
 import time
 
 
-def experiment_cs_density(ev, num_iterations, path_distance):
-	file_name = 'cs_density_dist1-100km_path100_itt10.csv'
-	fails = 0
-
-	f = open(file_name, 'a')
-	f.write('CS dist,path time,fail rate\n')
-	f.close()
+def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.csv'):
+	with open(file_name, 'a') as f:
+		f.write('CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
 	for cs_dist in range(0,100):
-		print 'loading graph'
+		print 'CS density experiment. currently at: ', cs_dist
 		rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-		print 'reducing charge stations'
 		charge_station_density(rn, cs_dist)
-		sum_of_time_naive = 0
-		f = open(file_name, 'a')
-		for iteration in range(0, num_iterations):
+		naive_t, hybrid_t, greedy_t = 0,0,0
+		naive_f, hybrid_f, greedy_f = 0,0,0
+		for iteration in range(iterations):
 			s, t, dist = s_and_t(rn, path_distance)
-
-			### naive
-			print 'running naive'
-			naive_p, naive_t = naive_path(rn, ev, s, t)
-			if naive_t == float('inf'):
-				fails += 1
-				print 'fail'
-			else:
-				sum_of_time_naive += naive_t
-				print 'CS dist:%s - Hours:%s'%(cs_dist, naive_t)
-
+			### NAIVE
+			_, time = naive_path(rn, ev, s, t)
+			naive_t += time if time!=float('inf') else 0
+			naive_f += 0 if time!=float('inf') else 1
 
 			### LP
+			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			hybrid_t += time if time!=float('inf') else 0
+			hybrid_f += 0 if time!=float('inf') else 1
 
 			### Greedy
-			print 'running Greedy'
-			greedy_path = fastest_path_greedy(rn, s, t, 1, ev)
+			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
+			greedy_t += time if time!=float('inf') else 0
+			greedy_f += 0 if time!=float('inf') else 1
 
-		print 'CS dist:%s - Hours:%s - Fail rate:%s'%(cs_dist, sum_of_time_naive/num_iterations, fails/num_iterations)
-		f.write('%s,%s,%s\n' % (cs_dist, sum_of_time_naive/num_iterations, fails/num_iterations))
-		f.close()
 
-def experiment_runtime_compexity(ev, num_iterations, num_experiments, path_distance, CS_density):
-	print 'loading graph'
+		with open(file_name, 'a') as f:
+			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+											  cs_dist,
+											  naive_t/(iterations-naive_f),
+											  naive_f,
+											  hybrid_t/(iterations-hybrid_f),
+											  hybrid_f,
+											  greedy_t/(iterations-greedy_f),
+											  greedy_f,
+											))
+
+
+def experiment_runtime_compexity(ev, iterations, path_distance, CS_density, step_size, file_name='time_complexity.csv'):
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-	print 'reducing charge stations'
 	charge_station_density(rn, CS_density)
 	number_of_nodes = 400000
-	iteration_size = number_of_nodes/num_experiments
 
-	file_name = 'complexity_size500k_itt100_csd40.csv'
-	f = open(file_name, 'a')
-	f.write('problem size,time\n')
-	f.close()
+	with open(file_name, 'a') as f:
+		f.write('nodes,dijkstra,hybrid,greedy\n')
 
 	while number_of_nodes > 0:
-		rn, real_num_nodes = set_roadnetwork_complexity(rn, number_of_nodes)
-		f = open(file_name, 'a')
-		dijkstra_time_sum = 0
-		greedy_time_sum = 0
-		for x in range(0, num_iterations):
+		actual_nodes = set_roadnetwork_complexity(rn, number_of_nodes)
+
+		dijkstra_t,hybrid_t,greedy_t = 0,0,0
+		for x in range(iterations):
 			s,t,dist = s_and_t(rn, path_distance)
 
-			### Dijksras
-			print s, t
-			print 'running Dijkstras'
+			### Dijkstras
 			start_time = time.time()
-			nx.single_source_dijkstra_path_length(rn, s, weight='weight')
-			dijkstra_time_sum += time.time() - start_time
+			nx.single_source_dijkstra_path_length(rn, s, weight='t')
+			dijkstra_t += time.time() - start_time
 
 			### LP
+			start_time = time.time()
+			fastest_path_greedy(rn, s, t, 2, ev)
+			hybrid_t += time.time() - start_time
 
 			### Greedy
-			print 'running greedy'
 			start_time = time.time()
-			greedy_return = fastest_path_greedy(rn, s, t, 1, ev)
-			rn.visualize()
-			print greedy_return
-			if greedy_return[0]:
-				greedy_time_sum += time.time() - start_time
-			else:
-				print 'greedy returns empty path'
-		print '%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/num_iterations, greedy_time_sum/num_iterations)
-		f.write('%s,%s,%s\n' % (real_num_nodes, dijkstra_time_sum/num_iterations, greedy_time_sum/num_iterations))
-		f.close()
+			fastest_path_greedy(rn, s, t, 1, ev)
+			greedy_t += time.time() - start_time
 
+		with open(file_name, 'a') as f:
+			f.write('%s,%s,%s\n' % (actual_nodes, dijkstra_t/iterations, hybrid_t/iterations,greedy_t/iterations ))
 
-		number_of_nodes -= iteration_size
+		number_of_nodes -= step_size
 
-def experiment_ev_consumption(num_iterations, path_distance, CS_density):
-	### PARAMETERS ###
-	con_variance_pct = 40
-	file_name = 'ev_con_40pct_50km_10itt.csv'
-	list_of_paths = []
-	sum_of_time = 0
-	fails = 0
-
-	print 'loading graph'
+def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_density, file_name='ev_consumption.csv'):
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-	print 'reducing charge stations'
-	charge_station_density(rn, CS_density)
+	charge_station_density(rn, cs_dist)
 
-	f = open(file_name, 'a')
-	f.write('con pct,time,fail rate\n')
-	f.close()
+	with open(file_name, 'a') as f:
+		f.write('CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
-	print 'chosing paths'
-	for x in range(0,num_iterations):
-		s,t,dist = s_and_t(rn, path_distance)
-		list_of_paths.append((s,t))
+	ev_number = 0
+	for ev in scale_cons_rate(con_rate_variance):
+		print 'charge station experiment. currently at EV: ', ev_number
 
-	print 'generating evs'
-	list_evs = scale_cons_rate(con_variance_pct)
+		scale_charge_rates(rn, 1+(scale_factor/100.0))
 
-	ev_number = -con_variance_pct
-	for ev in list_evs: #from -40pct to +40pct
-		f = open(file_name, 'a')
-		for path in list_of_paths:
-
-			print 'running naive'
-			naive_p, naive_t = naive_path(rn, ev, path[0], path[1])
-
-			if naive_t == float('inf'):
-				fails += 1
-				print 'fail'
-			else:
-				sum_of_time += naive_t
-				print 'EV:%s - Hours:%s'%(ev_number, naive_t)
-		print 'EV_number:%s - Hours:%s - Fail rate:%s'%(ev_number, sum_of_time/num_iterations, fails/num_iterations)
-		f.write('%s,%s,%s\n' % (ev_number, sum_of_time/num_iterations, fails/num_iterations))
-		ev_number += 1
-		f.close()
+		naive_t, hybrid_t, greedy_t = 0,0,0
+		naive_f, hybrid_f, greedy_f = 0,0,0
+		for iteration in range(iterations):
+			s, t, dist = s_and_t(rn, path_distance)
+			### NAIVE
+			_, time = naive_path(rn, ev, s, t)
+			naive_t += time if time!=float('inf') else 0
+			naive_f += 0 if time!=float('inf') else 1
 
 			### LP
+			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			hybrid_t += time if time!=float('inf') else 0
+			hybrid_f += 0 if time!=float('inf') else 1
+
 			### Greedy
+			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
+			greedy_t += time if time!=float('inf') else 0
+			greedy_f += 0 if time!=float('inf') else 1
 
-def experiment_charge_rate(road_network, ev, CS_density, path_distance, charge_rate_variance):
-	list_of_paths = []
-	sum_of_time = 0
-	naive_fails = 0
-	print 'reducing charge stations'
-	charge_station_density(road_network, CS_density)
 
-	f = open('charge_rate(0.6-1.4).csv', 'a')
-	f.write('scale factor,time\n')
+		with open(file_name, 'a') as f:
+			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+											scale_factor,
+											naive_t/(iterations-naive_f),
+											naive_f,
+											hybrid_t/(iterations-hybrid_f),
+											hybrid_f,
+											greedy_t/(iterations-greedy_f),
+											greedy_f,
+											))
+		ev_number += 1
 
-	print 'chosing paths'
-	for x in range(0,10):
-		s,t,dist = s_and_t(road_network, path_distance)
-		list_of_paths.append((s,t))
+def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, CS_density, file_name='charge_rate.csv'):
+	with open(file_name, 'a') as f:
+		f.write('Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
 	for scale_factor in range(-charge_rate_variance, charge_rate_variance):
-		temp_rn = road_network
-		scale_charge_rates(temp_rn, 1+(scale_factor/100.0))
+		print 'charge station experiment. currently at: ', scale_factor
+		rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
+		charge_station_density(rn, CS_density)
+		scale_charge_rates(rn, 1+(scale_factor/100.0))
 
-		for path in list_of_paths:
-			naive_p, naive_t = naive_path(temp_rn, ev, path[0], path[1])
+		naive_t, hybrid_t, greedy_t = 0,0,0
+		naive_f, hybrid_f, greedy_f = 0,0,0
+		for iteration in range(iterations):
+			s, t, dist = s_and_t(rn, path_distance)
+			### NAIVE
+			_, time = naive_path(rn, ev, s, t)
+			naive_t += time if time!=float('inf') else 0
+			naive_f += 0 if time!=float('inf') else 1
 
-			if naive_t == float('inf'):
-				naive_fails += 1
-				print 'fail'
-			else:
-				print path[0], path[1]
-				sum_of_time += naive_t
+			### LP
+			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			hybrid_t += time if time!=float('inf') else 0
+			hybrid_f += 0 if time!=float('inf') else 1
 
-		f.write('%s,%s\n' % (1+(scale_factor/100.0), sum_of_time/10))
-		print 'Scale factor:%s - Hours:%s'%(1+(scale_factor/100.0), sum_of_time/10)
-	f.close()
+			### Greedy
+			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
+			greedy_t += time if time!=float('inf') else 0
+			greedy_f += 0 if time!=float('inf') else 1
 
-def experiment_driving_dist(ev, CS_density, max_distance):
-	print 'loading roadnetwork'
+
+		with open(file_name, 'a') as f:
+			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+											  scale_factor,
+											  naive_t/(iterations-naive_f),
+											  naive_f,
+											  hybrid_t/(iterations-hybrid_f),
+											  hybrid_f,
+											  greedy_t/(iterations-greedy_f),
+											  greedy_f,
+											))
+
+
+
+def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, file_name='driving_dist.csv'):
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-	set_roadnetwork_complexity(rn, 500000)
-	print 'reducing cs density'
 	charge_station_density(rn, CS_density)
 
-	f = open('path_time_length(1-500).csv', 'a')
-	f.write('dist,time,fail_rate\n')
-	for distance in range(250, max_distance, 50):
-		for x in xrange(1):
-			s,t,dist = s_and_t(rn, distance)
-			print s,t,dist
-			################ NAIVE 1
-			#naive1_p, naive1_t = naive(rn,s, t, ev)
-			################
-			#naive2_p, naive2_t = get_navie_path(rn,s,t, ev)
-			################ GREEDY
-			greedy_p,greedy_t = fastest_path_greedy(rn, s, t, 1, ev)
-			################ LP
+	with open(file_name, 'a') as f:
+		f.write('driving distance,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
-			################
-			#rn.visualize_path(naive1_p)
-			rn.visualize_path(greedy_p)
-			#rn.visualize_path(naive2_p)
+	for distance in range(min_dist, max_dist, step_size):
+		for iteration in xrange(iterations):
+			s, t, dist = s_and_t(rn, distance)
 
-			print greedy_t#, naive2_t 
+			### NAIVE
+			_, time = naive_path(rn, ev, s, t)
+			naive_t += time if time!=float('inf') else 0
+			naive_f += 0 if time!=float('inf') else 1
 
-		# f.write('%s,%s,%s\n' % (distance, sum_time/10.0, fails/10.0))
-	f.close()
+			### LP
+			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			hybrid_t += time if time!=float('inf') else 0
+			hybrid_f += 0 if time!=float('inf') else 1
 
-road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
+			### Greedy
+			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
+			greedy_t += time if time!=float('inf') else 0
+			greedy_f += 0 if time!=float('inf') else 1
+
+
+		with open(file_name, 'a') as f:
+			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+											  distance,
+											  naive_t/(iterations-naive_f),
+											  naive_f,
+											  hybrid_t/(iterations-hybrid_f),
+											  hybrid_f,
+											  greedy_t/(iterations-greedy_f),
+											  greedy_f,
+											))
+
+
 ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_cs_density(ev, 10, 100)
@@ -217,5 +221,4 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_charge_rate(road_network, ev, 10, 100, 50)
 
-experiment_driving_dist(ev, 20, 500)
-
+experiment_driving_dist(ev, 20, 50,500,50,10)
