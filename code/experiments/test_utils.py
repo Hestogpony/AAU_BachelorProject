@@ -44,21 +44,21 @@ def scale_cons_rate(pct):
 def set_roadnetwork_complexity(rn, num_nodes):
     lonmax = 12.89
     #latmax = 57.86
-    connected_components = nx.connected_components(rn)  
+    connected_components = nx.connected_components(rn)
     sorted(connected_components, key=len)
-    
+
     while len(connected_components[0]) > num_nodes:
-        
+
         #print(len(connected_components[0]))
         #latmax -= 0.02
         lonmax -= 0.02
         for node in rn.nodes():
             if (float(rn.node[node]['lon']) >= lonmax):
                 rn.remove_node(node)
-        connected_components = nx.connected_components(rn)  
+        connected_components = nx.connected_components(rn)
         sorted(connected_components, key=len)
-        
+
     for list_of_nodes in connected_components[1:]:
         for node in list_of_nodes:
             rn.remove_node(node)
-    return rn, rn.number_of_nodes()
+    return rn.number_of_nodes()
