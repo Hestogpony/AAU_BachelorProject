@@ -189,19 +189,19 @@ def experiment_driving_dist(ev, CS_density, max_distance):
 			s,t,dist = s_and_t(rn, distance)
 			print s,t,dist
 			################ NAIVE 1
-			#naive1_p, naive1_t = naive(rn,s, t, ev)
+			naive1_p, naive1_t = naive(rn,s, t, ev)
 			################
-			#naive2_p, naive2_t = get_navie_path(rn,s,t, ev)
+			naive2_p, naive2_t = get_navie_path(rn,s,t, ev)
 			################ GREEDY
 			greedy_p,greedy_t = fastest_path_greedy(rn, s, t, 1, ev)
 			################ LP
 
 			################
 			#rn.visualize_path(naive1_p)
-			rn.visualize_path(greedy_p)
+			#rn.visualize_path(greedy_p)
 			#rn.visualize_path(naive2_p)
 
-			print greedy_t#, naive2_t 
+			print greedy_t, naive2_t, naive1_t
 
 		# f.write('%s,%s,%s\n' % (distance, sum_time/10.0, fails/10.0))
 	f.close()

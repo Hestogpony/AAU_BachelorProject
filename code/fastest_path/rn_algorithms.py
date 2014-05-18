@@ -1,6 +1,7 @@
 
 from copy import copy, deepcopy
 from heapq import heappop, heappush
+from inRange import inRange
 import subprocess
 import networkx as nx
 from haversine import distance
@@ -159,7 +160,7 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 
     if time_case1 < time_case2:
         chargeStations = getChargeRate(preCS, myCS)
-        return time_case1, chargeStations , cur_battery_case1, energy_used_case1
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
     else:
         return time_case2, chargeStations, cur_battery_case2, energy_used_case2
        
@@ -167,9 +168,10 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 def getSlope(lowerX, higherX, lowerY, higherY):
     return (higherY-lowerY)/(higherX-lowerX)
 
-def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
+def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev, curbat):
     n = "param n := {0};\n".format(len(edgeDists))
     m = "param m := {0}; \n".format(Precision)
+    initialBat = "param initialBat := {0};\n".format(curbat)
     batCap = "param batCap := {0}; \n".format(ev.battery_capacity)
     points = "param points: \n"
     points2 = "param points2: \n"
@@ -192,7 +194,6 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
     points2 += rangeList
     linesA += rangeList
     linesB += rangeList
-
 
     for i in range(0, len(edgeDists)):
         minSpeed = edgeSpeeds[i]*0.8
@@ -223,29 +224,35 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
     output_file = open("LPData.dat", "w")
     output_file.write(n)
     output_file.write(m)
+    output_file.write(initialBat)
     output_file.write(batCap)
-    output_file.write(points + ";")
-    output_file.write(points2 + ";")
-    output_file.write(speedDists + ";")
-    output_file.write(linesA + ";")
-    output_file.write(linesB + ";")
-    output_file.write(edgeDist + ";")
-    output_file.write(chargeConstants + ";")
+    output_file.write(points + ";\n")
+    output_file.write(points2 + ";\n")
+    output_file.write(speedDists + ";\n")
+    output_file.write(linesA + ";\n")
+    output_file.write(linesB + ";\n")
+    output_file.write(edgeDist + ";\n")
+    output_file.write(chargeConstants + ";\n")
+
     output_file.close()
     proc = subprocess.Popen("glpsol  --model fastestPathLinearization.mod --data LPData.dat", stdout=subprocess.PIPE, shell=True)
 
     pathTime = float('inf')
-    for line in iter(proc.stdout.readline,''):
+    pathCurbat = 0
+    for line in iter(proc.stdout.readline, ''):
+        print line
         try:
             num = float(line.rstrip())
-            pathTime = num
-
+            if pathTime == float('inf'):
+                pathTime = num
+            else:
+                pathCurbat = num
         except:
             pass
-    return pathTime
+    return pathTime, pathCurbat
 # print line.rstrip()
 
-def linearProgramming(G, preNode, curNode):
+def linearProgramming(G, preNode, curNode, ev, curbat):
     print "here:::::: ", preNode, curNode
     ChargeConstants = []
     edgeDists = []
@@ -267,16 +274,33 @@ def linearProgramming(G, preNode, curNode):
         edgeDists.append(edge['weight'])
     #print edge
     #ChargeConstants.append(G.node[nodes[-1]]['charge_rate'])
-    print ChargeConstants, len(ChargeConstants)
-    print edgeSpeeds, len(edgeSpeeds)
-    print edgeDists, len(edgeDists)
-    time = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 5, 50)
-    return time
+    #print ChargeConstants, len(ChargeConstants)
+    #print edgeSpeeds, len(edgeSpeeds)
+    #print edgeDists, len(edgeDists)
+    time, newcurbat = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 5, ev, curbat)
+    return time, newcurbat
     # print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
 
 def age(charge_stations, energy):
     for i in range(0, len(charge_stations)):
         charge_stations[i][0] -= energy
+
+
+def pathEnergy(G, preNode, ev):
+    path_energy = 0
+    nodes = []
+    batcap = 0
+    path = G.node[preNode]['path']
+    while path != 0 and G.node[path]['myCS'][1] == 0:
+        nodes.append(path)
+        path = G.node[path]['path']
+    nodes.reverse()
+    for i in range(0,len(nodes)-1):
+        edge = G.edge[nodes[i]][nodes[i+1]]
+        path_energy += edge['weight']*ev.consumption_rate(edge['speed_limit']*0.8)
+    return batcap - path_energy
+
+
 def fastest_path_greedy(graph, s, t, algorithm, ev):
     G = deepcopy(graph)
     print "Started"
@@ -303,34 +327,35 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
         for e in G.edges([node_id], data=True):
             node = G.node[e[1]]
 
-            if node['time'] < node_data['time']:
+            if node['time'] <= node_data['time']+e[2]['t']:
                 continue
 
             if algorithm == 1:
-                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat']) #HER
+                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat'])
                 totalTime = node_data['time'] + time
             elif algorithm == 0:
                 totalTime = node_data['time'] + e[2]["t"]
                 curbat = 0
                 preCS = []
-                time = 0
             else:
-                #totalTime = 1
-                totalTime = linearProgramming(G, node_id, e[1])
-                curbat = 0
-                preCS = []
-                time = 0
-            if time == float('inf'):
-                continue
-
+                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat'])
+                if time == float('inf'):
+                    ev.curbat = pathEnergy(graph, node_id, ev)
+                    if inRange(graph, s, t, ev):
+                        totalTime, curbat = linearProgramming(G, node_id, e[1], ev, ev.curbat)
+                        preCS = []
+                    else:
+                        totalTime = float('inf')
+                else:
+                    totalTime = node_data['time'] + time
 
             if node['time'] > totalTime:
                 node['time'] = totalTime
                 node['path'] = node_id
                 node['curbat'] = curbat
                 if preCS:
-                    #age(preCS, energyUsed)
                     node['preCS'] = preCS
+                    age(node['preCS'], energyUsed)
                 node['myCS'][0] = ev.battery_capacity - curbat
                 heappush(open_nodes, (totalTime, e[1]))
 
