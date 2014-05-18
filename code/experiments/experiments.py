@@ -22,7 +22,7 @@ def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.c
 		for iteration in range(iterations):
 			s, t, dist = s_and_t(rn, path_distance)
 			### NAIVE
-			_, time = naive_path(rn, ev, s, t)
+			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
 
@@ -102,7 +102,7 @@ def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_de
 		for iteration in range(iterations):
 			s, t, dist = s_and_t(rn, path_distance)
 			### NAIVE
-			_, time = naive_path(rn, ev, s, t)
+			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
 
@@ -134,7 +134,7 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 		f.write('Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
 	for scale_factor in range(-charge_rate_variance, charge_rate_variance):
-		print 'charge station experiment. currently at: ', scale_factor
+		print 'charge station experiment. currently at: ', 1+(scale_factor/100.0)
 		rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 		charge_station_density(rn, CS_density)
 		scale_charge_rates(rn, 1+(scale_factor/100.0))
@@ -144,28 +144,27 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 		for iteration in range(iterations):
 			s, t, dist = s_and_t(rn, path_distance)
 			### NAIVE
-			_, time = naive_path(rn, ev, s, t)
+			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
 
 			### LP
-			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
-			hybrid_t += time if time!=float('inf') else 0
-			hybrid_f += 0 if time!=float('inf') else 1
+			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			# hybrid_t += time if time!=float('inf') else 0
+			# hybrid_f += 0 if time!=float('inf') else 1
 
 			### Greedy
 			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
 			greedy_t += time if time!=float('inf') else 0
 			greedy_f += 0 if time!=float('inf') else 1
 
-
 		with open(file_name, 'a') as f:
 			f.write('%s,%s,%s,%s,%s,%s,%s' % (
 											  scale_factor,
 											  naive_t/(iterations-naive_f),
 											  naive_f,
-											  hybrid_t/(iterations-hybrid_f),
-											  hybrid_f,
+											'.',#   hybrid_t/(iterations-hybrid_f),
+											'.',#   hybrid_f,
 											  greedy_t/(iterations-greedy_f),
 											  greedy_f,
 											))
@@ -176,49 +175,24 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 	charge_station_density(rn, CS_density)
 
-
-	f = open('path_time_length(1-500).csv', 'a')
-	f.write('dist,time,fail_rate\n')
-	for distance in range(250, max_distance, 50):
-		for x in xrange(1):
-			s,t,dist = s_and_t(rn, distance)
-			print s,t,dist
-			################ NAIVE 1
-			naive1_p, naive1_t = naive(rn,s, t, ev)
-			################
-			naive2_p, naive2_t = get_navie_path(rn,s,t, ev)
-			################ GREEDY
-			greedy_p,greedy_t = fastest_path_greedy(rn, s, t, 1, ev)
-			################ LP
-
-			################
-			#rn.visualize_path(naive1_p)
-			#rn.visualize_path(greedy_p)
-			#rn.visualize_path(naive2_p)
-
-			print greedy_t, naive2_t, naive1_t
-
-		# f.write('%s,%s,%s\n' % (distance, sum_time/10.0, fails/10.0))
-	f.close()
-
-road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
-
 	with open(file_name, 'a') as f:
 		f.write('driving distance,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
 	for distance in range(min_dist, max_dist, step_size):
+		print 'driving distance experiment. currently at: ', distance
+		naive_t, hybrid_t, greedy_t = 0,0,0
+		naive_f, hybrid_f, greedy_f = 0,0,0
 		for iteration in xrange(iterations):
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
-			_, time = naive_path(rn, ev, s, t)
+			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
-
 			### LP
-			_, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
-			hybrid_t += time if time!=float('inf') else 0
-			hybrid_f += 0 if time!=float('inf') else 1
+			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
+			# hybrid_t += time if time!=float('inf') else 0
+			# hybrid_f += 0 if time!=float('inf') else 1
 
 			### Greedy
 			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
@@ -231,8 +205,8 @@ road_network = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 											  distance,
 											  naive_t/(iterations-naive_f),
 											  naive_f,
-											  hybrid_t/(iterations-hybrid_f),
-											  hybrid_f,
+											'.',#   hybrid_t/(iterations-hybrid_f),
+											'.',#   hybrid_f,
 											  greedy_t/(iterations-greedy_f),
 											  greedy_f,
 											))
@@ -247,6 +221,6 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_ev_consumption(10, 100, 40)
 
-#experiment_charge_rate(road_network, ev, 10, 100, 50)
+experiment_charge_rate(ev, 10, 100, 300,40)
 
-experiment_driving_dist(ev, 20, 50,500,50,10)
+experiment_driving_dist(ev, 40, 250,500,50,10)
