@@ -46,23 +46,18 @@ def getBestChargeStation(chargeStations):
     place = chargeStations.index(bestStation)
     return chargeStations[:place]
 
-def update_stations(charge_stations, energy):
-    if not charge_stations:
-        return [[]], 0, 0
-    try:
-        possible_energy = charge_stations[0][0]
-    except:
-        return [[]], 0, 0
-    energy = 0
-    time = 0    
-    if possible_energy < energy:
-        energy = possible_energy
-        time = possible_energy/charge_stations[0][1]        
-        charge_stations.remove(0)
-        charge_stations = getBestChargeStation(charge_stations)
-    for i in range(0, len(charge_stations)):
-        charge_stations[i][0] -= energy
-    return charge_stations, energy, time
+def filterCS(chargeStations):
+    best = 0
+    station = None
+    for cs in chargeStations:
+        if cs[1] >= best:
+            station = cs
+            best = cs[1]
+    if station:
+        index = chargeStations.index(station)
+        chargeStations = chargeStations[index:]
+    return chargeStations
+
 
 # Function checks if newly added charge station (currentCS)
 # is faster than all of the previous charge stations (preCS)
@@ -123,27 +118,38 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
         return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
     # Case 2
     chargeStations = getChargeRate(preCS, myCS)
-    #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
-    if (not chargeStations) and time_case1 == float('inf'): 
-        return (float('inf'), [], nodecurbat, float('inf'))
+     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
+    if (not chargeStations) and time_case1 == float('inf'):
+        return float('inf'), [], nodecurbat, float('inf')
 
     #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
-    if (not chargeStations):
+    if not chargeStations:
         chargeStations = getChargeRate(preCS, myCS)
-        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
     #finds the optimal way to drive an edge using a chargestation
     v_opt_case2 = fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev)
-    additional_time = 0
+
 
     #If we can drive the edge using previous charge stations we calculate the time used to drive this way
-    time_case2 = dist/v_opt_case2 + (((ev.consumption_rate(v_opt_case2)*dist) - nodecurbat)/chargeRate) + additional_time
+    time_case2 = dist/v_opt_case2 + (((ev.consumption_rate(v_opt_case2)*dist) - nodecurbat)/chargeRate)
     energy_used_case2 = (ev.consumption_rate(v_opt_case2)*dist)
 
     if energy_used_case2 > possible_energy:
-        chargeStations.remove(0)
+        del chargeStations[0]
+        chargeStations = filterCS(chargeStations)
+
+     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
+    if (not chargeStations) and time_case1 == float('inf'):
+        return float('inf'), [], nodecurbat, float('inf')
+
+    #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
+    if not chargeStations:
+        chargeStations = getChargeRate(preCS, myCS)
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
+
 
 
     cur_battery_case2 = nodecurbat - energy_used_case2
@@ -153,9 +159,9 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 
     if time_case1 < time_case2:
         chargeStations = getChargeRate(preCS, myCS)
-        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
+        return time_case1, chargeStations , cur_battery_case1, energy_used_case1
     else:
-        return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
+        return time_case2, chargeStations, cur_battery_case2, energy_used_case2
        
 
 def getSlope(lowerX, higherX, lowerY, higherY):
