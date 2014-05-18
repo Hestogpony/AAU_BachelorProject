@@ -355,7 +355,6 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
                 node['curbat'] = curbat
                 if preCS:
                     node['preCS'] = preCS
-                    age(node['preCS'], energyUsed)
                 node['myCS'][0] = ev.battery_capacity - curbat
                 heappush(open_nodes, (totalTime, e[1]))
 
