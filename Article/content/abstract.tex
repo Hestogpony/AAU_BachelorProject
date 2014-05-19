@@ -1,16 +1,18 @@
 \begin{abstract}
 We describe a greedy-heuristic algorithm for finding the fastest path, between two points in a
-large road network graph, for electrical vehicles. Unlike many of today's GPS systems, our greedy-heuristic 
+large road network graph, for electrical vehicles. We further introduce a linear programming 
+approach, which could be combined with the greedy-heuristic algorithm and likely improve fastest path 
+finding abilities at the cost of run time performance. Unlike many of today's GPS systems, our greedy-heuristic 
 algorithm takes both the drive time and the recharge time into account. Since the recharging possibilities for 
-electrical vehicles are still limited on Danish roads and the recharging process takes a long time compared to 
-refuelling times of regular gasoline cars, this is necessary in order to give the electrical vehicles users a 
+electrical vehicles are still limited on Danish roads and the recharging process takes a long time compared to refuelling 
+times of regular gasoline cars, this is necessary in order to give the electrical vehicles users a 
 useful route plan.\\
 
 We compared the performance of the greedy-heuristic algorithm with a naive algorithm on road
 networks extracted from OpenStreetMap (OSM). We modified the OSM road network, so it contained Danish speed limits
-and charge stations. We compared the performance on four different parameters: the density of charge stations in
-the road network, the quality of the charge stations in the road network, the size of the road network measured in 
-distance and the complexity of the road network measured in number of nodes. The greedy-algorithm 
-performed pretty god damn okay     
+and charge stations at variable positions and with variable charge rates. We compared the performance of the algorithms 
+with four different parameters: the density of charge stations in the road network, the quality of the charge stations 
+in the road network, the size of the road network measured in distance and the complexity of the road network measured 
+in number of nodes. HOW DID IT PERFORM?!      
 
 \end{abstract}
