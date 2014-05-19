@@ -38,15 +38,15 @@ def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.c
 
 
 		with open(file_name, 'a') as f:
-			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
 											  cs_dist,
-											  naive_t/(iterations-naive_f),
+											  naive_t/(iterations-naive_f) if iterations != naive_f else 'inf',
 											  naive_f,
-											  hybrid_t/(iterations-hybrid_f),
-											  hybrid_f,
-											  greedy_t/(iterations-greedy_f),
+											  '.',#   hybrid_t/(iterations-hybrid_f) if iterations != hybrid_f else 'inf',
+											  '.',#   hybrid_f,
+											  greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
 											  greedy_f,
-											))
+											 ))
 
 
 def experiment_runtime_compexity(ev, iterations, path_distance, CS_density, step_size, file_name='time_complexity.csv'):
@@ -118,13 +118,13 @@ def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_de
 
 
 		with open(file_name, 'a') as f:
-			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
 											scale_factor,
-											naive_t/(iterations-naive_f),
+											naive_t/(iterations-naive_f) if iterations != naive_f else 'inf',
 											naive_f,
-											hybrid_t/(iterations-hybrid_f),
-											hybrid_f,
-											greedy_t/(iterations-greedy_f),
+											'.',#   hybrid_t/(iterations-hybrid_f) if iterations != hybrid_f else 'inf',
+											'.',#   hybrid_f,
+											greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
 											greedy_f,
 											))
 		ev_number += 1
@@ -159,15 +159,15 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 			greedy_f += 0 if time!=float('inf') else 1
 
 		with open(file_name, 'a') as f:
-			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
 											  scale_factor,
-											  naive_t/(iterations-naive_f),
+											  naive_t/(iterations-naive_f) if iterations != naive_f else 'inf',
 											  naive_f,
-											'.',#   hybrid_t/(iterations-hybrid_f),
-											'.',#   hybrid_f,
-											  greedy_t/(iterations-greedy_f),
-											  greedy_f,
-											))
+										  '.',#  hybrid_t/(iterations-hybrid_f) if iterations != hybrid_f else 'inf',
+										  '.',#  hybrid_f,
+											  greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
+										  	greedy_f,
+											 ))
 
 
 
@@ -200,15 +200,15 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			greedy_f += 0 if time!=float('inf') else 1
 
 		with open(file_name, 'a') as f:
-			f.write('%s,%s,%s,%s,%s,%s,%s' % (
+			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
 											  distance,
-											  naive_t/(iterations-naive_f),
+											  naive_t/(iterations-naive_f) if iterations != naive_f else 'inf',
 											  naive_f,
-											'.',#   hybrid_t/(iterations-hybrid_f),
-											'.',#   hybrid_f,
-											  greedy_t/(iterations-greedy_f),
+											  '.',#   hybrid_t/(iterations-hybrid_f) if iterations != hybrid_f else 'inf',
+											  '.',#   hybrid_f,
+											  greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
 											  greedy_f,
-											))
+											  ))
 
 
 
@@ -220,6 +220,6 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_ev_consumption(10, 100, 40)
 
-experiment_charge_rate(ev, 10, 40, 300,40)
+experiment_charge_rate(ev, 1, 40, 300,40)
 
-experiment_driving_dist(ev, 40, 250,500,50,10)
+experiment_driving_dist(ev, 40, 250,500,50,1)
