@@ -139,6 +139,7 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 		charge_station_density(rn, CS_density)
 		scale_charge_rates(rn, 1+(scale_factor/100.0))
 
+
 		naive_t, hybrid_t, greedy_t = 0,0,0
 		naive_f, hybrid_f, greedy_f = 0,0,0
 		for iteration in range(iterations):
@@ -147,7 +148,6 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
-
 			### LP
 			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
 			# hybrid_t += time if time!=float('inf') else 0
@@ -199,7 +199,6 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			greedy_t += time if time!=float('inf') else 0
 			greedy_f += 0 if time!=float('inf') else 1
 
-
 		with open(file_name, 'a') as f:
 			f.write('%s,%s,%s,%s,%s,%s,%s' % (
 											  distance,
@@ -221,6 +220,6 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_ev_consumption(10, 100, 40)
 
-experiment_charge_rate(ev, 10, 100, 300,40)
+experiment_charge_rate(ev, 10, 40, 300,40)
 
 experiment_driving_dist(ev, 40, 250,500,50,10)
