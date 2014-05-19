@@ -186,11 +186,9 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
-			print 'ey'
 			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
-			print 'ey'
 			### LP
 			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
 			# hybrid_t += time if time!=float('inf') else 0
@@ -200,7 +198,6 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
 			greedy_t += time if time!=float('inf') else 0
 			greedy_f += 0 if time!=float('inf') else 1
-
 
 		with open(file_name, 'a') as f:
 			f.write('%s,%s,%s,%s,%s,%s,%s' % (
@@ -225,4 +222,4 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 experiment_charge_rate(ev, 10, 40, 300,40)
 
-# experiment_driving_dist(ev, 40, 250,500,50,10)
+experiment_driving_dist(ev, 40, 250,500,50,10)
