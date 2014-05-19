@@ -1,6 +1,7 @@
 
 from copy import copy, deepcopy
 from heapq import heappop, heappush
+from inRange import inRange
 import subprocess
 import networkx as nx
 from haversine import distance
@@ -25,13 +26,13 @@ def updateCSAfterCharging(chargeStations, usedEnergy):
     for chargeStation in chargeStations:
         if chargeStation:
             chargeStation[0] -= usedEnergy
-            
+
 def updateCS(charge_stations):
     bestCS = charge_stations[0]
     for CS in charge_stations:
         if CS[1] >= bestCS[1]:
             bestCS = CS
-                            
+
     place = charge_stations.index(bestCS)
     return charge_stations[place:]
 
@@ -46,27 +47,22 @@ def getBestChargeStation(chargeStations):
     place = chargeStations.index(bestStation)
     return chargeStations[:place]
 
-def update_stations(charge_stations, energy):
-    if not charge_stations:
-        return [[]], 0, 0
-    try:
-        possible_energy = charge_stations[0][0]
-    except:
-        return [[]], 0, 0
-    energy = 0
-    time = 0    
-    if possible_energy < energy:
-        energy = possible_energy
-        time = possible_energy/charge_stations[0][1]        
-        charge_stations.remove(0)
-        charge_stations = getBestChargeStation(charge_stations)
-    for i in range(0, len(charge_stations)):
-        charge_stations[i][0] -= energy
-    return charge_stations, energy, time
+def filterCS(chargeStations):
+    best = 0
+    station = None
+    for cs in chargeStations:
+        if cs[1] >= best:
+            station = cs
+            best = cs[1]
+    if station:
+        index = chargeStations.index(station)
+        chargeStations = chargeStations[index:]
+    return chargeStations
+
 
 # Function checks if newly added charge station (currentCS)
 # is faster than all of the previous charge stations (preCS)
-# returns currentCS if true else returns preCS 
+# returns currentCS if true else returns preCS
 def getChargeRate(preCS, currentCS):
     current_rate = currentCS[1]
     if current_rate == 0:
@@ -74,7 +70,7 @@ def getChargeRate(preCS, currentCS):
     if len(preCS) == 0:
         return [currentCS]
     max_rate = preCS[0][1]
-    
+
     if max_rate > current_rate:
         preCS.append(currentCS)
         return preCS
@@ -110,10 +106,10 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
         v_opt_case1 = int(v_opt_case1)
 
     # If we don't have enough energy to drive at the optimal speed the edge cannot be driven with the energy in the battery
-    if dist*ev.consumption_rate(v_opt_case1) > nodecurbat: 
+    if dist*ev.consumption_rate(v_opt_case1) > nodecurbat:
         time_case1 = float('inf')
     else: #Otherwice the time is calculated
-        time_case1 = dist/v_opt_case1  
+        time_case1 = dist/v_opt_case1
     energy_used_case1 = (dist*ev.consumption_rate(v_opt_case1))
     cur_battery_case1 = nodecurbat-energy_used_case1
 
@@ -123,27 +119,38 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
         return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
     # Case 2
     chargeStations = getChargeRate(preCS, myCS)
-    #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
-    if (not chargeStations) and time_case1 == float('inf'): 
-        return (float('inf'), [], nodecurbat, float('inf'))
+     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
+    if (not chargeStations) and time_case1 == float('inf'):
+        return float('inf'), [], nodecurbat, float('inf')
 
     #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
-    if (not chargeStations):
+    if not chargeStations:
         chargeStations = getChargeRate(preCS, myCS)
-        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
     possible_energy = chargeStations[0][0]
     #finds the optimal way to drive an edge using a chargestation
     v_opt_case2 = fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev)
-    additional_time = 0
+
 
     #If we can drive the edge using previous charge stations we calculate the time used to drive this way
-    time_case2 = dist/v_opt_case2 + (((ev.consumption_rate(v_opt_case2)*dist) - nodecurbat)/chargeRate) + additional_time
+    time_case2 = dist/v_opt_case2 + (((ev.consumption_rate(v_opt_case2)*dist) - nodecurbat)/chargeRate)
     energy_used_case2 = (ev.consumption_rate(v_opt_case2)*dist)
 
     if energy_used_case2 > possible_energy:
-        chargeStations.remove(0)
+        del chargeStations[0]
+        chargeStations = filterCS(chargeStations)
+
+     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
+    if (not chargeStations) and time_case1 == float('inf'):
+        return float('inf'), [], nodecurbat, float('inf')
+
+    #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
+    if not chargeStations:
+        chargeStations = getChargeRate(preCS, myCS)
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
+
 
 
     cur_battery_case2 = nodecurbat - energy_used_case2
@@ -153,17 +160,18 @@ def travel_time(preCS, myCS, e, ev, nodecurbat):
 
     if time_case1 < time_case2:
         chargeStations = getChargeRate(preCS, myCS)
-        return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
+        return time_case1, chargeStations, cur_battery_case1, energy_used_case1
     else:
-        return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
-       
+        return time_case2, chargeStations, cur_battery_case2, energy_used_case2
+
 
 def getSlope(lowerX, higherX, lowerY, higherY):
     return (higherY-lowerY)/(higherX-lowerX)
 
-def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
+def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev, curbat):
     n = "param n := {0};\n".format(len(edgeDists))
     m = "param m := {0}; \n".format(Precision)
+    initialBat = "param initialBat := {0};\n".format(curbat)
     batCap = "param batCap := {0}; \n".format(ev.battery_capacity)
     points = "param points: \n"
     points2 = "param points2: \n"
@@ -187,7 +195,6 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
     linesA += rangeList
     linesB += rangeList
 
-
     for i in range(0, len(edgeDists)):
         minSpeed = edgeSpeeds[i]*0.8
         maxSpeed = edgeSpeeds[i]
@@ -207,46 +214,48 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
             lineA += "%s " % slope
             lineB += "%s " % (ev.consumption_rate(higherX)-slope*higherX)
             minSpeed += stepSize
-    
+
         points += lowerXes + "\n"
         points2 +=  higherXes + "\n"
         speedDists += speedDist + "\n"
         linesA += lineA + "\n"
         linesB += lineB + "\n"
-    
+
     output_file = open("LPData.dat", "w")
     output_file.write(n)
     output_file.write(m)
+    output_file.write(initialBat)
     output_file.write(batCap)
-    output_file.write(points + ";")
-    output_file.write(points2 + ";")
-    output_file.write(speedDists + ";")
-    output_file.write(linesA + ";")
-    output_file.write(linesB + ";")
-    output_file.write(edgeDist + ";")
-    output_file.write(chargeConstants + ";")
+    output_file.write(points + ";\n")
+    output_file.write(points2 + ";\n")
+    output_file.write(speedDists + ";\n")
+    output_file.write(linesA + ";\n")
+    output_file.write(linesB + ";\n")
+    output_file.write(edgeDist + ";\n")
+    output_file.write(chargeConstants + ";\n")
+
     output_file.close()
     proc = subprocess.Popen("glpsol  --model fastestPathLinearization.mod --data LPData.dat", stdout=subprocess.PIPE, shell=True)
 
     pathTime = float('inf')
-    for line in iter(proc.stdout.readline,''):
+    pathCurbat = 0
+    for line in iter(proc.stdout.readline, ''):
         try:
             num = float(line.rstrip())
-            pathTime = num
-
+            if pathTime == float('inf'):
+                pathTime = num
+            else:
+                pathCurbat = num
         except:
             pass
-    return pathTime
-# print line.rstrip()
+    return pathTime, pathCurbat
 
-def linearProgramming(G, preNode, curNode):
-    print "here:::::: ", preNode, curNode
+def linearProgramming(G, preNode, curNode, ev, curbat):
     ChargeConstants = []
     edgeDists = []
     edgeSpeeds = []
     nodes = []
-    print G.edge[preNode][curNode]
-    
+
     nodes.append(curNode)
     nodes.append(preNode)
     path = G.node[preNode]['path']
@@ -259,22 +268,33 @@ def linearProgramming(G, preNode, curNode):
         edge = G.edge[nodes[i]][nodes[i+1]]
         edgeSpeeds.append(edge['speed_limit'])
         edgeDists.append(edge['weight'])
-    #print edge
     #ChargeConstants.append(G.node[nodes[-1]]['charge_rate'])
-    print ChargeConstants, len(ChargeConstants)
-    print edgeSpeeds, len(edgeSpeeds)
-    print edgeDists, len(edgeDists)
-    time = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 5, 50)
-    return time
-    # print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
+    time, newcurbat = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 5, ev, curbat)
+    return time, newcurbat
 
 def age(charge_stations, energy):
     for i in range(0, len(charge_stations)):
         charge_stations[i][0] -= energy
+
+
+def pathEnergy(G, preNode, ev):
+    path_energy = 0
+    nodes = []
+    batcap = 0
+    path = G.node[preNode]['path']
+    while path != 0 and G.node[path]['myCS'][1] == 0:
+        nodes.append(path)
+        path = G.node[path]['path']
+    nodes.reverse()
+    for i in range(0,len(nodes)-1):
+        edge = G.edge[nodes[i]][nodes[i+1]]
+        path_energy += edge['weight']*ev.consumption_rate(edge['speed_limit']*0.8)
+    return batcap - path_energy
+
+
 def fastest_path_greedy(graph, s, t, algorithm, ev):
     G = deepcopy(graph)
-    print "Started"
-    #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5 
+    #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5
 
     for node_id, data in G.nodes(data=True):
         data['time'] = float('inf')
@@ -290,48 +310,45 @@ def fastest_path_greedy(graph, s, t, algorithm, ev):
     while open_nodes:
         node_id = heappop(open_nodes)[1]
         node_data = G.node[node_id]
-        #print node_id
         if node_data['time'] == float('inf'):
-            print "NO PATH FOUND", len(open_nodes)
             break
         for e in G.edges([node_id], data=True):
             node = G.node[e[1]]
 
-            if node['time'] < node_data['time']:
+            if node['time'] <= node_data['time']+e[2]['t']:
                 continue
 
             if algorithm == 1:
-                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat']) #HER
+                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat'])
                 totalTime = node_data['time'] + time
             elif algorithm == 0:
                 totalTime = node_data['time'] + e[2]["t"]
                 curbat = 0
                 preCS = []
-                time = 0
             else:
-                #totalTime = 1
-                totalTime = linearProgramming(G, node_id, e[1])
-                curbat = 0
-                preCS = []
-                time = 0
-            if time == float('inf'):
-                continue
-
+                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), e, ev, node_data['curbat'])
+                if time == float('inf'):
+                    ev.curbat = pathEnergy(graph, node_id, ev)
+                    if inRange(graph, s, t, ev):
+                        totalTime, curbat = linearProgramming(G, node_id, e[1], ev, ev.curbat)
+                        preCS = []
+                    else:
+                        totalTime = float('inf')
+                else:
+                    totalTime = node_data['time'] + time
 
             if node['time'] > totalTime:
                 node['time'] = totalTime
                 node['path'] = node_id
                 node['curbat'] = curbat
                 if preCS:
-                    #age(preCS, energyUsed)
                     node['preCS'] = preCS
                 node['myCS'][0] = ev.battery_capacity - curbat
                 heappush(open_nodes, (totalTime, e[1]))
 
-    # print open_nodes
     Path = []
     path =  G.node[t]['path']
-        
+
     totaltime =  G.node[t]['time']
     if totaltime == float('inf'):
         return ([], totaltime)
