@@ -3,7 +3,7 @@ from heapq import heappop, heappush
 def inRange(graph, s, t, ev):
     G = copy(graph)
     nodes = set()
-    print "Here: " , ev.curbat
+    #print "Here: " , ev.curbat
     for node_id, data in G.nodes(data=True):
         data['curbat'] = float('inf')
     G.node[s]['curbat'] = 0

@@ -38,7 +38,7 @@ def getPathTime(rn, path, ev):
 def naive(rn,s,t,v):
     bat = v.curbat
     driven_path = [s]
-    sp = nx.shortest_path(rn,s,t,weight='weight')
+    sp = nx.shortest_path(rn,s,t,weight='t')
     time = 0
     while driven_path[-1] != t:
         x = 0
@@ -51,7 +51,7 @@ def naive(rn,s,t,v):
             x+=1
         if driven_path[-1] == t:
             continue
-        d,p = nx.single_source_dijkstra(rn,sp[x+1],weight='weight')
+        d,p = nx.single_source_dijkstra(rn,sp[x+1],weight='t', cutoff=(bat*v.consumption_rate(100)))
         sorted_d = sorted(d.iteritems(), key=operator.itemgetter(1))
         next_guy = sorted_d[0][0]
         while not ((rn.node[next_guy]['charge_rate'] != 0) and reachable(rn,p[next_guy],v,bat)):
@@ -61,7 +61,7 @@ def naive(rn,s,t,v):
         if len(sorted_d)!=0:
             driven_path += p[next_guy]
             bat = v.battery_capacity
-            sp = nx.shortest_path(rn,next_guy,t,weight='weight')
+            sp = nx.shortest_path(rn,next_guy,t,weight='t')
         else:
             return ([],float('inf'))
     return (driven_path, getPathTime(rn,driven_path,v))
