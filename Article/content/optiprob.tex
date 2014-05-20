@@ -1,5 +1,7 @@
 \subsection{Optimization problem}
-In this section a fomal describtion of how to calculate the speed to drive on each road segment and the amount of energy to charge at each charge stations, in order to solve a path optimally in terms of time. The paths the optimization problem is intended to solve are modelled in the following way: \\
+In this section a formal description of the fastest path problem, modelled as an optimization problem, will be introduced.
+
+The paths the optimization problem is intended to solve are modelled in the following way: \\
 \begin{figure}[h!]
 \centering
     \begin{tikzpicture}[shorten >=1pt,node distance=2cm,>=stealth',thick]
@@ -16,38 +18,50 @@ In this section a fomal describtion of how to calculate the speed to drive on ea
     \caption{Example of a path consisting of $n$ edges} \label{fig:pathexample}
 \end{figure} \\
 
-The objective of the optimization problem is to minimize the time spend driving 
-and the time spend charging for the entire path. The optimization problem can be expressed as follows:
+The objective of the optimization problem is to minimize the time spent driving 
+and the time spent charging for the entire path. The optimization problem can be expressed as follows:
 
 \begin{equation}
 	\begin{aligned} & 
 	{\text{minimize:}}
-	& & \sum_{i=1}^{n} \frac{D(e_i)}{v(e_i)} + charge\_time(u_i) \\
+	& & \sum_{i=1}^{n} \frac{D(e_i)}{v_{e_i}} + charge\_time(u_i) \\
 	\end{aligned}
 \end{equation}\label{eq:objfunction}
 
-Where $D(e_i)$ is the distance of road segment $i$, $v(e_i)$ is the actual speed driven at road segment $i$ and $charge\_time(u_i)$ is the time spend charging at charge station $i$. It should be clear that the objective function of this problem is concerned with time, being that $\frac{D(e_i)}{v(e_i)}$ is the time spend driving and $charge\_time(u_i)$ is the time spend charging. Having this objective function we now know which unknown variables we need to find. The problem is as described in \cref{sub:problem_definition} the problem is constrainted by the proberties of the $EV$ driving the path.  
+Where $D(e_i)$ is the distance of road segment $i$, $v_{e_i}$ is the actual speed driven at road segment $i$ and $charge\_time(u_i)$ is the time spent charging at charge station $i$. It should be clear that the objective function of this problem is concerned with time, being that $\frac{D(e_i)}{v_{e_i}}$ is the time spent driving and $charge\_time(u_i)$ is the time spent charging. Having this objective function, we now know which unknown variables which should be maximized. However, there are also some constraints which should be adhered to. The fastest path problem is constrained by the \emph{physical properties} of the $EV$ driving the path.  
+
 The constraints can be formulated as follows: \\
-On all edges the speed of the electric vehicle must be within the speed limits of the specific edge. $v(e_i)$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed limit. So we have that $v_{min}(e_i) \leq v(e_i) \leq v_{max}(e_i)$ for all .
- 
+
+First of all, on every edge the speed of the electric vehicle must be within the speed limits of the specific edge. $v_{e_i}$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed limit. Thus, we arrive at the first constraint:
+
 \begin{equation}
-v_{min}(e_i) \leq v(e_i) \leq v_{max}(e_i) \text{ for } i = 1..n  
+    v_{min}(e_i) \leq v(e_i) \leq v_{max}(e_i) \text{ for } i = 1..n  
 \end{equation}
 
-The battery level of the EV, $B_{cur}$, has to be between $0$ and the max battery capacity of the vehicle, $B_{max}$. The constraint is split up in two constraints which looks quite similar. The first constraint is ensuring that the EV will have enough energy to drive each edge and the second constraint is ensuring that the EV can not over charge at any charge station. $R_{CO}(v)$ is the the energy consumption rate of the EV, given the speed $v$. $EC(u_j)$ is the energy charged at charge station $u_j$ and $ES(e_j)$ is the
-energy spend on edge $e_j$.  
+The battery level of the EV, $B_{cur}$, must be between $0$ and $B_{max}$, the maximal battery capacity of the vehicle. This constraint is split up in two constraints which are quite similar. The first constraint ensures that the EV can not drive the distance of an edge without having the required energy. The second constraint ensures that the EV can not overcharge at any charge station. 
+
+Thus we arrive at the following two constraints:
 
 \begin{equation}
 \forall_{j\in1 \dots n }:\; EC(u_j) = R_{CH}(u_j) * charge\_time(u_j)
 \end{equation}
 
+$EC$, the energy consumed for $e_j$, is described by the charge rate of $e_j$ multiplied by the time spent charging on $e_j$
+
 \begin{equation}
 \forall_{j\in1 \dots n }:\; ES(e_j) = D(e_j)*R_{CO}(v(e_j))
 \end{equation} 
 
+$ES$, the energy spent driving $e_j$, is described by the distance of $e_j$ and the consumption rate of the vehicle driving at speed $v_{e_j}$
+
+%%% KOMMET HER TIL MIKKEL!!!!!!!!!!!!!!!!!
+%%% KOMMET HER TIL MIKKEL!!!!!!!!!!!!!!!!!
+
+
 \begin{equation}
 \forall_{i\in1 \dots n }:\;0 \leq \sum_{j=1}^{i} EC(u_j) - ES(e_j) \leq B_{max} 
 \end{equation}
+
 
 \begin{equation}
 \begin{aligned}
