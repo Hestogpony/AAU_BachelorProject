@@ -77,11 +77,11 @@ def travel_time(preCS, myCS, edge_data, ev, nodecurbat):
     
     # Case 2: 
     chargeStations = getChargeStations(preCS, myCS)
-    
+    print chargeStations
     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
     if (not chargeStations) and time_case1 == float('inf'):
         return float('inf'), [], nodecurbat, float('inf')
-
+    
     #If we don't have any charge stations, but enough energy in the battery to drive the path we drive the path using the energy
     if not chargeStations:
         return time_case1, chargeStations, cur_battery_case1, energy_needed_case1

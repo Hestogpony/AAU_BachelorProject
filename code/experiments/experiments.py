@@ -172,11 +172,14 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 
 
 def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, file_name='driving_dist.csv'):
+	print('loading road network...')
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
+	print('setting charge stations...')
 	charge_station_density(rn, CS_density)
-
+	rn.visualize()
+	
 	with open(file_name, 'a') as f:
-		f.write('driving distance,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
+		f.write('driving distance, naive-time, naive-fail, hybrid-time, hybrid-fail, greedy-time, greedy-fail\n')
 
 	for distance in range(min_dist, max_dist, step_size):
 		print 'driving distance experiment. currently at: ', distance
@@ -186,9 +189,9 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
-			_, time = naive_path(rn, s, t, ev)
-			naive_t += time if time!=float('inf') else 0
-			naive_f += 0 if time!=float('inf') else 1
+			#_, time = naive_path(rn, s, t, ev)
+			#naive_t += time if time!=float('inf') else 0
+			#naive_f += 0 if time!=float('inf') else 1
 			### LP
 			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
 			# hybrid_t += time if time!=float('inf') else 0
@@ -220,6 +223,6 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_ev_consumption(10, 100, 40)
 
-experiment_charge_rate(ev, 1, 40, 300,40)
+#experiment_charge_rate(ev, 1, 40, 300,40)
 
-experiment_driving_dist(ev, 40, 250,500,50,1)
+experiment_driving_dist(ev, 5, 200,400,50,1)
