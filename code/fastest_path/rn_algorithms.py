@@ -48,7 +48,7 @@ def fastSolveCase1(ev, dist, minSpeed, maxSpeed, curbat):
     return optimal_speed
 
 def fastSolveCase2(dist, minSpeed, maxSpeed, chargeRate, ev, curbat):
-    v_opt_case2 = float('inf')
+    v_opt_case2 = maxSpeed
     best_time = float('inf')  
     for x in drange(minSpeed, maxSpeed+0.1, 0.1):
         if (ev.consumption_rate(x)*dist - curbat >= 0):
@@ -77,7 +77,7 @@ def travel_time(preCS, myCS, edge_data, ev, nodecurbat):
     
     # Case 2: 
     chargeStations = getChargeStations(preCS, myCS)
-    
+
     #If we can't charge or drive with the energy in the battery, we return time = float('inf') because we cannot drive the path
     if (not chargeStations) and time_case1 == float('inf'):
         return float('inf'), [], nodecurbat, float('inf')
@@ -113,9 +113,13 @@ def travel_time(preCS, myCS, edge_data, ev, nodecurbat):
         energy_needed_case2 = (ev.consumption_rate(v_opt_case2)*dist)
     
     cur_battery_case2 = additional_energy + nodecurbat - energy_needed_case2
+    if cur_battery_case2 <= 0:
+        cur_battery_case2 = 0
     time_case2 += additional_time
+    if time_case2 < 0: 
+        time_case2 = float('inf')
      
-    if time_case1 < time_case2:
+    if time_case1 <= time_case2:
         return time_case1, chargeStations, cur_battery_case1, energy_needed_case1
     else:
         return time_case2, chargeStations, cur_battery_case2, energy_needed_case2
@@ -131,7 +135,7 @@ def update_possible_energy(charge_stations, energy):
 
 def fastest_path_greedy(G, s, t, algorithm, ev):
     #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5
-
+    print "Started"
     for node_id, data in G.nodes(data=True):
         data['time'] = float('inf')
         data['path'] = None
@@ -155,8 +159,13 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
 
             time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), edge_data, ev, node_data['curbat'])
             totalTime = node_data['time'] + time
+            if time < 0:
+                print time, preCS, curbat, energyUsed
 
-            if neighbour_data['time'] > totalTime:
+            if totalTime == float('inf'):
+                continue
+
+            if neighbour_data['time'] > totalTime: # and ((preCS or  neighbour_data['myCS'][1] > 0) or not neighbour_data['preCS']):
                 neighbour_data['time'] = totalTime
                 neighbour_data['path'] = node_id
                 neighbour_data['curbat'] = curbat
@@ -165,10 +174,18 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
                 neighbour_data['myCS'][0] = ev.battery_capacity - curbat
                 heappush(open_nodes, (totalTime, neighbour_id))
 
+    reachedNodes = 0
+    totalnodes = 0
+    for node_id, data in G.nodes(data=True):
+        totalnodes += 1
+        if data['time'] != float('inf'):
+            reachedNodes += 1
+    print "nodes", reachedNodes, totalnodes
     driven_path = []
     path =  G.node[t]['path']
 
     totaltime =  G.node[t]['time']
+    print "time ", totaltime
     if totaltime == float('inf'):
         return ([], totaltime)
     

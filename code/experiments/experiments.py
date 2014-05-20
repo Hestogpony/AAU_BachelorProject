@@ -198,6 +198,7 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
 			greedy_t += time if time!=float('inf') else 0
 			greedy_f += 0 if time!=float('inf') else 1
+			print greedy_t, naive_t
 
 		with open(file_name, 'a') as f:
 			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
