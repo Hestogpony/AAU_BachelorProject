@@ -226,6 +226,6 @@ ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_charge_rate(ev, 1, 40, 300,40)
 
-experiment_driving_dist(ev, 40, 250,500,50,1)
+experiment_driving_dist(ev, 20, 250,500,50,1)
 
 

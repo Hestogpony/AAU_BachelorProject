@@ -75,3 +75,10 @@ driving distance,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,gree
 300,13.7122933613,0,.,.,5.2099114307,0
 350,6.38996116265,0,.,.,6.28931363452,0
 400,10.2458275968,0,.,.,inf,1
+driving distance, naive-time, naive-fail, hybrid-time, hybrid-fail, greedy-time, greedy-fail
+250,0,0,.,.,14.2060337604,0
+300,0,0,.,.,inf,1
+350,0,0,.,.,inf,1
+400,0,0,.,.,inf,1
+driving distance, naive-time, naive-fail, hybrid-time, hybrid-fail, greedy-time, greedy-fail
+250,0,0,.,.,3.94949775317,0
