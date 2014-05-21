@@ -1,5 +1,4 @@
-\subsection{Greedy-Heuristics Approach}
-In this section we will give a heuristic approach to solving the fastest path problem.
+\subsection{Greedy Heuristics Algorithm}
 
 \subsubsection*{Idea outline}
 The idea in the approach taken in this section, is using Dijkstra's algorithm for finding the shortest path with $\frac{distance}{speed}$ as the weight of an edge. The problem then becomes, which speed must we use in the interval of $v_{min}$ and $v_{max}$. As argued previously, the optimal speed to drive can only be found by iterating over all possibilities which is a combinatorial optimization problem, and it is NP-Hard. Thus we introduce a heuristic, which promotes local optimal choices. This gives a fast path, but this might not be drivable, if there are not any charge stations on this path, thus we will need to figure out how to incorporate this.\\
