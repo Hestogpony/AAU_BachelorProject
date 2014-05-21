@@ -1,30 +1,30 @@
-from copy import deepcopy
+from copy import copy
 from heapq import heappop, heappush
 def inRange(graph, s, t, ev):
-    G = graph
+    G = copy(graph)
     nodes = set()
     #print "Here: " , ev.curbat
     for node_id, data in G.nodes(data=True):
-        data['batcur'] = float('inf')
-    G.node[s]['batcur'] = 0
+        data['curbat'] = float('inf')
+    G.node[s]['curbat'] = 0
     open_nodes = []
     heappush(open_nodes, (0, s))
     while open_nodes:
         node_id = heappop(open_nodes)[1]
         node_data = G.node[node_id]
 #print "now working on: ", node_id
-        if node_data['batcur'] == float('inf'):
+        if node_data['curbat'] == float('inf'):
             #           print "The graph is not connected"
             break
         nodes.add(node_id)
         for e in G.edges([node_id], data=True):
             node = G.node[e[1]]
-            newcurbat = node_data['batcur'] + ev.consumption_rate(e[2]['speed_limit'])*e[2]['weight']
+            newcurbat = node_data['curbat'] + ev.consumption_rate(e[2]['speed_limit'])*e[2]['weight']
 #print newcurbat, ev.curbat
             if newcurbat > ev.curbat:
                 continue
-            if node['batcur'] > newcurbat:
-                node['batcur'] = newcurbat
+            if node['curbat'] > newcurbat:
+                node['curbat'] = newcurbat
                 heappush(open_nodes, (newcurbat, e[1]))
     for n in list(nodes):
         if n == t:
