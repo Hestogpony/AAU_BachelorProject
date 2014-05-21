@@ -1,6 +1,6 @@
 \section{experiments}
 \label{sec:experiments}
-In this section we present the experiments and tests of our fastest-path algorithms. We test both the performance of the greedy-heuristic algorithm and the linear programming approach in comparison to the naive algorithm. We test on four different parameters: the complexity of the graph (measured in number of vertices and edges in the road network), the density of charge stations, the charge rate of the charge stations on the road network and the size of the graph (measured in distances on edges).
+In this section we present the experiments and tests of our fastest-path algorithms. We test both the performance of the greedy-heuristic algorithm and the linear programming approach in comparison to the naive algorithm. We test on four different parameters: the complexity of the graph (measured in number of vertices and edges in the road network), the density of charge stations, the charge rate of the charge stations on the road network and the size of the road network (measured in distances on edges).
 
 \subsection{Road network representation} 
 \label{sub:setup}
@@ -12,5 +12,34 @@ The ways and nodes can easily be converted into a, for us, useful road network s
 \label{sub:naivealgorithm}
 We have formulated a naive algorithm for performance comparison with our greedy-heuristic algorithm. The naive algorithm should simulate the way an unintelligent electric vehicle driver would choose to travel through a road network from s to t. The naive algorithm works the following way: It greedily chooses the fastest roads from s to t in terms of distance over speed. Whenever the vehicle reaches 10 \% battery capacity, it starts searching for nearby charge stations in the radius allowed by the 10 \% battery capacity given the vehicles consumption rate. If no charge stations are available, the algorithm will backtrack to the time where the vehicle had 20 \% battery capacity and perform a search again. If still no charge stations are available, it will backtrack to the time where the vehicle had 30 \% battery capacity and so on. If no charge stations are available even with 100 \% battery capacity, the path from s to t is not possible. If, on the other hand, one or more charge stations are reachable, the algorithm will choose the closest one and charge to 100 \% battery capacity and resume greedily choosing the fastest roads from the charge station to t, in terms of distance over speed.
 
+\subsection{Experiment: Complexity of Road Network}
 
+We compared the run-time of the Greedy-heuristic algorithm to the naive algorithm with the complexity of the road network as changing parameter. The
+complexity is measured in the number of nodes on the road network. The more nodes on the road network, the more nodes the two algorithms has 
+to visit before they are able to find a fastest path. The set-up of the experiment: distance to drive was 100 km, the minimum distance between 
+charge stations was 20 km. The initial number of nodes in the road network: 450000 nodes. The number of nodes is then counted down with 10000 nodes 
+for each iteration of the test. The resulting graph is illustrated in (REF!).
+
+\subsection{Experiment: Density of Charge Stations}
+
+We compared the performance of the Greedy-heuristic algorithm to the naive algorithm with the density of charge stations as changing parameter. The
+density of charge stations are measured in the minimum distance between two charge stations. Initially, the minimum distance is set to 5 km which generates 3029 charge stations in Denmark. Table \ref{table:chargedensity} shows the number of charge stations according to the minimum distance between charge stations in the road network.
+
+\begin{table}[!htb]
+\centering
+		\begin{tabular}{ p{1.85cm} p{0.67cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} } \hline
+		Radius (km): & 5 & 10 & 20 & 30 & 40 & 50 \\ \hline
+		Stations: & 3029 & 827 & 326 & 117 & 76 & 49 \\ \hline 
+		\end{tabular}
+		\caption{number of charge stations corresponding to the minimum distance between two charge stations}
+	\label{table:chargedensity}
+	\end{table}
+
+The set-up of the experiment: the distance to drive was set to 200 km, the complexity of the road network was 483398 nodes, which is the number of nodes in Denmark. The charge rates of the charge stations are evenly distributed with rates between $10 \si{\kW}$ and $100 \si{\kW}$. The resulting graph is illustrated in (REF!).
+
+\subsection{Experiment: Charge Rate on Charge Stations}
+
+We compared the performance of the Greedy-heuristic algorithm to the naive algorithm with the charge rate of charge stations as changing parameter. The minimum distance between charge stations was set to 30 km, the distance to drive was set to 200 km. The initial charge rates in the road network were evenly distributed between $10 \si{\kW}$ and $100 \si{\kW}$. For each iteration all charge rates are scaled with a constant factor resulting in worse of better charge rates on all charge stations. The resulting graph of the experiment is seen in (REF!). On the x-axis is displayed the average charge rate of the charge stations on the road network. On the y-axis is displayed the time it takes to pass a path of length 200 km. 
+
+\subsection{Experiment: Size of Road Network}
 
