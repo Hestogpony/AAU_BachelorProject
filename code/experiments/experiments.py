@@ -48,7 +48,6 @@ def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.c
 											  greedy_f,
 											 ))
 
-
 def experiment_runtime_compexity(ev, iterations, path_distance, CS_density, step_size, file_name='time_complexity.csv'):
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 	charge_station_density(rn, CS_density)
@@ -92,7 +91,7 @@ def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_de
 		f.write('CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
 
 	ev_number = 0
-	for ev in scale_cons_rate(con_rate_variance):
+	for ev in scale_cons_rate(con_rate_variance): #Create vehicles
 		print 'charge station experiment. currently at EV: ', ev_number
 
 		scale_charge_rates(rn, 1+(scale_factor/100.0))
@@ -101,6 +100,7 @@ def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_de
 		naive_f, hybrid_f, greedy_f = 0,0,0
 		for iteration in range(iterations):
 			s, t, dist = s_and_t(rn, path_distance)
+			
 			### NAIVE
 			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
@@ -169,8 +169,6 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 										  	greedy_f,
 											 ))
 
-
-
 def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, file_name='driving_dist.csv'):
 	print('loading road network...')
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
@@ -189,9 +187,11 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
-			#_, time = naive_path(rn, s, t, ev)
-			#naive_t += time if time!=float('inf') else 0
-			#naive_f += 0 if time!=float('inf') else 1
+			_, time = naive_path(rn, s, t, ev)
+			naive_t += time if time!=float('inf') else 0
+			naive_f += 0 if time!=float('inf') else 1
+			rn.visualize_path(_)
+
 			### LP
 			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
 			# hybrid_t += time if time!=float('inf') else 0
@@ -202,6 +202,7 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			greedy_t += time if time!=float('inf') else 0
 			greedy_f += 0 if time!=float('inf') else 1
 			print greedy_t, naive_t
+			rn.visualize_path(_)
 
 		with open(file_name, 'a') as f:
 			f.write('%s,%s,%s,%s,%s,%s,%s\n' % (
@@ -216,16 +217,16 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 
 
 
-ev = EV(80, 80, lambda x: ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
+ev = EV(80, 80, lambda x: (0.019*x**2 - 0.770*x + 184.4))
 
-#experiment_cs_density(ev, 10, 100)
+#experiment_cs_density(ev, 10, 100) # ev, iterations, path_distance
 
-# experiment_runtime_compexity(ev, 1, 100, 200, 20)
+#experiment_runtime_compexity(ev, 1, 100, 200, 20) # ev, iterations, path_distance, CS_density, step_size
 
-#experiment_ev_consumption(10, 100, 40)
+#experiment_ev_consumption(10, 100, 40) # iterations, path_distance,con_rate_variance, CS_density
 
-#experiment_charge_rate(ev, 1, 40, 300,40)
+#experiment_charge_rate(ev, 1, 40, 300,40) # ev, iterations,charge_rate_variance, path_distance, CS_density
 
-experiment_driving_dist(ev, 20, 250,500,50,1)
+experiment_driving_dist(ev, 40, 250, 450, 50, 1) # ev, CS_density, min_dist, max_dist, step_size, iterations
 
 
