@@ -3,6 +3,7 @@ import networkx as nx
 # from fastest_path.naive import naive
 from fastest_path.naivedrol import naive_path
 from fastest_path.vehicle import EV
+from fastest_path.dijkstra import single_source_dijkstra_path_length
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
@@ -214,8 +215,7 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 											  greedy_f,
 											  ))
 
-
-ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4))
+ev = EV(40, 40, lambda x: ((0.019*x**2 - 0.770*x + 184.4) * 10**(-3)))
 
 #experiment_cs_density(ev, 10, 100) 				# ev, iterations, path_distance
 
@@ -225,4 +225,15 @@ ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4))
 
 #experiment_charge_rate(ev, 1, 40, 300,40) 			# ev, iterations,charge_rate_variance, path_distance, CS_density
 
-experiment_driving_dist(ev, 30, 50, 450, 50, 1) 	# ev, CS_density, min_dist, max_dist, step_size, iterations
+#experiment_driving_dist(ev, 30, 50, 450, 50, 1) 	# ev, CS_density, min_dist, max_dist, step_size, iterations
+
+rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
+charge_station_density(rn, 61)
+s,t,dist = s_and_t(rn, 300)
+print 'loaded'
+#dist, time, ener, paths = dijkstra_mod(rn, s, t, ev)
+#print dist[t], time[t], ener[t]
+
+time_h2, time2, dist, ener2, paths = single_source_dijkstra_path_length(rn, s, ev)
+print time_h2[t], time2[t], dist[t], ener2[t]
+rn.visualize_path(paths[t])

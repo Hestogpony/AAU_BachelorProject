@@ -1,7 +1,7 @@
 """
-Gammel forbrug: y= ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3))
-Nyt forbrug: y= (0.019*x**2 - 0.770*x + 184.4)
-"""
+Gammel forbrug: y= ((0.04602*x**2 +  0.6591*x + 173.1174) * 10**(-3))
+Nyt forbrug: y= (0.019*x**2 - 0.770*x + 184.4 * 10**(-3))
+"""	
 
 class EV():
     def __init__(self, battery_capacity, curbat, consumption_rate):
