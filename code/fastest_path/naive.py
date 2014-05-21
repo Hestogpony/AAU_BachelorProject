@@ -35,7 +35,7 @@ def getPathTime(rn, path, ev):
         initial_battery -= energy_consumed
     return time
 
-def naive(rn,s,t,v):
+def naive_path(rn,s,t,v):
     bat = v.curbat
     driven_path = [s]
     sp = nx.shortest_path(rn,s,t,weight='t')
