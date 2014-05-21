@@ -1,16 +1,33 @@
 \section{Experiments}
 \label{sec:experiments}
-In this section we present the experiments and tests of our fastest-path algorithms. We test both the performance of the greedy-heuristic algorithm and the linear programming approach in comparison to the naive algorithm. We test on four different parameters: the complexity of the graph (measured in number of vertices and edges in the road network), the density of charge stations, the charge rate of the charge stations on the road network and the size of the road network (measured in distances on edges).
+Now we present the experiments of the Greedy Heuristic Algorithm. It was concluded that the practical usage of the linear programming solution was not plausible in our experiments, after several implementations using an existing solver. Additionally, there will be a runtime complexity test of the algorithms.
 
-\subsection{Road network representation} 
+We have constructed four experiments, to figure out what implication the adjusting of these parameters will have on the Greedy Heuristic Algorithm. The four parameters being experimented on are:
+\begin{itemize}
+     \item Route driving distance
+     \item Charge rate of charge stations
+     \item Consumption rate of EVs
+     \item Density of charge stations
+ \end{itemize} 
+
+\todo[inline]{insert default values}
+
+
+\subsection{Road network dataset} 
 \label{sub:setup}
-To facilitate the experiments, we've had to find a real world road network dataset which contains road distances, speed limits and charge stations of varying charge rates. Such a dataset does not openly exist to our knowledge. Instead we have used OpenStreetMaps, henceforth OSM, which is an open-source collection of map data. One can read more about OSM at \url{http://www.openstreetmap.org/about}. OSM has a concept of ways and nodes. Ways represent geographical planar objects e.g. roads, cycleways, foot ways etc. A Node is a geographical point consisting of a latitude and longitude coordinate. A way is constituted of a set of nodes and some tags which describe meta-information about the way, such as the name of the way and what type of way it is e.g. a road, cycleway, foot way  etc. From this information we can derive that if way $e_1$ and $e_2$ intersect in node $u$, they will share the node $u$, which is what we refer to as an intersection/charge station in the road network.\\
+To facilitate the experiments, we've had to find a real world road network dataset which contains road distances, speed limits and charge stations of varying charge rates. Such a dataset does not openly exist to our knowledge. Instead we have used OpenStreetMaps which is an open-source collection of map data. One can read more about OSM at \url{http://www.openstreetmap.org/about}. OSM has a concept of ways and nodes. Ways represent geographical planar objects e.g. roads, cycleways, foot ways etc. A Node is a geographical point consisting of a latitude and longitude coordinate. A way is constituted of a set of nodes and some tags which describe meta-information about the way, such as the name of the way and what type of way it is e.g. a road, cycleway, foot way  etc. From this information we can derive that if way $e_1$ and $e_2$ intersect in node $u$, they will share the node $u$, which is what we refer to as an intersection/charge station in the road network.\\
 
 The ways and nodes can easily be converted into a, for us, useful road network structure for experimenting. This is done, by simply filtering away all types of ways accept roads and use these as edges for our road network. To get a notion of speed limits on edges, we can derive general speed limits from the type of the roads. OSM carries such information as whether the road is a motorway, residential way, tertiary way etc. The speed limits are set according to Danish speed limits. For nodes, we are only interested in the ones which correspond to intersections between two roads. All other nodes in the road network are ignored. To get a notion of charge rate on the nodes we have implemented a method which distributes random charge rates on randomly selected nodes in the road network.
 
+We have used the drivable part of Denmark as a baseline for the experiments. The dataset features:
+\begin{itemize}
+    \item 483407 vertices
+    \item 543482 edges
+\end{itemize}
+
 \subsection{Naive algorithm}
 \label{sub:naivealgorithm}
-We have formulated a naive algorithm for performance comparison with our greedy-heuristic algorithm. The naive algorithm should simulate the way an unintelligent electric vehicle driver would choose to travel through a road network from s to t. The naive algorithm works the following way: It greedily chooses the fastest roads from s to t in terms of distance over speed. Whenever the vehicle reaches 10 \% battery capacity, it starts searching for nearby charge stations in the radius allowed by the 10 \% battery capacity given the vehicles consumption rate. If no charge stations are available, the algorithm will backtrack to the time where the vehicle had 20 \% battery capacity and perform a search again. If still no charge stations are available, it will backtrack to the time where the vehicle had 30 \% battery capacity and so on. If no charge stations are available even with 100 \% battery capacity, the path from s to t is not possible. If, on the other hand, one or more charge stations are reachable, the algorithm will choose the closest one and charge to 100 \% battery capacity and resume greedily choosing the fastest roads from the charge station to t, in terms of distance over speed.
+We have formulated a naive algorithm for performance comparison with our greedy-heuristic algorithm. The naive algorithm should simulate the way an naive electric vehicle driver would choose to travel through a road network. The naive algorithm works the following way: It greedily chooses the fastest roads in terms of distance over speed. Whenever the battery reaches 10 \% battery capacity, it starts searching for nearby charge stations in the radius allowed by the 10 \% battery capacity given the vehicles consumption rate. If no charge stations are available, the naive algorithm will go back to the time where it had 20 \% battery capacity and perform a search again. If still no charge stations are available, it will backtrack to the time where the vehicle had 30 \% battery capacity and so on. If no charge stations are available even with 100 \% battery capacity, the path from s to t is not possible. If, on the other hand, one or more charge stations are reachable, the algorithm will choose the closest one and charge to 100 \% battery capacity and resume greedily choosing the fastest roads from the charge station to t, in terms of distance over speed.
 
 \subsection{Experiment: Complexity of Road Network}
 
