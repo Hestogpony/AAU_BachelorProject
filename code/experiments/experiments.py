@@ -8,7 +8,6 @@ from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
 import time
 
-
 def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.csv'):
 	with open(file_name, 'a') as f:
 		f.write('CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail\n')
@@ -187,10 +186,10 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
-			_, time = naive_path(rn, s, t, ev)
-			naive_t += time if time!=float('inf') else 0
-			naive_f += 0 if time!=float('inf') else 1
-			rn.visualize_path(_)
+			# _, time = naive_path(rn, s, t, ev)
+			# naive_t += time if time!=float('inf') else 0
+			# naive_f += 0 if time!=float('inf') else 1
+			# rn.visualize_path(_)
 
 			### LP
 			# _, time = fastest_path_greedy(rn, s, t, 2, ev) # 3 for LP
@@ -216,17 +215,14 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 											  ))
 
 
+ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4))
 
-ev = EV(80, 80, lambda x: (0.019*x**2 - 0.770*x + 184.4))
+#experiment_cs_density(ev, 10, 100) 				# ev, iterations, path_distance
 
-#experiment_cs_density(ev, 10, 100) # ev, iterations, path_distance
+#experiment_runtime_compexity(ev, 1, 100, 200, 20) 	# ev, iterations, path_distance, CS_density, step_size
 
-#experiment_runtime_compexity(ev, 1, 100, 200, 20) # ev, iterations, path_distance, CS_density, step_size
+#experiment_ev_consumption(10, 100, 40) 			# iterations, path_distance,con_rate_variance, CS_density
 
-#experiment_ev_consumption(10, 100, 40) # iterations, path_distance,con_rate_variance, CS_density
+#experiment_charge_rate(ev, 1, 40, 300,40) 			# ev, iterations,charge_rate_variance, path_distance, CS_density
 
-#experiment_charge_rate(ev, 1, 40, 300,40) # ev, iterations,charge_rate_variance, path_distance, CS_density
-
-experiment_driving_dist(ev, 40, 250, 450, 50, 1) # ev, CS_density, min_dist, max_dist, step_size, iterations
-
-
+experiment_driving_dist(ev, 30, 50, 450, 50, 1) 	# ev, CS_density, min_dist, max_dist, step_size, iterations
