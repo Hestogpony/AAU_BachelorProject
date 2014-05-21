@@ -51,7 +51,7 @@ def getBestChargeStation(chargeStations):
 # Function checks if newly added charge station (currentCS)
 # is faster than all of the previous charge stations (preCS)
 # returns currentCS if true else returns preCS 
-def getChargeRate(preCS, currentCS):
+def getChargeStations(preCS, currentCS):
     current_rate = currentCS[1]
     if current_rate == 0:
         return preCS
@@ -102,15 +102,15 @@ def travel_time(preCS, myCS, e, cur_battery):
     cur_battery_case1 = cur_battery-energy_used_case1
 
     if time_case1 < float('inf') and v_opt_case1 == maxSpeed: #If we have the energy needed to drive at max speed we pick case 1 right away.
-        chargeStations = getChargeRate(preCS, myCS)
+        chargeStations = getChargeStations(preCS, myCS)
         return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
     # Case 2
-    chargeStations = getChargeRate(preCS, myCS)
+    chargeStations = getChargeStations(preCS, myCS)
     if (not chargeStations) and time_case1 == float('inf'):
         return (float('inf'), [], cur_battery, float('inf'))
 
     if (not chargeStations):
-        chargeStations = getChargeRate(preCS, myCS)
+        chargeStations = getChargeStations(preCS, myCS)
         return (time_case1, chargeStations , cur_battery_case1, energy_used_case1)
 
     chargeRate = chargeStations[0][1] #The charge speed of the fastest charge station.
@@ -138,7 +138,7 @@ def travel_time(preCS, myCS, e, cur_battery):
         cur_battery_case2 = 0
 
     if time_case1 < time_case2:
-        chargeStations = getChargeRate(preCS, myCS)
+        chargeStations = getChargeStations(preCS, myCS)
         return (time_case1, chargeStations, cur_battery_case1, energy_used_case1)
     else:
         return (time_case2, chargeStations, cur_battery_case2, energy_used_case2)
