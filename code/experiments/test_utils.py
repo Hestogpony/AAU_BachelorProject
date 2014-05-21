@@ -38,7 +38,7 @@ def scale_cons_rate(pct):
     evs = []
     for x in xrange(-pct,pct):
         multiplier = 1+(x/100.0)
-        evs.append(EV(80, 80,lambda x, copy=multiplier: ((0.04602*x**2+0.6591*x+173.1174)*10**(-3))*copy))
+        evs.append(EV(80, 80,lambda x, copy=multiplier: (0.019*x**2 - 0.770*x + 184.4)*copy))
     return evs
 
 def set_roadnetwork_complexity(rn, num_nodes):
