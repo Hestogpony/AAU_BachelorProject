@@ -153,10 +153,6 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
         for _, neighbour_id, edge_data in G.edges([node_id], data=True):
             neighbour_data = G.node[neighbour_id]
 
-            if (neighbour_data['time'] <= node_data['time']+edge_data['t'])\
-                and ((neighbour_data['preCS'] or neighbour_data['myCS'][1] > 0) or not (node_data['preCS'] or node_data['myCS'][1] > 0)):
-                continue
-
             time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), edge_data, ev, node_data['curbat'])
             totalTime = node_data['time'] + time
 
@@ -183,7 +179,7 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
     path =  G.node[t]['path']
 
     totaltime =  G.node[t]['time']
-    #print "time ", totaltime
+    print "time ", totaltime
     if totaltime == float('inf'):
         return ([], totaltime)
     

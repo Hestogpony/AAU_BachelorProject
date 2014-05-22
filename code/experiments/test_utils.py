@@ -29,6 +29,7 @@ def charge_station_density(rn, dist):
     for node in rn.nodes():
         if (node in rn):
             if (rn.node[node]['charge_rate'] != 0):
+                rn.node[node]['charge_rate'] = 60
                 dists = nx.single_source_dijkstra_path_length(rn,node,cutoff=dist,weight='weight')
                 for vertex,dval in dists.items():
                     if vertex != node:

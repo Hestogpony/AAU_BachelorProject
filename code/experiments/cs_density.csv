@@ -1,0 +1,108 @@
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+5,4.91355243722,0,0,0,3.71868382979,0
+10,4.80486857622,0,0,0,3.87539511662,0
+15,4.88189840816,0,0,0,3.75285270657,0
+20,5.4143444473,0,0,0,4.23410771682,0
+25,4.51482180978,0,0,0,4.04173975336,0
+30,6.45897417206,0,0,0,inf,5
+35,7.06175903612,0,0,0,inf,5
+40,6.98006500726,0,0,0,inf,5
+45,9.75251667441,0,0,0,inf,5
+50,5.01307293301,0,0,0,inf,5
+55,10.5871271565,0,0,0,inf,5
+60,10.5871271565,0,0,0,inf,5
+65,10.7920186442,0,0,0,inf,5
+70,8.04797776169,0,0,0,inf,5
+75,8.04797776169,0,0,0,inf,5
+80,8.04797776169,0,0,0,inf,5
+85,9.21031633793,0,0,0,inf,5
+90,9.21031633793,0,0,0,inf,5
+95,9.21031633793,0,0,0,inf,5
+100,9.17277259663,0,0,0,inf,5
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+100,5.08103930888,0,0,0,inf,5
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+100,5.92074667387,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+100,inf,1,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+100,inf,1,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,9.62428519792,0,0,0,5.74169516669,0
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,5.35561390452,0,0,0,4.45234848206,0
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,4.76395002087,0,0,0,4.35621582946,0
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,5.89243846948,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,6.74323438418,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,4.49544847203,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,4.42084300985,0,0,0,5.35965791363,0
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+50,7.67942032408,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+5,4.51563345233,0,0,0,3.52123352692,0
+10,4.07120432936,0,0,0,3.52123352692,0
+15,5.55469206216,0,0,0,3.54379113683,0
+20,6.14419761693,0,0,0,3.73784188151,0
+25,4.31477852434,0,0,0,inf,1
+30,5.70517143815,0,0,0,3.63251269102,0
+35,5.44510927671,0,0,0,inf,1
+40,4.73570209396,0,0,0,inf,1
+45,4.61094397006,0,0,0,inf,1
+50,4.94845202458,0,0,0,5.46218492422,0
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+5,4.12977371969,0,0,0,4.03341945332,0
+10,4.39889490541,0,0,0,4.03341945332,0
+15,4.5895500842,0,0,0,4.03341945332,0
+20,4.79845820994,0,0,0,4.03341945332,0
+25,4.85761696124,0,0,0,4.03341945332,0
+30,5.25510267032,0,0,0,inf,1
+35,5.11103086254,0,0,0,inf,1
+40,5.46364133001,0,0,0,inf,1
+45,5.67562754791,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+5,4.12977371969,0,0,0,4.03341945332,0
+10,4.39889490541,0,0,0,4.03341945332,0
+15,4.5895500842,0,0,0,4.03341945332,0
+20,4.79845820994,0,0,0,4.03341945332,0
+25,4.85761696124,0,0,0,4.03341945332,0
+30,5.25510267032,0,0,0,inf,1
+35,5.11103086254,0,0,0,inf,1
+40,5.46364133001,0,0,0,inf,1
+45,5.67562754791,0,0,0,inf,1
+50,5.57227644911,0,0,0,inf,1
+CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+5,4.12977371969,0,0,0,4.03341945332,0
+10,4.39889490541,0,0,0,4.05261951097,0
+15,4.5895500842,0,0,0,4.03341945332,0
+20,4.79845820994,0,0,0,4.03341945332,0
+25,4.85761696124,0,0,0,4.13440046368,0
+30,5.25510267032,0,0,0,inf,1
+35,5.11103086254,0,0,0,inf,1

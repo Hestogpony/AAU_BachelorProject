@@ -54,9 +54,12 @@ def naive_path(rn,s,t,v):
         d,p = nx.single_source_dijkstra(rn,sp[x+1],weight='t', cutoff=(bat*v.consumption_rate(100)))
         sorted_d = sorted(d.iteritems(), key=operator.itemgetter(1))
         next_guy = sorted_d[0][0]
+        
         while not ((rn.node[next_guy]['charge_rate'] != 0) and reachable(rn,p[next_guy],v,bat)):
             if sorted_d:
                 del sorted_d[0]
+                if not sorted_d:
+                    break
             next_guy = sorted_d[0][0]
         if len(sorted_d)!=0:
             driven_path += p[next_guy]
