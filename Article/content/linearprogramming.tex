@@ -1,9 +1,9 @@
 \subsection{Global optimal solution}
-In this section an approach to find a global optimal solution to the optimization problem proposed in \Cref{sec:optiprob}. The optimisation problem is a non linear optimization problem, due to $\frac{D(e_i)}{v_{e_i}}$ and $R_{CO}(v_{e_i})$ being non linear function. The problem can however be reformulated into a linear programming problem by reformulating $\frac{D(e_i)}{v_{e_i}}$ and $R_{CO}(v_{e_i})$ as piecewice-linear functions $(1)$. Precisely the problem is modeled as a MIP problem. $(2)$  
-This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at a global optimal solution.
-\subsubsection{Linearization}
-To handle the linearization we need to introduce three new sets, a set of known variables which is the function of each linear piece, a set mother set of known variables which is the starting point of each line segment and a set of unknown variables which will be the line segment which produces the best result. 
-The unknown variable is called SL(selected line) and is two dimensional the 1st dimension is the the number of function to be solved and the 2nd is the amount of pieces the function is split into. This lead to the following constraints.   
+In this section an approach to finding a global optimal solution to the optimisation problem proposed in Section \ref{sec:optiprob}. The optimisation problem is a non-linear optimisation problem, due to $\frac{D(e_i)}{v_{e_i}}$ and $R_{CO}(v_{e_i})$ being non-linear function. The problem can however be reformulated into a linear programming problem by reformulating $\frac{D(e_i)}{v_{e_i}}$ and $R_{CO}(v_{e_i})$ as a piecewise-linear functions. Precisely the problem is modelled as a MIP problem. This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at a global optimal solution.
+\todo[inline]{Missing some references, and an explanation of what MIP is}
+
+\subsubsection{Linearisation}
+To handle the linearisation we need to introduce three new sets, a set of known variables which is the function of each linear piece, and another set of known variables which is the starting point of each line segment and a set of unknown variables which will be the line segments which produces the best result. The unknown variable is called SL(selected line) and it is two dimensional the first dimension is the the number of function to be solved and the second is the amount of pieces the function is split into. This lead to the following constraints.   
 Exactly one line segment needs to be selected for all line segments. 
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} SL_{i,j} = 1
@@ -17,7 +17,7 @@ The speed of the EV needs to be constraint by the line segment chosen
 \begin{equation*}
 \forall_{i\in1 \dots n, j \in 1 \dots m-1}:\; SL_{i,j} * P_{i,j}  \le  v_{j,e_i} \le SL_{i,j}*P_{i,j+1}
 \end{equation*}
-$P$ is a set of start points of all line segments including the end point of the last segment. $SL_{i,j} * P_{i,j}$ is the minimal speed the EV is allowed to drive on edge $i$ and $SL_{i,j}*P_{i,j+1}$ is the maximal speed, note that the values will either be a valid value or $0$ it the segment is not selected. $P_{i,j+1}$ is the end point of $P_{i,j}$. 
+$P$ is a set of start points of all line segments including the end point of the last segment. $SL_{i,j} * P_{i,j}$ is the minimal speed the EV is allowed to drive on edge $i$ and $SL_{i,j}*P_{i,j+1}$ is the maximal speed, note that the values will either be a valid value or $0$ if the segment is not selected. $P_{i,j+1}$ is the end point of $P_{i,j}$. 
 The optimal solution to $\frac{D(e_i)}{v_{e_i}}$ or $R_{CO}(v_{e_i})$ can now be found by multiplying the slope of the selected line with the selected speed and adding the constant b. As an example the way to model $R_{CO}(v_{e_i})$ for $i$
 \begin{equation*}
 \sum_{j=1}^{m} LinesA_{i,j}*v_{j,e_i} + \sum_{j=1}^{m} SL_{i,j}*LinesB_{i,j} 
