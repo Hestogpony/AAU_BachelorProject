@@ -1,4 +1,4 @@
-\subsection{Greedy Heuristics Algorithm}}\label{sec:greedy}
+\subsection{Greedy Heuristics Algorithm}\label{sec:greedy}
 After having realised that even solving only a path optimal is very expensive, we will now interest ourselves with the notion of an approximation approach. The problem then becomes, which speed must we use for edges in a path, in the interval of $v_{min}$ and $v_{max}$. As argued previously, the optimal speed to drive can only be found by iterating over all possibilities which is a combinatorial optimization problem, and it is NP-Hard. Thus we must introduce a heuristic, which promotes local optimal choices. 
 
 We will now analyse how to find this speed. Given a path $P = \langle u_1,u_2,\dots,u_k \rangle$. In measuring the fastest way to pass an edge on the path, there are two probable cases:
@@ -37,7 +37,6 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 \caption{In this instance of $T(v,(u_1, u_2))$, going from $u_1$ to $u_2$, we have a distance of $5 \si{\km}$ and a charge speed of $5 \si{\kW}$ on $u_1$. The optimal speed in this case is $42.12\si{\km\per\hour}$, and the total time is roughly 17 minutes to pass through the edge when driving and charging}
 \end{figure}
 Having the two ways of deciding the time it takes to pass an edge a algorithm can be created which decide how to drive each road segment can be formulated.   
-
 \begin{algorithmic}
 \Function{travel\_time}{$RN, u, v, EV$}
 	\State $e = (u, v)$
@@ -61,7 +60,7 @@ Having the two ways of deciding the time it takes to pass an edge a algorithm ca
 			\State $(RN.D(e)*EV.R_{CO}(v)-energy)/charge\_rate) \rangle$
 		\State $energy\_needed_{2} = RN.D(e)*EV.R_{CO}(v_{opt2})$
 		\State $energy = energy + B_{possible}$
-		\If{$v_{opt2} == \infty$}
+		\If{$v_{opt2} == -\infty$}
 			\State $time\_added = time\_added + B_{possible}/charge\_rate$
 			\State $CS.remove(0)$
 			\State $updateCS(CS)$
@@ -82,3 +81,4 @@ Having the two ways of deciding the time it takes to pass an edge a algorithm ca
 
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
+The $travel\_time$ function takes as input a road network $RN$, the two vertices which makes up the edge to be driven and the EV which is support to drive the path. The function uses a few helping functions, the two solve functions $solve1$ and $solve2$ are solvers specified for each of the cases and returns the optimal speed of the EV or $\infty$ if no optimal speed is found. The function $CS = getCS(u, v)$ returns a list of charge stations. If $v$ is a charge stations with a higher charge rate than any charge station previous to $v$ then $v$ is returned otherwise $v$ is append to the list of charging stations previous to $v$, this ensure that the charge station with the best charge rate is alway the 1st in the list of previous charge stations. The last function $updateCS(CS)$ finds a new best charge station and deletes all charge stations prior to it, this is need because the best charge station have been removed by $CS.remove(0)$. Having a way to solve a single edge the time of the path can be decided by looping through all edges form $e_1$ to $e_n$  
