@@ -58,7 +58,8 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 	\While{$Q \neq \emptyset$} 
 		\State $u = extractmin(Q)$
 		\ForAll{$v \in RN.adj(u)$} 
-			\State $time,preCS,B_{cur},energy = travel\_time(RN, u, v, EV)$
+			\State $time,preCS,B_{cur},energy = $
+			\State $travel\_time(RN, u, v, EV)$
 			\If{$v.time > u.time + time$} 
 				\State $v.time = u.time + time$
 				\State $v.predecessor = u$
@@ -78,28 +79,45 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 \begin{algorithmic}
 \Function{travel\_time}{$RN, u, v, EV$}
 	\State $e = (u, v)$
-	\State $v_{opt}1 = solve\langle v, 0 = B_{cur}-RN.D(e)*EV.R_{CO}(v)\rangle$
-	\If{$ u.B_{cur} - RN.D(e)*EV.R_{CO} < 0 $}
-		\State $time1 = \infty$
+	\State $v_{opt1} = solve1\langle v, EV.B_{cur}-RN.D(e)*EV.R_{CO}(v) = 0\rangle$
+	\If{$ u.B_{cur} - RN.D(e)*EV.R_{CO}(v_{opt1}) < 0 $}
+		\State $time_1 = \infty$
 	\Else
-		\State $time1 = RN.D(e) / v_{opt}$
-		\State $energy_needed1 = RN.D(e)*EV.R_{CO}(v_{opt})$
-		\State $B_{cur}1 = u.B_{cur} - energy_needed1$
+		\State $time_1 = RN.D(e) / v_{opt1}$
+		\State $energy\_used_{1} = RN.D(e)*EV.R_{CO}(v_{opt1})$
 	\EndIf
-		\State $CS = getCS(u)$ 
-		\State $energy_needed1 = \infty$
-		\State $energy = EV.B_{cap} - best_{CS}.B_{cur}$
-		\State $time2 = 0$
-	\While{$energy_needed1 > extra_energy and length(CS) \neq 0$}
-		\State $best_{CS} = extractmin(CS)$
-		\State $v_{opt} = solve \langle v, RN.D(e)/v + (energy-RN.D(e)*EV.R_{CO}(v)) \rangle$
-		\State $time2 = RN.D(e)/v_{opt} + (EV.R_{CO}(v_{opt})*RN.D(e) - energy)/RN.R_{CH}(best_{CS}))$
-		\
-
+		\State $CS = getCS(u, v)$ 
+		\State $energy\_needed_{2} = \infty$
+		\State $energy = u.B_{cur}$
+		\State $time\_added = 0$
+		\State $time_2 = \infty$
+	\While{$energy\_needed_{2} > energy  \And  len(CS) \neq 0$}
+		\State $best_{CS} = extractmax(CS)$
+		\State $B_{possible} = best_{CS}.B_{possible}$
+		\State $charge\_rate = RN.R_{CH}(best_{CS})$
+		\State $v_{opt2} = solve2 \langle v, B_{possible},  RN.D(e)/v + $
+			\State $(RN.D(e)*EV.R_{CO}(v)-energy)/charge\_rate) \rangle$
+		\State $energy\_needed_{2} = RN.D(e)*EV.R_{CO}(v_{opt2})$
+		\State $energy = energy + B_{possible}$
+		\If{$v_{opt2} == \infty$}
+			\State $time\_added = time\_added + B_{possible}/charge\_rate$
+			\State $CS.remove(0)$
+			\State $updateCS(CS)$
+		\EndIf	
 	\EndWhile
+	\If{$v_{opt2} \neq \infty$}
+		\State $time_2 = RN.D(e)*EV.R_{CO}(v_{opt2}) + $
+		\State $energy\_needed_{2}/charge\_rate + time\_added$
+		\State $energy\_used_2 = RN.D(e)*EV.R_{CO}(v_{opt2})$
+	\EndIf
+	\If{$time_1 <= time_2$}
+		\State \Return $time_1, CS, energy\_used_1$
+	\ElsIf{$time_1 > time_2$}
+		\State \Return $time_2, CS, energy\_used_2$
+	\Else
+		\State \Return $\infty, NIL, \infty$
+	\EndIf
 
-
-	\State \Return $t.time, t.path$
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
 
