@@ -53,7 +53,24 @@ The set-up of the experiment: the distance to drive was set to 200 km, the compl
 
 \subsection{Experiment: Charge Rate on Charging Stations}
 
-We compared the performance of the greedy heuristic algorithm to the naive algorithm with the charge rate of charging stations as changing parameter. The minimum distance between charging stations was set to 30 km, the distance to drive was set to 200 km. The initial charge rates in the road network were evenly distributed between $10 \si{\kW}$ and $100 \si{\kW}$. For each iteration all charge rates are scaled with a constant factor resulting in worse of better charge rates on all charging stations. The resulting graph of the experiment is seen in (REF!). On the x-axis is displayed the average charge rate of the charging stations on the road network. On the y-axis is displayed the time it takes to pass a path of length 200 km. 
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+	xlabel=Charge rate (\%),
+	ylabel=Path time (hours)]
+\addplot table [x=Charge rate scale, y=naive-time, col sep=comma] {charge_rate.csv};
+	\addlegendentry{Naive}
+\addplot table [x=Charge rate scale, y=greedy-time, col sep=comma] {charge_rate.csv};
+	\addlegendentry{Greedy heuristic}
+\end{axis}
+\end{tikzpicture}
+\caption{Time spend driving a 300km path on different charge rates} 
+\label{fig:charge_rate}
+\end{figure}
+
+We compared the performance of the greedy heuristic algorithm to the naive algorithm with the charge rate of charging stations as variable parameter. The minimum distance between charging stations was set to 30 km, the distance of the patch was set to 300 km. The initial charge rates in the road network were evenly distributed between $10 \si{\kW}$ and $100 \si{\kW}$. For each iteration all charge rates are scaled with a constant factor resulting in worse of better charge rates on all charging stations. The resulting graph of the experiment is seen in Figure \ref{fig:charge_rate}. The x-axis displays the charge rate in percent and the y-axis displayes the time it takes to travel the route.
+
+The experiment shows a clear picture of the changes in the route plan. There are no large deviations, which indicates that the route itself did not change, nor did the relative amount of time spend charging on different charging stations change, which. However the combine time of the route did naturally shrink as the charge rates increased. 
 
 \subsection{Experiment: Size of Road Network}
-
