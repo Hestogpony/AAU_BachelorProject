@@ -4,7 +4,7 @@
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{tikz}
-\usepackage{algpseudocode}
+\usepackage[noend]{algpseudocode}
 \usepackage{algorithm}
 \usepackage{cleveref}
 \usepackage{todonotes}
@@ -20,6 +20,9 @@
 
 \DeclareSIUnit\Wh{Wh}
 \DeclareSIUnit\miles{mi}
+\algdef{SE}[DOWHILE]{Do}{DoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+
+
 
 
 \begin{document}
