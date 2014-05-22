@@ -3,25 +3,11 @@ import networkx as nx
 # from fastest_path.naive import naive
 from fastest_path.naive import naive_path
 from fastest_path.vehicle import EV
+from fastest_path.dijkstra import single_source_dijkstra_path_length
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
 import time
-
-def validpath(graph, path, ev,perc):
-	batCap = ev.battery_capacity
-	possibleEnergy = ev.curbat
-	if len(path) == 0:
-		print "No path given"
-	for i in range(0, len(path)-1):
-		edge = graph.edge[path[i]][path[i+1]]
-		node = graph.node[path[i]]
-		possibleEnergy -= edge['weight']*ev.consumption_rate(edge['speed_limit']*perc)
-		if node['charge_rate'] > 0:
-			possibleEnergy = batCap
-		if possibleEnergy < 0:
-			print "The path can not be driven sorry"
-			break
 
 def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.csv'):
 	with open(file_name, 'a') as f:
@@ -55,7 +41,6 @@ def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.c
 											  greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
 											  greedy_f,
 											 ))
-
 
 def experiment_runtime_compexity(ev, iterations, path_distance, CS_density, step_size, file_name='time_complexity.csv'):
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
@@ -95,7 +80,7 @@ def experiment_ev_consumption(iterations, path_distance,con_rate_variance, CS_de
 		f.write('CS density,naive-time,naive-fail,greedy-time,greedy-fail\n')
 
 	ev_number = 0
-	for ev in scale_cons_rate(con_rate_variance):
+	for ev in scale_cons_rate(con_rate_variance): #Create vehicles
 		print 'charge station experiment. currently at EV: ', ev_number
 
 		scale_charge_rates(rn, 1+(scale_factor/100.0))
@@ -161,8 +146,6 @@ def experiment_charge_rate(ev, iterations,charge_rate_variance, path_distance, C
 										  	greedy_f,
 											 ))
 
-
-
 def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, file_name='driving_dist.csv'):
 	print('loading road network...')
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
@@ -180,9 +163,11 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 			s, t, dist = s_and_t(rn, distance)
 
 			### NAIVE
+
 			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
+
 			### Greedy
 			_, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
 			greedy_t += time if time!=float('inf') else 0
@@ -196,7 +181,6 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 											  greedy_t/(iterations-greedy_f) if iterations != greedy_f else 'inf',
 											  greedy_f,
 											  ))
-
 
 
 ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))

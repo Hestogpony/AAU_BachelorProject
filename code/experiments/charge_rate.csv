@@ -1,5 +1,6 @@
 Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
 Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+<<<<<<< HEAD
 -40,11.9747276645,0,.,.,inf,1
 -39,11.8318042498,0,.,.,inf,1
 -38,11.6934912678,0,.,.,inf,1
@@ -107,3 +108,16 @@ Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,gre
 5,10.7677637481,0,.,.,5.89089856187,0
 10,10.4269956201,0,.,.,5.7714663979,0
 15,10.1158595033,0,.,.,5.67365720398,0
+=======
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+Charge rate scale,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fail
+-40,14.9655074627,0,.,.,8.16081828818,4-39,15.8385590842,0,.,.,6.05577544891,7
+>>>>>>> 53bec75bd0c1fe5884d8e0508222732ed2ecaf09
