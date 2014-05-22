@@ -118,10 +118,11 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
 
+The worst case running time of the greedy heuristic algorithm is bound by three procedures. First there is the main procedure that is derived directly from Dijkstra's, which have a worst case of $O(V^2)$ on dense graphs. To that we need to multiply $O(V)$ from the travel\_time procedure, as this procedure might go through all vertices, if the vehicle is set to charge at a new charging station for every found edge and every vertex in the graph is also a charging station. Finally we have the procedure that maintain a set of charging stations relevant on each vertex. In the special case where the vehicle have an infinitely large battery capacity, but start without any battery, and every vertex found happens to be a charging station with a charge rate in a decreasing order, the procedure would have to multiply $O(V)$ to the worst case.
+However only one of the last two procedure's $O(V)$ complexity is added, as the case where the algorithm chose to charge at a new charge station for every edge never happens with an infinity large battery. Likewise the case where the procedure maintain a list of every charging station, never happens if the car has a limited battery capacity. Resulting in a worst case running time of $O(V^3)$.
 
-
-
-
+In practice Dijkstra's algorithm run faster on a sparse graph, which road networks are, and both of the remaining procedures are simultaneously limited from the fact that only a small amount of charging stations exist and that EV battery capacity is limited.
+\todo[inline]{need proof-reading}
 
 
 
