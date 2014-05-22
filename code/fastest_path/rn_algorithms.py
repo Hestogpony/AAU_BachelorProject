@@ -135,7 +135,7 @@ def update_possible_energy(charge_stations, energy):
 
 def fastest_path_greedy(G, s, t, algorithm, ev):
     #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5
-    print "Started"
+    #print "Started"
     for node_id, data in G.nodes(data=True):
         data['time'] = float('inf')
         data['path'] = None
@@ -153,19 +153,13 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
         for _, neighbour_id, edge_data in G.edges([node_id], data=True):
             neighbour_data = G.node[neighbour_id]
 
-            if (neighbour_data['time'] <= node_data['time']+edge_data['t'])\
-                and ((neighbour_data['preCS'] or neighbour_data['myCS'][1] > 0) or not (node_data['preCS'] or node_data['myCS'][1] > 0)):
-                continue
-
             time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), edge_data, ev, node_data['curbat'])
             totalTime = node_data['time'] + time
-            if time < 0:
-                print time, preCS, curbat, energyUsed
 
             if totalTime == float('inf'):
                 continue
 
-            if neighbour_data['time'] > totalTime: # and ((preCS or  neighbour_data['myCS'][1] > 0) or not neighbour_data['preCS']):
+            if neighbour_data['time'] > totalTime and ((preCS or  neighbour_data['myCS'][1] > 0) or not neighbour_data['preCS']):
                 neighbour_data['time'] = totalTime
                 neighbour_data['path'] = node_id
                 neighbour_data['curbat'] = curbat
