@@ -1,5 +1,5 @@
 \subsection{Global optimal solution}
-The nature of the optimisation problem proposed in \Cref{sec:optiprob} is a non linear optimization problem, due to the $\frac{D(e_i)}{v_{e_i}}$ and R_{CO}(v_{e_i}) being non linear. 
+The nature of the optimisation problem proposed in \Cref{sec:optiprob} is a non linear optimization problem, due to the $\frac{D(e_i)}{v_{e_i}}$ and $R_{CO}(v_{e_i})$ being non linear. The problem can however be reformulated into a linear programming problem by piecewice-linear functions $(1)$, this section reformulates the optimization problem as a linear programming problem. More precisely the problem is modeled as a in  
 This optimisation problem is almost a linear programming problem. However, we suffer from a non-linear constraint: $D(e_i)*R_{CO}(v(e_i))$ since the consumption rate $R_{CO}(v(e_i))$ of the EV is not linear. The function can however be estimated using linearisation. 
 
 subject to: 
@@ -55,7 +55,7 @@ The algorithm consists of continuous pruning of paths in the road network, until
 $initial\_path(G,s,t)$ returns a randomly chosen path, $p$ which is solved optimally by $solve\_optimally(p)$. $get\_paths(G,s,t,T_p)$ returns a sorted list of paths in $G$ between $s$ and $t$ with a max travelling time of $T_p$.
 
 %sources
-%
+%1, SWP-3587
 %
 %
 %
