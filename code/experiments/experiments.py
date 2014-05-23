@@ -3,7 +3,7 @@ import networkx as nx
 # from fastest_path.naive import naive
 from fastest_path.naive import naive_path
 from fastest_path.vehicle import EV
-from fastest_path.dijkstra import single_source_dijkstra_path_length
+#from fastest_path.dijkstra import single_source_dijkstra_path_length
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
@@ -157,13 +157,12 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 
 	for distance in range(min_dist, max_dist, step_size):
 		print 'driving distance experiment. currently at: ', distance
-		naive_t, greedy_t = 0,0,0
-		naive_f, greedy_f = 0,0,0
+		naive_t, greedy_t = 0,0
+		naive_f, greedy_f = 0,0
 		for iteration in xrange(iterations):
 			s, t, dist = s_and_t(rn, distance)
-
+			print 'iteration: ', iteration, ' distance: ', dist
 			### NAIVE
-
 			_, time = naive_path(rn, s, t, ev)
 			naive_t += time if time!=float('inf') else 0
 			naive_f += 0 if time!=float('inf') else 1
@@ -185,7 +184,7 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 
 ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
-experiment_cs_density(ev, 1, 300)
+#experiment_cs_density(ev, 1, 300)
 
 #experiment_runtime_compexity(ev, 1, 300, 200, 20)
 
@@ -193,4 +192,4 @@ experiment_cs_density(ev, 1, 300)
 
 #experiment_charge_rate(ev, 5, 30, 300, 30, 5)
 
-#experiment_driving_dist(ev, 30, 50, 500, 25, 5)
+experiment_driving_dist(ev, 30, 200, 500, 25, 5)
