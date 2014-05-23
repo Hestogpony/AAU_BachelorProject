@@ -4,12 +4,14 @@
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{tikz}
-\usepackage{algpseudocode}
+\usepackage[noend]{algpseudocode}
 \usepackage{algorithm}
 \usepackage{cleveref}
 \usepackage{todonotes}
 \usepackage{cite}
 \usepackage{pgfplots}
+%\usepackage{filecontents}
+\usepgfplotslibrary{dateplot}
 \usepackage{microtype}
 \usepackage{siunitx}
 \usepackage{tikz}
@@ -17,6 +19,7 @@
 \usepackage{siunitx}
 \usepackage{pgf}
 \usetikzlibrary{arrows}
+\usepackage{caption}
 
 \DeclareSIUnit\Wh{Wh}
 \DeclareSIUnit\miles{mi}
@@ -60,7 +63,7 @@
 
 \input{content/introduction}
 
-\input{content/notation}
+\input{content/preliminaries}
 
 \input{content/shorterfaster}
 
@@ -70,13 +73,15 @@
 
 \input{content/optiprob}
 
+\input{content/linearprogramming}
+
 \input{content/greedy}
 
-\input{content/linearprogramming}
+\input{content/algorithms}
 
 \input{content/experiments}
 
-\input{content/citations}
+%\input{content/citations}
 
 \input{content/conclusion}
 
