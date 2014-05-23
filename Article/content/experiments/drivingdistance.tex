@@ -8,9 +8,9 @@ We experiment with the driving distance as the changing parameter. The longer di
 \begin{axis}[
 	xlabel=Distance (km),
 	ylabel=Path time (hours)]
-\addplot table [x=driving distance, y=naive-time, col sep=comma] {driving_dist.csv};
+\addplot table [x=driving distance, y=naive-time, col sep=comma] {data/driving_dist.csv};
 	\addlegendentry{Naive}
-\addplot table [x=driving distance, y=greedy-time, col sep=comma] {driving_dist.csv};
+\addplot table [x=driving distance, y=greedy-time, col sep=comma] {data/driving_dist.csv};
 	\addlegendentry{Greedy heuristic}
 \end{axis}
 \end{tikzpicture}
