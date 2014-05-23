@@ -4,12 +4,14 @@
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{tikz}
-\usepackage[noend]{algpseudocode}
+\usepackage{algpseudocode}
 \usepackage{algorithm}
 \usepackage{cleveref}
 \usepackage{todonotes}
 \usepackage{cite}
 \usepackage{pgfplots}
+\usepackage{filecontents}
+\usepgfplotslibrary{dateplot}
 \usepackage{microtype}
 \usepackage{siunitx}
 \usepackage{tikz}
@@ -17,12 +19,10 @@
 \usepackage{siunitx}
 \usepackage{pgf}
 \usetikzlibrary{arrows}
+\usepackage{caption}
 
 \DeclareSIUnit\Wh{Wh}
 \DeclareSIUnit\miles{mi}
-\algdef{SE}[DOWHILE]{Do}{DoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
-
-
 
 
 \begin{document}
@@ -73,9 +73,11 @@
 
 \input{content/optiprob}
 
+\input{content/linearprogramming}
+
 \input{content/greedy}
 
-\input{content/linearprogramming}
+\input{content/algorithms}
 
 \input{content/experiments}
 
