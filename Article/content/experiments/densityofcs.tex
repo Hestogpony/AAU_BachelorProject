@@ -1,0 +1,16 @@
+\subsection{Experiment: Density of Charging Stations}
+
+We compared the performance of the greedy heuristic algorithm to the naive algorithm with the density of charging stations as changing parameter. The
+density of charging stations are measured in the minimum distance between two charging stations. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in Denmark. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
+
+\begin{table}[!htb]
+\centering
+		\begin{tabular}{ p{1.85cm} p{0.67cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} } \hline
+		Radius (km): & 5 & 10 & 20 & 30 & 40 & 50 \\ \hline
+		Stations: & 3029 & 827 & 326 & 117 & 76 & 49 \\ \hline 
+		\end{tabular}
+		\caption{number of charging stations corresponding to the minimum distance between two charging stations}
+	\label{table:chargedensity}
+	\end{table}
+
+The set-up of the experiment: the distance to drive was set to 200 km, the complexity of the road network was 483398 vertices, which is the number of vertices in Denmark. The charge rates of the charging stations are evenly distributed with rates between $10 \si{\kW}$ and $100 \si{\kW}$. The resulting graph is illustrated in (REF!).
