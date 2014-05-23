@@ -1,0 +1,11 @@
+\subsection{Road network dataset} 
+\label{sub:setup}
+To facilitate the experiments, we've had to find a real world road network dataset which contains road distances, speed limits and charging stations of varying charge rates. Such a dataset does not openly exist to our knowledge. Instead we have used OpenStreetMaps which is an open-source collection of map data. One can read more about OSM at \url{http://www.openstreetmap.org/about}. OSM has a concept of ways and vertices. Ways represent geographical planar objects e.g.\ roads, cycleways, foot ways etc. A vertex is a geographical point consisting of a latitude and longitude coordinate. A way is constituted of a set of vertices and some tags which describe meta-information about the way, such as the name of the way and what type of way it is e.g. a road, cycleway, foot way  etc. From this information we can derive that if way $e_1$ and $e_2$ intersect in vertex $u$, they will share the vertex $u$. A vertex is referred to as either a road intersection or as a charging station if the vertex has been assigned a charge rate.
+
+The ways and vertices can easily be converted into a, for us, useful road network structure for experimenting. This is done, by simply filtering away all types of ways accept roads and use these as edges in the road network. To get a notion of speed limits on edges, we derive general speed limits from the type of the roads. OSM carries such information as whether the road is a motorway, residential way, tertiary way etc. The speed limits are set according to Danish speed limits. For vertices, we are only interested in the ones which correspond to intersections between two roads. All other vertices in the road network are ignored. To get a notion of charge rate on the vertices we have implemented a method which distributes random charge rates on randomly selected vertices in the road network.
+
+We have used the drivable part of Denmark as a baseline for the experiments. The dataset features:
+\begin{itemize}
+    \item 483407 vertices
+    \item 543482 edges
+\end{itemize}

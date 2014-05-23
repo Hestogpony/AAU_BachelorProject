@@ -11,67 +11,21 @@ This section presents the experiments of the greedy heuristic algorithm. Our lin
 
 In addition, the runtime complexity of the algorithms will be tested and analysed.  
 
-\subsection{Road network dataset} 
-\label{sub:setup}
-To facilitate the experiments, we've had to find a real world road network dataset which contains road distances, speed limits and charging stations of varying charge rates. Such a dataset does not openly exist to our knowledge. Instead we have used OpenStreetMaps which is an open-source collection of map data. One can read more about OSM at \url{http://www.openstreetmap.org/about}. OSM has a concept of ways and vertices. Ways represent geographical planar objects e.g.\ roads, cycleways, foot ways etc. A vertex is a geographical point consisting of a latitude and longitude coordinate. A way is constituted of a set of vertices and some tags which describe meta-information about the way, such as the name of the way and what type of way it is e.g. a road, cycleway, foot way  etc. From this information we can derive that if way $e_1$ and $e_2$ intersect in vertex $u$, they will share the vertex $u$. A vertex is referred to as either a road intersection or as a charging station if the vertex has been assigned a charge rate.
 
-The ways and vertices can easily be converted into a, for us, useful road network structure for experimenting. This is done, by simply filtering away all types of ways accept roads and use these as edges in the road network. To get a notion of speed limits on edges, we derive general speed limits from the type of the roads. OSM carries such information as whether the road is a motorway, residential way, tertiary way etc. The speed limits are set according to Danish speed limits. For vertices, we are only interested in the ones which correspond to intersections between two roads. All other vertices in the road network are ignored. To get a notion of charge rate on the vertices we have implemented a method which distributes random charge rates on randomly selected vertices in the road network.
+\input{content/experiments/roadnetworkdataset}
 
-We have used the drivable part of Denmark as a baseline for the experiments. The dataset features:
-\begin{itemize}
-    \item 483407 vertices
-    \item 543482 edges
-\end{itemize}
+\input{content/experiments/naivealgorithm}
 
-\subsection{Naive algorithm}
-\label{sub:naivealgorithm}
-We have formulated a naive algorithm for performance comparison with our greedy heuristic algorithm. The naive algorithm should simulate the way a naive electric vehicle driver would choose to travel through a road network. The naive algorithm works the following way: It greedily chooses the fastest roads in terms of distance over speed. Whenever the battery reaches 40 \% battery capacity, it starts searching for nearby charging stations in the radius allowed by the 40 \% battery capacity given the vehicles consumption rate. If no charging stations are available with 40 \% battery capacity, the path from $s$ to $t$ is not solvable for the naive algorithm. If, on the other hand, one or more charging stations are reachable, the algorithm will choose the closest one and charge to 100 \% battery capacity or to the battery capacity needed in order to reach $t$. After charging, the algorithm will resume greedily choosing the fastest roads from the charging station to $t$, in terms of distance over speed.
+\input{content/experiments/drivingdistance}
 
-\subsection{Experiment: Complexity of Road Network}
+\input{content/experiments/chargerateoncs}
 
-We compared the run-time of the greedy heuristic algorithm to the naive algorithm with the complexity of the road network as changing parameter. The
-complexity is measured in the number of vertices on the road network. The more vertices on the road network, the more vertices the two algorithms has 
-to visit before they are able to find a fastest path. The set-up of the experiment: distance to drive was 100 km, the minimum distance between 
-charging stations was 20 km. The initial number of vertices in the road network: 450000 vertices. The number of vertices is then counted down with 10000 for each iteration of the test. The resulting graph is illustrated in (REF!).
+\input{content/experiments/densityofcs}
 
-\subsection{Experiment: Density of Charging Stations}
-
-We compared the performance of the greedy heuristic algorithm to the naive algorithm with the density of charging stations as changing parameter. The
-density of charging stations are measured in the minimum distance between two charging stations. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in Denmark. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
-
-\begin{table}[!htb]
-\centering
-		\begin{tabular}{ p{1.85cm} p{0.67cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} p{0.63cm} } \hline
-		Radius (km): & 5 & 10 & 20 & 30 & 40 & 50 \\ \hline
-		Stations: & 3029 & 827 & 326 & 117 & 76 & 49 \\ \hline 
-		\end{tabular}
-		\caption{number of charging stations corresponding to the minimum distance between two charging stations}
-	\label{table:chargedensity}
-	\end{table}
-
-The set-up of the experiment: the distance to drive was set to 200 km, the complexity of the road network was 483398 vertices, which is the number of vertices in Denmark. The charge rates of the charging stations are evenly distributed with rates between $10 \si{\kW}$ and $100 \si{\kW}$. The resulting graph is illustrated in (REF!).
-
-\subsection{Experiment: Charge Rate on Charging Stations}
-
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-	xlabel=Charge rate (\%),
-	ylabel=Path time (hours)]
-\addplot table [x=Charge rate scale, y=naive-time, col sep=comma] {charge_rate.csv};
-	\addlegendentry{Naive}
-\addplot table [x=Charge rate scale, y=greedy-time, col sep=comma] {charge_rate.csv};
-	\addlegendentry{Greedy heuristic}
-\end{axis}
-\end{tikzpicture}
-\caption{Time spend driving a 300km path on different charge rates} 
-\label{fig:charge_rate}
-\end{figure}
-
-We compared the performance of the greedy heuristic algorithm to the naive algorithm with the charge rate of charging stations as variable parameter. The minimum distance between charging stations was set to 30 km, the distance of the patch was set to 300 km. The initial charge rates in the road network were evenly distributed between $10 \si{\kW}$ and $100 \si{\kW}$. For each iteration all charge rates are scaled with a constant factor resulting in worse of better charge rates on all charging stations. The resulting graph of the experiment is seen in Figure \ref{fig:charge_rate}. The x-axis displays the charge rate in percent and the y-axis displayes the time it takes to travel the route.
-
-In Figure \ref{fig:charge_rate} it is quite clear that the behaviour of the naive scales quite polynomially with the increasingly better charge stations, however the greedy algorithm seems to decrease linearly with better charge stations. At the point of 5\% there seems to be a big jump, for the greedy algorithm, this suggests that as charging stations get better, new paths are opened up, because they are more attractive. This is a very nice result. 
+\input{content/experiments/runningtime}
 
 
-\subsection{Experiment: Size of Road Network}
+
+
+
+
