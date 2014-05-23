@@ -106,3 +106,4 @@ CS density,naive-time,naive-fail,hybrid-time, hybrid-fail,greedy-time,greedy-fai
 25,4.85761696124,0,0,0,4.13440046368,0
 30,5.25510267032,0,0,0,inf,1
 35,5.11103086254,0,0,0,inf,1
+CS density,naive-time,naive-fail,greedy-time,greedy-fail

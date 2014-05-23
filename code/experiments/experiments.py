@@ -3,7 +3,6 @@ import networkx as nx
 # from fastest_path.naive import naive
 from fastest_path.naive import naive_path
 from fastest_path.vehicle import EV
-from fastest_path.dijkstra import single_source_dijkstra_path_length
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
 from test_utils import *
@@ -15,7 +14,7 @@ def experiment_cs_density(ev, iterations, path_distance, file_name='cs_density.c
 
 	rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 	s, t, dist = s_and_t(rn, path_distance)
-	for cs_dist in range(5,55,5):
+	for cs_dist in range(25,55,5):
 		print 'CS density experiment. currently at: ', cs_dist
 		rn = RoadNetwork(nx.read_gpickle('pickle_experiment'))
 
