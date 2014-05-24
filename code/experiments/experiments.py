@@ -187,7 +187,7 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
 
 ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
-experiment_cs_density(ev, 1, 300)
+#experiment_cs_density(ev, 1, 300)
 
 #experiment_runtime_compexity(ev, 1, 300, 200, 20)
 
@@ -195,4 +195,5 @@ experiment_cs_density(ev, 1, 300)
 
 #experiment_charge_rate(ev, 5, 30, 300, 30, 5)
 
-# experiment_driving_dist(ev, 30, 200, 500, 25, 5)
+experiment_driving_dist(ev, 30, 300, 550, 50, 1)
+
