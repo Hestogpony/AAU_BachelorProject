@@ -6,9 +6,9 @@
 \begin{axis}[
 	xlabel=Charge rate (\%),
 	ylabel=Path time (hours)]
-\addplot table [x=Charge rate scale, y=naive-time, col sep=comma] {data/charge_rate.csv};
+\addplot table [x=Charge rate scale, y=naive-time, col sep=comma] {charge_rate.csv};
 	\addlegendentry{Naive}
-\addplot table [x=Charge rate scale, y=greedy-time, col sep=comma] {data/charge_rate.csv};
+\addplot table [x=Charge rate scale, y=greedy-time, col sep=comma] {charge_rate.csv};
 	\addlegendentry{Greedy heuristic}
 \end{axis}
 \end{tikzpicture}
