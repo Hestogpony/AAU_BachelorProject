@@ -1,16 +1,19 @@
-\subsection{Preliminaries} \label{sec:notation}
-In this section we will briefly explain the mathematical notation and model used in this paper. The graph representation consists of edges which represent road segments and vertices which represent either charging stations or road intersections. We define a graph as a road network, $RN$, which is a tuple $RN=(V,E,D,v_{max},v_{min},R_{ch})$ comprising of a set $V$ of vertices and a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
+\section{Preliminaries} \label{sec:notation}
+In this section we explain the mathematical notation and model used in this paper. We further present a brief example of why a shorter path does not necessarily equal a faster path for EVs. 
+
+\subsection{Notation}
+The graph representation consists of edges which represent road segments and vertices which represent either charging stations or road intersections. We define a road network, $RN$, as a tuple $RN=(V,E,D,v_{max},v_{min},R_{ch})$ comprising of a set $V$ of vertices and a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further define the following functions:
 \[ D(e)\rightarrow d \] 
 \[ v_{max}(e)\rightarrow v \]
 \[ v_{min}(e)\rightarrow v \]
-These total functions respectively returns the distance of edge $e$, the maximum speed of edge $e$ and the minimum speed of edge $e$. The minimum speed of a given edge is defined as 30 \% less than the max speed allowed on the edge, which is given by the speed limit. Each vertex is defined as a charging station or a road intersection, described by the following total function:
+These total functions respectively returns the length of edge $e$, the maximum speed of edge $e$ and the minimum speed of edge $e$. Each vertex is defined as a charging station or a road intersection, described by the following total function:
 \[R_{ch}(u)\rightarrow c\]
 $c$ is the charging rate of vertex $u$ given in kilo-Watt. A road intersection is simply a vertex with charge rate $c = 0\si{\kW}$, while a charging station is a vertex where $c > 0\si{\kW}$. 
 
-An electric vehicle $EV=(R_{co},B_{cur},B_{cap})$ is a tuple given by three parameters: Its battery capacity $B_{cap}$ given in $\si{\kWh}$, the consumption rate of the $R_{co}$ given in $\si{\kWh\per\km}$. The consumption rate is given by a function on the following form:
+An electric vehicle $EV=(R_{co},B_{cur},B_{cap})$ is a tuple given by three parameters: Its battery capacity $B_{cap}$ given in $\si{\kWh}$, Its consumption rate, $R_{co}$ given in kWh/km. The consumption rate is given by a function on the following form:
 \[ R_{co}(v)=av^2+bv+c \]
 
-where $v$ is the speed of the vehicle and the constants $a$, $b$ and $c$ are dependent on the specific instance of the vehicle. The current battery capacity of the vehicle is defined by the starting battery, the energy consumed and the energy charged. However, we will abstract away from this and simply denote $B_{cur}$ as the current battery capacity of the vehicle at a given state. Lastly, we define a path $P$ of length k in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_k \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,k-1$.
+where $v$ is the speed of the vehicle and the constants $a$, $b$ and $c$ are dependent on the specific instance of the vehicle. \todo[inline]{Beskriv current battery bedre} The current battery capacity of the vehicle is defined by the starting battery, the energy consumed and the energy charged. However, we will abstract away from this and simply denote $B_{cur}$ as the current battery capacity of the vehicle at a given state. Lastly, we define a path $P$ of length k in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_k \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,k-1$.
 
 The fastest path problem, can now be defined in relation to this notation:
 
