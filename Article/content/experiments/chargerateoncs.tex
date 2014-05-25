@@ -4,12 +4,12 @@
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-	xlabel=Charge rate (\%),
-	ylabel=Path time (hours)]
+    xlabel=Charge rate (\%),
+    ylabel=Path time (hours)]
 \addplot table [x=Charge rate scale, y=naive-time, col sep=comma] {data/charge_rate.csv};
-	\addlegendentry{Naive}
+    \addlegendentry{Naive}
 \addplot table [x=Charge rate scale, y=greedy-time, col sep=comma] {data/charge_rate.csv};
-	\addlegendentry{Greedy heuristic}
+    \addlegendentry{Greedy heuristic}
 \end{axis}
 \end{tikzpicture}
 \caption{Time spend driving a 300km path on different charge rates} 
