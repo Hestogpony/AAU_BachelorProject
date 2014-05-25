@@ -1,16 +1,20 @@
 \section{Experiments}
 \label{sec:experiments}
-This section presents the experiments of the greedy heuristic algorithm. Our linear programming solution was test implemented with GLPK, but the practical usage of it was not found plausible, due to overwhelming running times. Further experiments were therefore omitted. We test the performance of the greedy heuristic algorithm in comparison to a naive algorithm, which is presented in section \ref{sub:naivealgorithm}. We have constructed four experiments, to figure out what implication the adjusting of parameters will have on the greedy heuristic Algorithm. The four parameters being experimented on are:
+This section presents the experiments for the greedy heuristic algorithm. Our linear programming solution was implemented with GLPK as a test, but the practical usage of it was not found plausible, due to overwhelming running times. Further experiments were therefore omitted. We compare the performance of the greedy heuristic to a naive algorithm, which is presented in section \ref{sub:naivealgorithm}, on five experiments. The experiments have been selected to illustrate the effects from variables in the route planning problem, including: route distance to drive, charge rate on charging stations, consumption rate of the EV, density of charging stations in the road network and the input size.
 
+To show the effect of the different parameters, we use a base case for all the experiments. The base case is as follows:
 \begin{itemize}
-     \item Driving distance
-     \item Charge rate on charging stations
-     \item Consumption rate of the EV
-     \item Density of charging stations in the road network
+
+     \item Route distance: 300km
+     \item Charge rates: 10-100kw
+     \item EV consumption rate: Tesla model S\cite{teslacon}
+     \item EV battery capacity: 50kW (range of 200km at 80km/h)
+	 \item EV start battery charge: full
+	 \item Input size: 400000 vertices (Denmark)
+     \item Density of charging stations in the road network: 1227:1 (at least 20km distance)
  \end{itemize} 
 
-In addition, the runtime complexity of the algorithms will be tested and analysed.  
-
+The route distance, consumption rate and battery capacity is chosen to force the EV to charge in most cases. The charging station density is chosen to have a reliable infrastructure, with an even spread of charging stations. In the base case we have 326 stations, when in fact Denmark have more than 4000\cite{Globalevoutlook}. The average charge rate is presumably a lot lower in reality, as very few charging stations are fast chargers.
 
 \input{content/experiments/roadnetworkdataset}
 
