@@ -3,7 +3,7 @@
 In this section an approach to finding a global optimal solution to the optimisation problem proposed in Section \ref{sec:optiprob} is formulated. The optimisation problem is a non-linear optimisation problem, due to \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ being non-linear functions. The problem can however be reformulated as a linear programming problem by formulating \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ as a piecewise-linear functions. Precisely the problem is modelled as a mixed integer problem (MIP) problem. This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at an almost global optimal solution. The quality of the solution depends on how many pieces the non-linear function is split into. 
 
 \subsubsection{Linearization}
-The linearization of a function is handled as show in \Cref{fig:linearization_example} the none-linear function is split into a number of linear pieces. To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the start and end points of each line segment and a set of unknown variables which will be the line segment chosen. The unknown variable is called SL(selected line) and must be a two dimensional of size $n \times m$ where $n$ is the length of the path, each edges has a unique function. $m$ is the number of linear lines the function is split into. This lead to the following constraints.  
+The linearization of a function is handled as show in \Cref{fig:linearization_example} the none-linear function is split into a number of linear pieces. To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the start and end points of each line segment and a set of unknown variables which will be the line segment chosen. The unknown variable is called SL(selected line) which have a two dimensional size $n \times m$ where $n$ is the amount of edges with a unique function. $m$ is the number of linear lines every edge's function is split into. This lead to the following constraints.  
 
 \begin{figure}[h!]
 \centering
@@ -12,7 +12,7 @@ The linearization of a function is handled as show in \Cref{fig:linearization_ex
 \caption{Example of a non-linear function which is split into 6 pieces}
 \end{figure}
 
-Exactly one line segment needs to be selected for all line segments. 
+For n edges, exactly n line segments needs to be selected. In other words, for every edge, only one linear line is chosen. 
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} SL_{i,j} = 1
 \end{equation*}
@@ -27,13 +27,14 @@ The speed of the EV needs to be constrained by the line segment chosen:
 \forall_{i\in1 \dots n, j \in 1 \dots m-1}:\; SL_{i,j} * P_{i,j}  \le  v_{j,e_i} \le SL_{i,j}*P_{i,j+1}
 \end{equation*}
 
-$P$ is a set of starting points of all line segments including the end point of the last segment. $SL_{i,j} * P_{i,j}$ is the minimal speed the EV is allowed to drive on edge $i$ and $SL_{i,j}*P_{i,j+1}$ is the maximal speed, note that the values will either be a valid value or $0$ if the segment is not selected. $P_{i,j+1}$ is the end point of $P_{i,j}$. 
-The approximate solution to \( D(e_i)/v_{e_i} \) or $R_{CO}(v_{e_i})$ can now be found by precomputing the functions of each of the individual linear lines \( D(e_i)/v_{e_i} \) or $R_{CO}(v_{e_i})$ is split into, the produce precomputing is a set of slopes called $LinesA$ and a set constants called  the  multiplying the slope of the selected line with the selected speed and adding the constants called $LinesB$. As an example the way to model $R_{CO}(v_{e_i})$ for $i$
+$P$ is the set of starting points of all line segments including the end point of the previous segment. $SL_{i,j} * P_{i,j}$ is the minimal speed the EV is allowed to drive on edge $i$ and $SL_{i,j}*P_{i,j+1}$ is the maximal speed, note that the values will either be a valid value or $0$, if the segment is not selected being that $SL_{i,j}$ is $0$ if the line segment is not chosen. $P_{i,j+1}$ is the end point of $P_{i,j}$. 
+The linearization of \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ can now be found by precomputing the line segments of each of the path edges. for instance, to linearize $R_{CO}(v_{e_i})$ we precompute a set of line functions on the form $a*x+b$. We store the slope $a$ as $SlopesA$, and the constants $b$ as $ConstantsB$. In total $n \times m$ function are defined. \\
+The linearized model of $R_{CO}(v_{e_i})$ for every edge $i$ will look like this:
 \begin{equation*}
-\sum_{j=1}^{m} LinesA_{i,j}*v_{j,e_i} + \sum_{j=1}^{m} SL_{i,j}*LinesB_{i,j} 
+\sum_{j=1}^{m} SlopesA_{i,j}*v_{j,e_i} + \sum_{j=1}^{m} SL_{i,j}*ConstantsB_{i,j} 
 \end{equation*}
-$\sum_{j=1}^{m} LinesA_{i,j}*v_{j,e_i}$ is equlent of $a*x$ and $\sum_{j=1}^{m} SL_{i,j}*LinesB_{i,j}$ is equivalent with $b$ and thus the consumption rate of the EV is modeled as $m$ function in linear form $a*x + b$. 
-Finally note that this is a way to determine the solution of \( D(e_i)/v_{e_i} \) or $R_{CO}(v_{e_i})$ and before the solution can be found the line segments and points for each of both of the non linear functions needs to be precomputed. 
+$\sum_{j=1}^{m} SlopesA_{i,j}*v_{j,e_i}$ is equivalent of $a*x$ and $\sum_{j=1}^{m} SL_{i,j}*LinesB_{i,j}$ is equivalent with $b$ and thus the consumption rate of the EV is modeled as $m$ functions. 
+Finally note that this is a way to determine the solution of $R_{CO}(v_{e_i})$ and before a solution to an edge can be found, the line segments and points  for both of the non linear functions needs to be precomputed. 
 %sources
 %1, SWP-3587
 %2, glpk-sos2
