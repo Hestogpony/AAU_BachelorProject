@@ -10,9 +10,9 @@ Both the greedy heuristic and Dijkstra's algorithm were written in Python 2.7, i
 	legend pos=north west,
 	xlabel=Problem size (vertices),
 	ylabel=Computation time (seconds),
-    ymax=1000]
+    ymax=2000]
 \addplot table [x=nodes, y=dijkstra, col sep=comma] {data/time_complexity.csv};
-	\addlegendentry{Dijkstra's x10}
+	\addlegendentry{Dijkstra's}
 \addplot table [x=nodes, y=greedy, col sep=comma] {data/time_complexity.csv};
 	\addlegendentry{Greedy heuristic}
 \addplot table [x=nodes, y=naive, col sep=comma] {data/time_complexity.csv};
