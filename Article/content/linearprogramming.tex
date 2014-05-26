@@ -1,19 +1,21 @@
 
 \subsection{Approximating an Optimal Path}\label{sec:LP}
-In this section an approach to finding a global optimal solution to the optimisation problem proposed in Section \ref{sec:optiprob}. The optimisation problem is a non-linear optimisation problem, due to \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ being non-linear functions. The problem can however be reformulated into a linear programming problem by reformulating \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ as a piecewise-linear functions. Precisely the problem is modelled as a mixed integer problem (MIP) problem. This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at an almost global optimal solution. The quality of the solution depends on how many pieces the non-linear function is split into. 
+In this section an approach to finding a global optimal solution to the optimisation problem proposed in Section \ref{sec:optiprob} is formulated. The optimisation problem is a non-linear optimisation problem, due to \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ being non-linear functions. The problem can however be reformulated as a linear programming problem by formulating \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ as a piecewise-linear functions. Precisely the problem is modelled as a mixed integer problem (MIP) problem. This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at an almost global optimal solution. The quality of the solution depends on how many pieces the non-linear function is split into. 
 
 \subsubsection{Linearization}
-To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the starting point of each line segment and a set of unknown variables which will be the line segments that produces the best result. The unknown variable is called SL(selected line) and it is two dimensional the first dimension is the the number of function to be solved and the second is the amount of pieces the function is split into. This lead to the following constraints.  
+The linearization of a function is handled as show in \Cref{fig:linearization_example} the none-linear function is split into a number of linear pieces. To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the start and end points of each line segment and a set of unknown variables which will be the line segment chosen. The unknown variable is called SL(selected line) and must be a two dimensional of size $n \times m$ where $n$ is the length of the path, each edges has a unique function. $m$ is the number of linear lines the function is split into. This lead to the following constraints.  
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.33]{images/linearization_example}
+\label{fig:linearization_example}
+\caption{Example of a non-linear function which is split into 6 pieces}
+\end{figure}
 
 Exactly one line segment needs to be selected for all line segments. 
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} SL_{i,j} = 1
 \end{equation*}
-
-\begin{center}
-\includegraphics[scale=0.33]{images/linearization_example}
-\label{fig:linearization_example}
-\end{center}
 
 $n$ is the length of the path, $m$ is the amount of lines the functions \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ are split into and $\sum_{j=1}^{m} SL_{i,j} = 1$ ensures that only one line segments can be selected.
 Being that exactly one line segment needs to be chosen. In other words, SL needs to be binary values.
