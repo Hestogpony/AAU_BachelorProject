@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import importer
 import networkx as nx
 # from fastest_path.naive import naive
@@ -165,20 +166,21 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
         naive_f, greedy_f = 0,0
         for iteration in xrange(iterations):
             s, t, dist = s_and_t(rn, distance)
-            print 'iteration: ', iteration, ' distance: ', dist
+            print 'iteration: ', iteration + 1, ' distance: ', dist
+            print 's: ', rn.edges([s], data=True)[0], ' t: ', rn.edges([t], data=True)[0]
             ### NAIVE
+            print 'Initialising Naive...'
             _, time = naive_path(rn, s, t, ev)
             naive_t += time if time!=float('inf') else 0
             naive_f += 0 if time!=float('inf') else 1
-            linear_t1, cur = linearProgramming(rn, _, ev, ev.curbat)
 
-
+            print 'done'
             ### Greedy
+            print 'Initialising Greedy...'
             _, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
             greedy_t += time if time!=float('inf') else 0
             greedy_f += 0 if time!=float('inf') else 1
-            linear_t2, cur = linearProgramming(rn, _, ev, ev.curbat)
-            print naive_t, linear_t1, greedy_t, linear_t2
+
 
         with open(file_name, 'a') as f:
             f.write('%s,%s,%s,%s,%s\n' % (
@@ -201,4 +203,6 @@ ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.0460
 #experiment_charge_rate(ev, 5, 30, 300, 30, 5)
 
 experiment_driving_dist(ev, 10, 300, 550, 50, 1)
+experiment_driving_dist(ev, 20, 550, 750, 50, 3)
+
 
