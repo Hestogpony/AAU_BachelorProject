@@ -7,15 +7,15 @@ Given a path there are two probable cases, when choosing the optimal speed to pa
 	\item Charging and driving is fastest
 \end{enumerate}
 
-The intuition is then to find which speed we want to drive and whether or not we should charge before driving. However, it might not be possible to drive at all, given the limited battery of the EV. The optimal speed when passing the edge $(u_i, u_{i+1})$ without charging, can be found by solving this equation for $v$:
-\[B_{cur} - D(u_i, u_{i+1}) * R_{CO}(v) = 0\] 
-We call this speed $v_{opt}$. If $v_{opt}$ is lower than $v_{min}(e)$, the minimum speed of the edge, there is not enough energy in the battery to drive from $u_i$ to $u_{i+1}$ and thus the time is set to $-\infty$, indicating that just driving is not an option. If it is possible to drive the edge using only energy from the battery, the time it will take to pass the edge can be calculated as:
- \[T = \frac{D((u_i, u_{i+1}))}{v_{opt}} \] 
-The time spent passing an edge $(u_i, u_{i+1})$ while charging first, is given by the following equation:
+The intuition is then to find which speed we want to drive and whether or not we should charge before driving. However, it might not be possible to drive at all, given the limited battery of the EV. The optimal speed when passing the edge $e_i$ $(u_i, u_{i+1})$ without charging, can be found by solving this equation for $v$:
+\[B_{cur} - D(e_i) * R_{CO}(v) = 0\] 
+We call this speed $v_{opt}$. If $v_{opt}$ is lower than $v_{min}(e)$, the minimum speed of the edge, there is not enough energy in the battery to drive from $u_i$ to $u_{i+1}$ and thus the time is set to $\infty$, indicating that just driving is not an option. If it is possible to drive the edge using only energy from the battery, the time it will take to pass the edge can be calculated as:
+ \[T = \frac{D(e_i)}{v_{opt}} \] 
+The time spent passing edge $e_i$ $(u_i, u_{i+1})$ when charging and driving, is given by the following equation:
 
 \begin{equation*}
 \begin{aligned}
- & T(v,(u_i, u_{i+1})) = \frac{D((u_i, u_{i+1}))}{v} + \frac{R_{CO}(v) * D((u_i, u_{i+1})) - B_{cur}}{charge_{rate}(u_{i})}
+ & T(v,e_i) = \frac{D(e_i)}{v} + \frac{R_{CO}(v) * D(e_i) - B_{cur}}{charge_{rate}(u_{i})}
 \end{aligned}
 \end{equation*}\label{eq:drivingAndCharging}
 
@@ -34,7 +34,7 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 % \addplot[mark=*, domain=25:75] coordinates {(37,295)};
 \end{axis}
 \end{tikzpicture}% 
-\caption{In this instance of $T(v,(u_i, u_{i+1}))$, going from $u_i$ to $u_{i+1}$, we have a distance of $5 \si{\km}$ and a charge speed of $5 \si{\kW}$ on $u_i$. The optimal speed in this case is $42.12\si{\km\per\hour}$, and the total time is roughly 17 minutes to pass through the edge when driving and charging}
+\caption{In this instance of $T(v,e_i)$, going from $u_i$ to $u_{i+1}$, we have a distance of $5 \si{\km}$ and a charge speed of $5 \si{\kW}$ on $u_i$. The optimal speed in this case is $42.12\si{\km\per\hour}$, and the total time is roughly 17 minutes to pass through the edge when driving and charging}
 \end{figure}
 Having the two ways of deciding the time it takes to pass an edge, we can formulate an algorithm which decides how to drive each local road segment:
 
@@ -68,7 +68,12 @@ Having the two ways of deciding the time it takes to pass an edge, we can formul
 		\EndIf	
 	\EndWhile
 	\If{$energy - energy\_needed_{2}) < 0$}
-		\State $time_2 = (RN.D(e)/*v_{opt2}) + (energy\_needed_{2}/charge\_rate) + time\_added$
+		
+		\State $ time_2 = (RN.D(e)/*v_{opt2}) + (energy\_needed_{2}/charge\_rate) + time\_added$
+		\State \begin{flalign*}
+    			math &math math \\
+ 			 &more math
+			\end{flalign*}
 	\EndIf
 	%\if{$time_1 == \infty \And time_2 == \infty$}
 	%	\State \Return $\infty, NIL, \infty$
@@ -81,5 +86,5 @@ Having the two ways of deciding the time it takes to pass an edge, we can formul
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
 
-The $travel\_time$ function takes as input a road network $RN$, the two vertices which makes up the edge to be driven and the EV which drives the path. The function uses a few helping functions, the two solve functions $solve1$ and $solve2$ are solvers specified for each of the cases and returns the optimal speed of the EV within the speed limit of the edges driven. The function $getCS(u_1, u_2)$ returns a list of charge stations. If $u_1$ is a charge stations with a higher charge rate than any charge station previous to $u_1$ then $u_1$ is returned otherwise $u_1$ is append to the list of charging stations previous to $u_1$, this ensure that the charge station with the best charge rate is alway the 1st in the list of previous charge stations. The last function $updateCS(CS)$ finds a new best charge station and deletes all charge stations prior to it, this is need because the best charge station have been removed by $CS.remove(0)$. Lines 3-8 handles case 1: Driving using the battery already in the battery. Lines 9-26 handles case 2: Driving and charging. The while loop ranging from line 14 till 24 makes sure the EV always charge as much as possible at the best previous charge station, with out allowing over charging of the battery. The if statement on line 4 and 25 check is a valid solution to the case is found, if so it the time for the case is calculated. Lines 27-32 if a solution is found and it so which solution is better. Having a way to solve a single edge the time of the path can be decided by looping through all edges form $e_1$ to $e_n$
+The $travel\_time$ function takes as input a road network $RN$, the two vertices which makes up the edge to be driven and the EV which drives the path. The function uses a few helping functions, the two solve functions $solve1$ and $solve2$ are solvers specified for each of the cases and returns the optimal speed of the EV within the speed limit of the edges driven. The function $getCS(u_1)$ returns a list of charge stations. If $u_1$ is a charge stations with a higher charge rate than any charge station previous to $u_1$ then $u_1$ is returned otherwise $u_1$ is append to the list of charging stations previous to $u_1$, this ensure that the charge station with the best charge rate is alway the 1st in the list of previous charge stations. The last function $updateCS(CS)$ finds a new best charge station and deletes all charge stations prior to it, this is need because the best charge station have been removed by $CS.remove(0)$. Lines 3-8 handles case 1: Driving using the battery already in the battery. Lines 9-26 handles case 2: Driving and charging. The while loop ranging from line 14 till 24 makes sure the EV always charge as much as possible at the best previous charge station, with out allowing over charging of the battery. The if statement on line 4 and 25 check is a valid solution to the case is found, if so it the time for the case is calculated. Lines 27-32 if a solution is found and it so which solution is better. Having a way to solve a single edge the time of the path can be decided by looping through all edges form $e_1$ to $e_n$
 
