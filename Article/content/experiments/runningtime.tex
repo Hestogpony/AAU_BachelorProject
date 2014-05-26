@@ -6,19 +6,20 @@ Both the greedy heuristic and Dijkstra's algorithm were written in Python 2.7, i
 \begin{figure}[!htb]
 \centering
 \begin{tikzpicture}
-\begin{axis}[
+\begin{semilogyaxis}[
 	legend pos=north west,
 	xlabel=Problem size (vertices),
-	ylabel=Computation time (seconds)]
+	ylabel=Computation time (seconds),
+    ymax=1000]
 \addplot table [x=nodes, y=dijkstra, col sep=comma] {data/time_complexity.csv};
 	\addlegendentry{Dijkstra's x10}
 \addplot table [x=nodes, y=greedy, col sep=comma] {data/time_complexity.csv};
 	\addlegendentry{Greedy heuristic}
 \addplot table [x=nodes, y=naive, col sep=comma] {data/time_complexity.csv};
 	\addlegendentry{Naive}
-\end{axis}
+\end{semilogyaxis}
 \end{tikzpicture}
-\caption{Time spend computing a 300km route on different input sizes, Dijkstra's computation time is multiplied by 10 for visibility} 
+\caption{Time spend computing a 300km route on different input sizes. Logarithmic y-scale is used} 
 \label{fig:time_comp}
 \end{figure}
 

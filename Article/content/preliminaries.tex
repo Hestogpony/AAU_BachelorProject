@@ -12,14 +12,14 @@ $c$ is the charging rate of vertex $u$ given in kilo-Watt. A road intersection i
 
 An electric vehicle $EV=(R_{co},B_{cur},B_{cap})$ is a tuple given by three parameters: Its battery capacity $B_{cap}$ given in $\si{\kWh}$, Its consumption rate, $R_{co}$ given in kWh/km. The consumption rate is given by a function on the following form:
 \[ R_{co}(v)=av^2+bv+c \]
+where $v$ is the speed of the vehicle and the constants $a$, $b$ and $c$ are dependent on the specific instance of the vehicle. The current battery capacity of the vehicle in a given state, $B_{cur}$, is given by three parameters: the starting battery, the energy consumed and the energy charged. Lastly, we define a path $P$ of length k in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_k \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,k-1$.
 
-where $v$ is the speed of the vehicle and the constants $a$, $b$ and $c$ are dependent on the specific instance of the vehicle. \todo[inline]{Beskriv current battery bedre} The current battery capacity of the vehicle is defined by the starting battery, the energy consumed and the energy charged. However, we will abstract away from this and simply denote $B_{cur}$ as the current battery capacity of the vehicle at a given state. Lastly, we define a path $P$ of length k in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_k \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,k-1$.
-
-The fastest path problem, can now be defined in relation to this notation:
+The fastest path problem can now be defined in relation to this notation:
 
 \textbf{Definition 1:} Given a road network $RN=(V,E,D,v_{max},$\\ 
 $v_{min},R_{ch})$ and a vehicle $EV=(R_{co},B_{cur},B_{cap})$. The fastest path 
-from $s$ to $t$, is defined as the path $P = \langle s,u_1,u_2,\dots,t \rangle$ where the time spent driving and charging is minimal.
+from $s$ to $t$, is defined as the path $P = \langle s,u_1,u_2,\dots,t \rangle$ where the time spent driving and charging is minimal. 
+ 
 
 
 
