@@ -6,6 +6,7 @@ from fastest_path.vehicle import EV
 #from fastest_path.dijkstra import single_source_dijkstra_path_length
 from fastest_path.roadnetwork import RoadNetwork
 from fastest_path.rn_algorithms import fastest_path_greedy
+from linearprogramming import linearProgramming
 from test_utils import *
 import subprocess
 import time
@@ -169,11 +170,15 @@ def experiment_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterat
             _, time = naive_path(rn, s, t, ev)
             naive_t += time if time!=float('inf') else 0
             naive_f += 0 if time!=float('inf') else 1
+            linear_t1, cur = linearProgramming(rn, _, ev, ev.curbat)
+
 
             ### Greedy
             _, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
             greedy_t += time if time!=float('inf') else 0
             greedy_f += 0 if time!=float('inf') else 1
+            linear_t2, cur = linearProgramming(rn, _, ev, ev.curbat)
+            print naive_t, linear_t1, greedy_t, linear_t2
 
         with open(file_name, 'a') as f:
             f.write('%s,%s,%s,%s,%s\n' % (
@@ -195,5 +200,5 @@ ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.0460
 
 #experiment_charge_rate(ev, 5, 30, 300, 30, 5)
 
-experiment_driving_dist(ev, 30, 300, 550, 50, 1)
+experiment_driving_dist(ev, 10, 300, 550, 50, 1)
 
