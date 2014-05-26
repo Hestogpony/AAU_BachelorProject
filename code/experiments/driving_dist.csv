@@ -142,6 +142,30 @@ driving distance, naive-time, naive-fail, greedy-time, greedy-fail
 TEST SIMON:
 settings: 20 km CS density, 3 iteration(s)
 driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+<<<<<<< HEAD
+300,4.74507179615,0,inf,1
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+300,4.79363601446,0,inf,1
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+300,4.05331283233,0,3.97112635449,0
+350,4.69564957685,0,4.49760319698,0
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+300,6.13573522338,0,3.95726887542,0
+350,5.12210402256,0,4.06725849186,0
+400,6.03683687487,0,4.63554728738,0
+450,8.87653687576,0,5.69500894751,0
+500,8.89642515453,0,6.11165596012,0
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+300,4.55937194415,0,3.81053212167,0
+350,5.76061454072,0,4.63395685765,0
+400,7.05385292521,0,4.81102525795,0
+=======
 50,0.667048576261,0,0.666347585083,0
 100,1.20332963456,0,1.12055216144,0
 150,1.98355961687,0,1.85916148284,0
@@ -153,3 +177,4 @@ driving distance, naive-time, naive-fail, greedy-time, greedy-fail
 450,7.16853475312,0,6.14548751905,0
 500,7.80944362454,0,6.82999627664,0
 550,9.09733629689,0,7.79275600911,0
+>>>>>>> dc784219a899e4accfcfb284cdb920b7fe189871
