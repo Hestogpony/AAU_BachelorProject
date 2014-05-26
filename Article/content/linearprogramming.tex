@@ -3,16 +3,20 @@
 In this section an approach to finding a global optimal solution to the optimisation problem proposed in Section \ref{sec:optiprob}. The optimisation problem is a non-linear optimisation problem, due to \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ being non-linear functions. The problem can however be reformulated into a linear programming problem by reformulating \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ as a piecewise-linear functions. Precisely the problem is modelled as a mixed integer problem (MIP) problem. This section introduces the constraints necessary to solve the problem as a MIP problem and thereby end up at an almost global optimal solution. The quality of the solution depends on how many pieces the non-linear function is split into. 
 
 \subsubsection{Linearization}
-To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the starting point of each line segment and a set of unknown variables which will be the line segments that produces the best result. The unknown variable is called SL(selected line) and it is two dimensional the first dimension is the the number of function to be solved and the second is the amount of pieces the function is split into. This lead to the following constraints.   
+To handle the linearization three new sets are introduced, a set of known variables which is the pre computed function of each linear piece, and another set of known variables which is the starting point of each line segment and a set of unknown variables which will be the line segments that produces the best result. The unknown variable is called SL(selected line) and it is two dimensional the first dimension is the the number of function to be solved and the second is the amount of pieces the function is split into. This lead to the following constraints.  
 
 Exactly one line segment needs to be selected for all line segments. 
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; \sum_{j=1}^{m} SL_{i,j} = 1
 \end{equation*}
 
-$n$ is the length of the path, $m$ is the amount of lines the functions \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ are split into and $\sum_{j=1}^{m} SL_{i,j} = 1$ ensures that only one line segments can be selected.
-Being that exactly one line segment needs to be chosen. In other words, SL needs to be binary values. 
+\begin{center}
+\includegraphics[scale=0.33]{images/linearization_example}
+\label{fig:linearization_example}
+\end{center}
 
+$n$ is the length of the path, $m$ is the amount of lines the functions \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ are split into and $\sum_{j=1}^{m} SL_{i,j} = 1$ ensures that only one line segments can be selected.
+Being that exactly one line segment needs to be chosen. In other words, SL needs to be binary values.
 \begin{equation*}
 \forall_{i\in1 \dots n, j \in 1 \dots m}: \; \; SL_{i,j} \in{0,1} 
 \end{equation*}
