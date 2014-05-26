@@ -18,7 +18,6 @@ This section introduces a formal description of the fastest path problem, modell
 \end{figure}
 
 The objective of the optimisation problem is to minimise the time spent driving and the time spent charging on a path from $s$ to $t$. The total time spend driving from $s$ to $t$ can be expressed as follows:
-
 \begin{equation*}
 \begin{aligned} &
 {\text{min:}}
@@ -44,7 +43,6 @@ $ES(e_i)$, the energy spent driving $e_i$, is calculated by multiplying the dist
 
 The EV can not pass an edge without having the required energy. The sum of energy acquired at the charging stations prior to the edge must be larger then the sum of energy used on the edges prior to the edge plus the energy the edge needs. As shown in \Cref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices.
 The constraint is formulated as such:
-\todo[inline]{Beskriv hvorfor er to næsten identiske constraints nødvendigt?}
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - ES(e_j) \leq B_{max}
 \end{equation*}\label{eq:energyreq}
