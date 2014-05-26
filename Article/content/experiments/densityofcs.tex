@@ -1,5 +1,5 @@
 \subsection{Experiment: Density of Charging Stations}
-In this experiment, we wish to find the density of charge station, for which the greedy heuristic algorithm works best. For this experiment, the density of charging stations are measured in the minimum distance between two charging stations. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in Denmark. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
+In this experiment, we wish to find the density of charge station, for which the greedy heuristic algorithm works best, for reference the naive time is included. For this experiment, the density of charging stations are measured in the minimum distance between two charging stations. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in Denmark. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
 
 \begin{table}[!htb]
 \centering
@@ -19,22 +19,16 @@ In this experiment, we wish to find the density of charge station, for which the
 \begin{axis}[
     xlabel=CS Density km,
     ylabel=Path time (hours)]
-\addplot table [x=CS-Density, y=greedy1, col sep=comma] {data/cs_density.csv};
-\addlegendentry{e1}
-\addplot table [x=CS-Density, y=greedy2, col sep=comma] {data/cs_density.csv};
-\addlegendentry{e2}
-\addplot table [x=CS-Density, y=greedy3, col sep=comma] {data/cs_density.csv};
-\addlegendentry{e3}
-\addplot table [x=CS-Density, y=greedy4, col sep=comma] {data/cs_density.csv};
-\addlegendentry{e4}
-\addplot table [x=CS-Density, y=greedy5, col sep=comma] {data/cs_density.csv};
-\addlegendentry{e5}
+\addplot table [x=CS-Density, y=naive-time, col sep=comma] {data/cs_density.csv};
+\addlegendentry{Naive}
+\addplot table [x=CS-Density, y=greedy-time, col sep=comma] {data/cs_density.csv};
+\addlegendentry{Greedy}
 \end{axis}
 \end{tikzpicture}
-\caption{Charging station density experiment results. Gaps imply no solution was found} 
-\label{fig:cs_desnity}
+\caption{Charging station density experiment results} 
+\label{fig:cs_density}
 \end{figure}
 
 
-Five experiments: e1,e2,e3,e4,e5 were conducted for the greedy algorithm. Samples were taken in increments of $3\si{km}$. In Figure \ref{fig:cs_desnity} one can see the results. Gaps imply no solution was found, in total there was 34 out of 80 fails. Interestingly, as we remove more and more charge stations, the greedy algorithm seems to stay relatively constant, with a few jumps here and there. $e1$ only collected two points and then it was stuck. Apparently the path taken lead the greedy algorithm in to a corner before being able to visit any charging stations, this seems to be a very rare case. From the rest of the points we can conclude that the algorithm works mostly with a density of charging stations below $40\si{km}$
+Five experiments were conducted for the greedy algorithm. Samples were taken in increments of $3\si{km}$. In Figure \ref{fig:cs_density} one can see the results, which is an average of all five experiments, fails were not counted in the average, in total there was $34$ out of $80$, $42.5\%$ fails for the greedy and $0$ for the naive. Interestingly, as we remove more and more charge stations, the greedy algorithm seems to stay relatively constant, with a few jumps here and there. Whereas the naive is very much affected by increasing the amount of charging stations. From the rest of the points we can conclude that the algorithm works mostly with a density of charging stations below $40\si{km}$
 
