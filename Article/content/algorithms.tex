@@ -1,4 +1,4 @@
-\section{Algorithms}
+\section{Algorithms}\label{sec:algo}
 Now that we are able to solve a path optimally but also heuristically, we are ready to describe a full algorithm for solving the fastest path problem. 
 
 An approach for solving the full problem, for the whole road network would be to iterate over every single simple path(a path without cycles) in the graph and figure out the best way to travel that path according to either the travel\_time procedure described in Section \ref{sec:greedy} or the Linear Programming model described in Section \ref{sec:LP}. However, doing this would be way too complex as the number of simple paths in a graph can be as much as $O(n!)$ which is too much.
