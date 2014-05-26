@@ -56,7 +56,7 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
         linesA += lineA + "\n"
         linesB += lineB + "\n"
 
-    output_file = open("LPData.dat", "w")
+    output_file = open("LPPData.dat", "w")
     output_file.write(n)
     output_file.write(m)
     output_file.write(initialBat)
@@ -70,12 +70,12 @@ def LPprinter(ChargeConstants, edgeDists, edgeSpeeds, Precision, ev):
     output_file.write(chargeConstants + ";\n")
 
     output_file.close()
-    proc = subprocess.Popen("glpsol --model fastestPathLinearization.mod --data LPData.dat", stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen("glpsol --model fastestPathLinearization.mod --data LPPData.dat", stdout=subprocess.PIPE, shell=True)
 
     pathTime = float('inf')
     pathCurbat = 0
     for line in iter(proc.stdout.readline, ''):
-        #print line
+        print line
         try:
             num = float(line.rstrip())
             if pathTime == float('inf'):
@@ -108,6 +108,6 @@ def linearProgramming(G, nodes, ev, curbat):
     #print ChargeConstants, len(ChargeConstants)
     #print edgeSpeeds, len(edgeSpeeds)
     #print edgeDists, len(edgeDists)
-    time, newcurbat = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 20, ev)
+    time, newcurbat = LPprinter(ChargeConstants, edgeDists, edgeSpeeds, 10, ev)
     return time, newcurbat
     # print G.node[preNode]['charge_rate'], G.node[curNode]['charge_rate']
