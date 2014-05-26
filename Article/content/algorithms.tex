@@ -6,7 +6,7 @@ An approach for solving the full problem, for the whole road network would be to
 Instead, one can utilize existing graph algorithms for reducing the number of paths being looked at. e.g. in Dijkstra's algorithm, the number of paths is substantially reduced by relaxing pairs of nodes, effectively reducing the number of paths substantially. This is possible, because the shortest path problem has an optimal substructure. Unfortunately, the fastest path problem does not have such a substructure.
 
 Along with the travel\_time procedure, which heuristically solve an edge local optimally, we can now utilize Dijkstra's algorithm for solving the fastest path problem. Instead of relaxing on the distance of edges, we relax on the time being calculated in the travel\_time procedure. Note that the Linear Programming could theoretically also be applied here. Though it works on a full path one can apply linear programming for each edge along with the predecessor chain, thus solving intermediate paths in a local-optimal manner. This will certainly not give the global optimal solution, but obviously better than using travel\_time.
-\begin{algorithmic}
+\begin{algorithmic}[1]
 \Function{GreedyHeuristic}{$RN,s,t,EV$}
     \ForAll{$v \in RN.V$} 
         \State $v.time = \infty$
