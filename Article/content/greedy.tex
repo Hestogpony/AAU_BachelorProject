@@ -37,8 +37,9 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 \end{figure}
 Having the two ways of deciding the time it takes to pass an edge, we can formulate an algorithm which decides how to drive each local road segment:
 
+
 \todo[inline]{FIX SYNTAX}
-\begin{algorithm}
+\begin{algorithm}[!htb]
  \begin{algorithmic}[1]
   \Function{travel\_time}{$RN, u_1, u_2, EV$}
   	\State $e = (u_1, u_2)$
@@ -86,6 +87,6 @@ The $travel\_time$ function takes as input a road network $RN$, the two vertices
 
 The last function $updateCS(CS)$ finds a new best charging station and deletes all charging stations prior to it, this is need because the best charging station have been removed by $CS.remove(0)$. Lines 3-8 handles case 1: Driving using the battery already in the battery. Lines 9-26 handles case 2: Charging and driving. The while loop ranging from line 14 till 24 makes sure the EV always charge as much as possible, at the best previous charging station, but without allowing overcharging. The if statement on line 4 and 25 checks if a valid solution to the case is found, if so, the time for the case is calculated. Lines 27-32 checks if a solution is found and if so, which solution is better. Having a way to solve a single edge, the time of the path can be decided by looping through all edges form $e_1$ to $e_n$
 
-The travel\_time procedure can then be used to solve a path. One simply has to call it for each consecutive edge.
+The $travel\_time$ procedure can then be used to solve a path. One simply has to call it for each consecutive edge.
 
 
