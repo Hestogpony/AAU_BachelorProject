@@ -1,5 +1,5 @@
 \subsection{Greedy Heuristic Path}\label{sec:greedy}
-As mentioned in (ref LP) finding an optimal solution of a path is a NP-complete problem. In this section a greedy heuristic approach is taken which solves the problem one edge at a time, instead of trying to give a solution to an entire path. The problem then becomes, which speed must we use for the current edge, in the interval of $v_{min}$ and $v_{max}$.
+As mentioned in previous section finding an optimal solution to a path is an NP-complete problem. In this section a greedy heuristic approach is taken which solves the problem one edge at a time, instead of trying to give a solution to an entire path. The problem then becomes, which speed must we use for the current edge, in the interval of $v_{min}$ and $v_{max}$.
 
 Given a path there are two probable cases when choosing the optimal speed to pass an edge:
 \begin{enumerate}
@@ -16,7 +16,7 @@ The time spent passing edge $e_i$ when charging and driving, is given by the fol
 \begin{aligned}
  & T(v,e_i) = \frac{D(e_i)}{v} + \frac{R_{CO}(v) * D(e_i) - B_{cur}}{charge_{rate}(u_{i})}
 \end{aligned}
-\end{equation*}\label{eq:drivingAndCharging}
+\end{equation*}
 Where $v$ is the speed of the vehicle, $D(u_i, u_{i+1})$ is the distance between vertices $u_i$ and $u_{i+1}$, $R_{CO}(v)$ is the consumption rate of the EV, $B_{cur}$ is the current battery of the vehicle. Since we only charge exactly enough to pass an edge, there might be charging stations previous to $u_i$ which we could have charged more at, without exceeding the battery capacity. Therefore we want go back in history and charge at the best previous charging stations, until we have enough energy to pass edge $e_i$. This is done by $charge_{rate}(u_i)$ which gives the charge rate of the best charging station previous to $u_{i}$ or the charge rate of $u_i$ if $u_i$ is a better charging station than any of the charging stations prior to $u_i$. The charging stations that can be used, is of course only those which are within the EV's battery range.
 
 The above equation yields a function of the form: $av^2 + bv + c$, due to the fact that $R_{CO}(v)$ is a quadratic function. $a$, $b$ and $c$ are some constants which are given by the instance of the vehicle. Represented in a Cartesian coordinate system, $T(v,(u_i, u_{i+1})))$ is a parabola, as can be seen in Figure \ref{fig:graph}, note that the graph is only defined for positive speeds larger than $0$ and can only be calculated if $charge_{rate}(u_{i+1})$ is larger than $0$. On the x-axis is the speed of the vehicle and on the y-axis is the time spent. The turning point of the graph represents the optimal speed to drive for the given edge, denoted as $v_{opt}(e)$. The turning point is easily calculated by finding a tangent line with a slope of $0$. If $v_{opt}(e)$ is smaller than $v_{min}(e)$, then $v_{min}(e)$ defines the optimal speed for the edge. Similarly if $v_{opt}(e)$ is larger than $v_{max}(e)$, $v_{max}(e)$ defines the optimal speed for the edge. If $v_{opt}(e) = v_{min}(e)$ there might be a possibility that driving and charging is not an option. 
@@ -37,13 +37,11 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 \end{figure}
 Having the two ways of deciding the time it takes to pass an edge, we can formulate an algorithm which decides how to drive each local road segment:
 
-
-\todo[inline]{FIX SYNTAX}
 \begin{algorithm}[!htb]
  \begin{algorithmic}[1]
   \Function{travel\_time}{$RN, u_1, u_2, EV$}
   	\State $e = (u_1, u_2)$
-  	\State $v_{opt1} = solve1\langle v, e, EV.B_{cur}-RN.D(e)*EV.R_{CO}(v)\rangle$
+  	\State $v_{opt1} = solve1(v, e, EV.B_{cur}-RN.D(e)*EV.R_{CO}(v))$
   	\If{$ u_1.B_{cur} - RN.D(e)*EV.R_{CO}(v_{opt1}) < 0 $}
   		\State $time_1 = \infty$
   	\Else
@@ -59,22 +57,22 @@ Having the two ways of deciding the time it takes to pass an edge, we can formul
   		\State $best_{CS} = extractmax(CS)$
   		\State $B_{possible} = best_{CS}.B_{possible}$
   		\State $charge\_rate = RN.R_{CH}(best_{CS})$
-  		\State $v_{opt2} = solve2 \langle v, e,  RN.D(e)/v + (RN.D(e) * EV.R_{CO}(v)-energy)/charge\_rate) \rangle$] 
+  		\State $v_{opt2} = solve2 (v, e,  RN.D(e)/v + (RN.D(e) * EV.R_{CO}(v)-energy)/charge\_rate))$ 
   		\State $energy\_needed_{2} = RN.D(e)*EV.R_{CO}(v_{opt2})$
   		\State $energy = energy + B_{possible}$
   		\If{$energy - energy\_needed_{2}) < 0$}
-  			\State $time\_added = time\_added + B_{possible}/charge\_rate$
+  			\State $time\_added = time\_added + (B_{possible} / charge\_rate)$
   			\State $CS.remove(0)$
   			\State $updateCS(CS)$
   		\EndIf	
   	\EndWhile
-  	\If{$energy - energy\_needed_{2}) < 0$}
+  	\If{$(energy - energy\_needed_{2}) < 0$}
   		\State $time_2 = (RN.D(e)/v_{opt2}) + (energy\_needed_{2}/charge\_rate) + time\_added$
   	\EndIf
   	\If{$time_1 = \infty \And time_2 = \infty$}
   		\State \Return $\infty, NIL, \infty$
   	\EndIf
-  	\If{$time_1 <= time_2$}
+  	\If{$time_1 \leq time_2$}
   		\State \Return $time_1, CS, energy\_used_1$
   	\Else
   		\State \Return $time_2, CS, energy\_used_2$
@@ -82,6 +80,8 @@ Having the two ways of deciding the time it takes to pass an edge, we can formul
   \EndFunction
   \end{algorithmic}\label{alg:fastest_path}
 \end{algorithm}
+
+\todo[inline]{This algorithm... really?}
 
 The $travel\_time$ function takes as input a road network $RN$, the two vertices which makes up the edge to be driven and the EV which is driving. The procedure utilizes a few helping functions, which we have not included for simplicity, we will however briefly explain them. The two solve functions $solve1$ and $solve2$ are function solvers specified for each of the cases and returns the optimal speed of the EV within the speed limit of the edges driven. The function $getCS(u_1)$ returns a list of charging stations. If $u_1$ is a charging stations with a higher charge rate than any charging station previous to $u_1$ then $u_1$ is returned. Otherwise $u_1$ is append to the list of charging stations previous to $u_1$, this ensure that the charging station with the best charge rate is always the first in the list of previous charging stations. 
 
