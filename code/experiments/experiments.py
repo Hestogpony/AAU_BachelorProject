@@ -248,7 +248,7 @@ def lp_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, fi
                                               ))
 
 
-ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
+ev = EV(50, 10, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.04602*x**2 +  0.6591*x + 173.1174)* 10**(-3)))
 
 #experiment_cs_density(ev, 1, 300)
 
@@ -258,4 +258,4 @@ ev = EV(50, 50, lambda x: (0.019*x**2 - 0.770*x + 184.4) * 10**(-3))  # ((0.0460
 
 #experiment_charge_rate(ev, 5, 30, 300, 30, 5)
 
-lp_driving_dist(ev, 20, 400, 450, 50, 1)
+lp_driving_dist(ev, 10, 400, 450, 50, 1)
