@@ -1,4 +1,4 @@
-\subsection{Greedy Heuristic Quality}
+\subsection{Quality Assessment}
 We will shortly investigate how well the greedy heuristic algorithm solves \emph{a path}. We are only able to test how well a path is passed (in terms of speed and charging), we can not investigate how good the actual path chosen is, this is simply too time demanding for the entire road network.
 
 To test this we implemented the LP described in Section \ref{sec:optiprob} using an existing LP solver\footnote{The LP tool used is the GNU Linear Programming Kit (GLPK). GLPK is intended for solving large-scale LP problems, mixed integer programming problems \cite{glpk}}. In our implementation we used 10 lines for linearization of the function. 
