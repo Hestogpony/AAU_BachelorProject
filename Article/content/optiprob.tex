@@ -35,7 +35,7 @@ This constraint is split into two constraints. The first constraint ensures that
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) * CT_{u_i}
 \end{equation*}
-$EA(u_i)$ is the energy acquired at the $i^{\text{\tiny th}}$ vertex of the path. The energy acquired is calculated as charge speed($R_{CH}(u_i)$) multiplied by charge time($CT_{u_i}$)
+$EA(u_i)$ is the energy acquired at the $i^{\text{th}}$ vertex of the path. The energy acquired is calculated as charge speed($R_{CH}(u_i)$) multiplied by charge time($CT_{u_i}$)
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; ES(e_i) = D(e_i)*R_{CO}(v_{e_i})
 \end{equation*}
@@ -46,7 +46,7 @@ The constraint is formulated as such:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - ES(e_j) \leq B_{max}
 \end{equation*}\label{eq:energyreq}
-$B_{cur}$ is the battery level of the EV at the start of the path, $ \sum_{j=1}^{i} EA(u_j)$ is the amount of energy acquired on the $j^{\text{\tiny th}}$ vertex including all vertices prior to vertex $i$. $\sum_{j=1}^{i} EA(u_j)$ is the energy spend on edge $j$ and as well as all edges prior to the $j^{\text{\tiny th}}$ edge.
+$B_{cur}$ is the battery level of the EV at the start of the path, $ \sum_{j=1}^{i} EA(u_j)$ is the amount of energy acquired on the $j^{\text{th}}$ vertex including all vertices prior to vertex $i$. $\sum_{j=1}^{i} EA(u_j)$ is the energy spend on edge $j$ and as well as all edges prior to the $j^{\text{th}}$ edge.
 
 The following constraints ensures that the EV is not overcharged at any charging station. It is almost exactly like the previous constraint, however it looks one charging station further, to ensure the energy is balanced both before and after passing an edge:
 
