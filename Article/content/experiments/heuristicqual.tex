@@ -1,4 +1,4 @@
-\subsection{Greedy Heuristic Quality}
+\subsection{Quality Assessment}
 We will shortly investigate how well the greedy heuristic algorithm solves \emph{a path}. We are only able to test how well a path is passed (in terms of speed and charging), we can not investigate how good the actual path chosen is, this is simply too time demanding for the entire road network.
 
 To test this we implemented the LP described in Section \ref{sec:optiprob} using an existing LP solver\footnote{The LP tool used is the GNU Linear Programming Kit (GLPK). GLPK is intended for solving large-scale LP problems, mixed integer programming problems \cite{glpk}}. In our implementation we used 10 lines for linearization of the function. 
@@ -15,4 +15,4 @@ Route-time & 7.461& 5.684 & 5.238 & 5.228\\
 \label{tab:LP}
 \end{table}
 
-Clearly the LP solving of a path is better, as shown in Table \ref{tab:LP}. Interestingly there is only a difference of $1.04\%$ in the greedy solution of a path compared with LP. Also, it is interesting to see that solving the path chosen by the naive algorithm, with LP achieves a better time, but \emph{not better} than the greedy route time. This means that the path chosen plays a significant role in the overall time.
+Clearly the LP solving of a path is better, as shown in Table \ref{tab:LP}. Interestingly there is only a difference of $0.198\%$ in the greedy solution of a path compared with LP. Also, it is interesting to see that solving the path chosen by the naive algorithm, with LP achieves a better time, but \emph{not better} than the greedy route time. The difference between Naive-LP and greedy is $7.845\%$. This means that the path chosen plays a significant role in the overall time.

@@ -1,19 +1,18 @@
 \section{Experiments}
 \label{sec:experiments}
-This section presents the experiments for the greedy heuristic algorithm. Our linear programming solution was implemented with GLPK as a test, but the practical usage of it was not found plausible, due to overwhelming running times. Further experiments were therefore omitted. We compare the performance of the greedy heuristic to a naive algorithm, which is presented in section \ref{sub:naivealgorithm}, on five experiments. The experiments have been selected to illustrate the effects from variables in the route planning problem, including: route distance to drive, charge rate on charging stations, consumption rate of the EV, density of charging stations in the road network and the input size.
-\todo[inline]{revise this intro so it correspond to what we acctaully do}
+This section presents the experiments for the greedy heuristic algorithm. Our linear programming solution was implemented, such that we can test the quality of the greedy choices. We chose not to use LP along with Dijkstras algorithm, because it was too slow. We compare the performance of the greedy heuristic to a naive algorithm, which is presented in section \ref{sub:naivealgorithm}, on five experiments. The experiments have been selected to illustrate the effects from variables in the route planning problem, including: route distance to drive, charge rate on charging stations, consumption rate of the EV, density of charging stations in the road network and the input size.
 
-To show the effect of the different parameters, we a default setting for all the experiments. The settings are as follows:
+The default settings for all the experiments are as follows:
 \begin{itemize}
-     \item Route distance to drive: $300 \si{km}$
-     \item Charge rates on charging stations: randomly generated between $10-100 \si{kW}$
+     \item Route distance: $300 \si{km}$
+     \item Charge rates: randomly generated between $10-100 \si{kW}$
      \item EV consumption rate: $0.019v^2-0.77*v+184.4$ $\si{Wh\per km}$, where $v$ is the speed (corresponds approximately to Tesla's Model S\cite{teslacon})
-     \item EV max battery capacity: 50 $\si{kWh}$
+     \item EV battery capacity: 50 $\si{kWh}$
 	 \item EV initial battery: 50 $\si{kWh}$
      \item Density of charging stations: minimum distance of $20 \si{km}$ between each charging station)
  \end{itemize} 
 
-The route distance, consumption rate and battery capacity is chosen to force the EV to charge in most cases. The charging station density is chosen to have a reliable infrastructure, with an even spread of charging stations. In the base case we have 326 stations, when in fact Denmark have more than 4000\cite{Globalevoutlook}. The average charge rate is presumably a lot lower in reality, as very few charging stations are fast chargers.
+The route distance, consumption rate and battery capacity is chosen to force the EV to charge in most cases. The charging station density is chosen to have a reliable infrastructure, with an even spread of charging stations. In the default settings we have 326 stations, when in fact Denmark have more than 4000\cite{Globalevoutlook}. 
 
 We have used the drivable part of Denmark as a baseline for the experiments. The dataset features:
 \begin{itemize}
@@ -32,6 +31,8 @@ We have used the drivable part of Denmark as a baseline for the experiments. The
 \input{content/experiments/densityofcs}
 
 \input{content/experiments/runningtime}
+
+\input{content/experiments/heuristicqual}
 
 
 
