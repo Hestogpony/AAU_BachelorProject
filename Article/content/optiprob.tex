@@ -35,11 +35,11 @@ This constraint is split into two constraints. The first constraint ensures that
 
 If we choose to charge at a vertex, the energy acquired is given by $EA(u_i)$ for the $i^{\text{th}}$ vertex of the path. The energy acquired is calculated as charge speed($R_{CH}(u_i)$) multiplied by charge time($CT_{u_i}$)
 \begin{equation*}
-\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) * CT_{u_i}
+\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}
 \end{equation*}
 The energy spent driving edge $e_i$ is given by $ES(e_i)$ and is calculated by multiplying the distance $D(e_i)$ by the consumption rate of the vehicle $R_{CO}(v_{e_i}))$ at speed $v_{e_i}$.
 \begin{equation*}
-\forall_{i\in1 \dots n }:\; ES(e_i) = D(e_i)*R_{CO}(v_{e_i})
+\forall_{i\in1 \dots n }:\; ES(e_i) = D(e_i) \times R_{CO}(v_{e_i})
 \end{equation*}
 Ignoring that the EV might have some battery at the beginning of a path, the EV should not be allowed to pass an edge without having charged the required energy to do so. The sum of energy acquired at the charging stations prior to the current edge must therefore be larger than the sum of energy spent on the edges prior to the current edge, including the energy needed to pass the current edge. As shown in \Cref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices. Taking the EV's battery into account, $B_{cur}$ is defined as the battery level of the EV at the beginning of a path, $ \sum_{j=1}^{i} EA(u_j)$ is the combined amount of energy acquired on the path at the $i^{\text{th}}$ vertex. $\sum_{j=1}^{i} EA(u_j)$ is the combined energy spend on the path at the $i^{\text{th}}$ edge. Combining these we get the following constraint:
 \begin{equation*}
@@ -56,4 +56,4 @@ Finally, it should not be possible for the EV to spend a negative amount of time
 \forall_{i\in1 \dots n }:\; 0 \leq CT_{u_i}
 \end{equation*}
 The optimisation problem is a NP-complete problem, as it is a non-linear optimisation problem \cite{Murty1987}. The reason it's non-linear is the fact that
-the consumption rate of an EV forms a quadratic function and the length over speed also forms a non-linear function. \todo[inline]{Why do the reader need to know this?}     
+the consumption rate of an EV forms a quadratic function and the length over speed also forms a non-linear function.

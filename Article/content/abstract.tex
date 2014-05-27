@@ -1,13 +1,13 @@
 \begin{abstract}
+In the future electric vehicles will play an increasingly important role in the traffic and due to the 
+limited recharging possibilities, as well as long recharging time of electric vehicles, the requirement for a different routing system emerges.
 
 We describe a greedy heuristic route planning algorithm that compute time-optimised paths in a road network,
-for electric vehicles (EVs). In the future EVs will play an increasingly important role in the traffic and due to the 
-limited recharging possibilities, as well as long recharging time of EVs, the requirement for a different routing system emerges. Unlike many of today's navigation systems, the greedy heuristic algorithm presented in this paper takes both the drive time and the recharge time into account. We further introduce a Linear Programming (LP) approach, which can be combined with the greedy heuristic algorithm to compute a faster path, at the cost of computation time.
+for electric vehicles. Unlike many of today's navigation systems, the greedy heuristic algorithm presented in this paper takes both the drive time and the recharge time into account. 
+We further introduce a linear programming solution, for solving simple paths optimally. For an entire road network, the linear programming solution is not plausible in practice. Instead, the linear programming solution is used for evaluating the quality of the route time outputted by the greedy heuristic algorithm.
 
-We compare the performance of the greedy heuristic algorithm with a naive algorithm on a road
-network extracted from OpenStreetMap (OSM). The road network contains all Danish roads and speed limits. We modify the road network with charging stations at various positions and charge rates. We compare the performance of the algorithms 
-on multiple experiments, which shows us..... 
+We extract map data from OpenStreetMap to create a road network for experimentation. We analyse the route time and the time complexity of the greedy heuristic algorithm through various experiments. This is done to asses the importance of parameters such as the charge rate on charging stations and driving distance. 
 
-\todo[inline]{HOW DID IT PERFORM?!}    
+From the quality assessment we can conclude that the greedy heuristic algorithm's route time of a path is $0.1\%$ worse than an approximately optimal route time.
 
 \end{abstract}
