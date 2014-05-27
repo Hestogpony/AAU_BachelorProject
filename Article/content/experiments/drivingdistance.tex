@@ -1,5 +1,7 @@
 \subsection{Experiment: Driving Distance}
 
+\todo[inline]{Revise this entire section so it follows the style of Experiments: Density of Charging Stations}
+
 We compare the performance of the greedy heuristic algorithm to the naive algorithm with the driving distance as the changing parameter. The longer distances the EV has to travel the more significant will a good path selection heuristic become. The initial distance is set to $50 \si{\km}$ for the experiment and thereafter increased by $50 \si{\km}$ for each iteration in the experiment. With full battery the EV has a range of approximately $123 \si{\km}$ at max speed ($130 \si{\km\per\hour}$). This means we shouldn't expect much difference between the time the greedy heuristic algorithm uses and the time the naive algorithm uses to pass a path in the first couple of iterations, because no charging stations has to be visited.
 
 The results of the experiment is illustrated in figure \ref{fig:charge_rate}.  

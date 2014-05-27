@@ -17,19 +17,20 @@ This section introduces a formal description of the fastest path problem, modell
     \caption{Example of a path consisting of $n$ edges} \label{fig:pathexample}
 \end{figure}
 
-The objective of the optimisation problem is to minimise the time spent driving and the time spent charging on a path. The total time spent driving a path can be expressed as follows:
+The objective of the optimisation problem is to minimise the time spent driving and the time spent charging on a path. The total time spent driving a path can be expressed as the following objective function:
 \begin{equation*}
 \begin{aligned} &
 {\text{min:}}
 & & \sum_{i=1}^{n} \left(\frac{D(e_i)}{v_{e_i}} + CT_{u_i} \right)\\
 \end{aligned}
 \end{equation*}\label{eq:objfunction}
-Where $D(e_i)$ is the distance of road segment $i$, $v_{e_i}$ is the speed driven on road segment $i$ and $CT_{u_i}$ is the time spent charging at the $i^{\text{th}}$ vertex of the path. It should be clear that the objective function of this problem is concerned with time, being that \( D(e_i)/v_{e_i} \) is the time spent driving and $CT_{u_i}$ is the time spent charging. The objective function has two unknown variables $v_{e_i}$ and $CT_{u_i}$. The unknown variables of the objective function are constrained by the physical properties of the $EV$ driving the path. We will now ensure the physical constraints are not broken.
+Where $D(e_i)$ is the distance of road segment $i$, $v_{e_i}$ is the speed driven on road segment $i$ and $CT_{u_i}$ is the time spent charging at the $i^{\text{th}}$ vertex of the path. In Figure \ref{fig:pathexample} $u_1 = s$ and $u_{n+1} = t$. It should be clear that the objective function of this problem is concerned with time, being that \( D(e_i)/v_{e_i} \) is the time spent driving and $CT_{u_i}$ is the time spent charging. The objective function has two unknown variables $v_{e_i}$ and $CT_{u_i}$. The unknown variables of the objective function are constrained by the physical properties of the $EV$ driving the path. We will now ensure the physical constraints are not broken.
 
-On every edge the speed of the EV must be within the speed limits. $v_{e_i}$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed. Thus, the first constraint is formulated as:
+On every edge the speed of the EV must be within the speed limits. $v_{e_i}$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed of edge $e_i$. Thus, the first constraint is formulated as:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;v_{min}(e_i) \leq v_{e_i} \leq v_{max}(e_i)
 \end{equation*}
+\todo[inline]{Move the way we introduce variables around}
 Furthermore, the battery level of the EV, must be between $0$ and $B_{max}$ (the battery capacity of the vehicle).
 This constraint is split into two constraints. The first constraint ensures that the EV can not pass an edge, without having the required energy. The second constraint ensures that the EV can not overcharge at any charging station.
 \begin{equation*}
@@ -41,21 +42,19 @@ $EA(u_i)$ is the energy acquired at the $i^{\text{\tiny th}}$ vertex of the path
 \end{equation*}
 $ES(e_i)$, the energy spent driving $e_i$, is calculated by multiplying the distance $D(e_i)$ by the consumption rate of the vehicle $R_{CO}(v_{e_i}))$ at speed $v_{e_i}$.
 
-The EV can not pass an edge without having the required energy. The sum of energy acquired at the charging stations prior to the edge must be larger then the sum of energy used on the edges prior to the edge plus the energy the edge needs. As shown in \Cref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices.
+The EV can not pass an edge without having the required energy. The sum of energy acquired at the charging stations prior to the edge must be larger than the sum of energy spent on the edges prior to the edge plus the energy spent passing the edge. As shown in \Cref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices.
 The constraint is formulated as such:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - ES(e_j) \leq B_{max}
 \end{equation*}\label{eq:energyreq}
-$B_{cur}$ is the battery level of the EV at the start of the path, $ \sum_{j=1}^{i} EA(u_j)$ is the amount of energy acquired on the $j^{\text{\tiny th}}$ vertex including all vertices prior to vertex $i$. $\sum_{j=1}^{i} EA(u_j)$ is the energy spend on edge $j$ and as well as all edges prior to the $j^{\text{\tiny th}}$ edge.
+$B_{cur}$ is the battery level of the EV at the start of the path, $ \sum_{j=1}^{i} EA(u_j)$ is the amount of energy acquired on the $i^{\text{\tiny th}}$ vertex including all vertices prior to vertex $i$. $\sum_{j=1}^{i} EA(u_j)$ is the energy spend on edge $i$ and as well as all edges prior to the $i^{\text{\tiny th}}$ edge.
 
 The following constraints ensures that the EV is not overcharged at any charging station. It is almost exactly like the previous constraint, however it looks one charging station further, to ensure the energy is balanced both before and after passing an edge:
-
 \begin{equation*}
 \begin{aligned}
 \forall_{i\in1 \dots n-1}:\;0 \leq B_{cur} + \sum_{j=1}^{i+1} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}
 \end{aligned}
 \end{equation*}
-
 Finally, it should not be possible for the EV to spend a negative amount of time at a charging station:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; 0 \leq CT_{u_i}
