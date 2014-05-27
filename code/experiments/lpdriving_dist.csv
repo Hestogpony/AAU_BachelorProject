@@ -7,3 +7,8 @@ naive-time, naive-fail, greedy-time, greedy-fail
 
 
 300,5.43483626463,4.10405232672,3.85111027492,3.9965400229
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+400,7.44407215754,5.07489273572,4.70957937607,4.71022887764
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+driving distance, naive-time, naive-fail, greedy-time, greedy-fail
+400,6.32481977235,5.57850044302,4.77717262829,4.77671954128
