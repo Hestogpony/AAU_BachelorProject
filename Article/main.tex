@@ -24,7 +24,7 @@
 \DeclareSIUnit\miles{mi}
 
 \sisetup{per-mode = symbol-or-fraction}
- 
+\def\XState#1{{\def\alglinenumber##1{}\State \hspace{0.5cm}#1}\addtocounter{ALG@line}{-1}}
 
 \begin{document}
 
