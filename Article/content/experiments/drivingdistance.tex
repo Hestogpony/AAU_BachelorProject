@@ -1,24 +1,23 @@
 \subsection{Experiment: Driving Distance}
+In this experiment we wish to investigate how well the greedy algorithm chooses and drives paths, with distance as the independent variable. We have set the charging rates to a constant value of $60 \si{kW}$, such that the charging becomes irrelevant. The initial distance is set to $50 \si{\km}$ and thereafter increases by $50 \si{\km}$ until it reaches $550 \si{km}$. This is done 5 times to acquire an average.
 
-\todo[inline]{Revise this entire section so it follows the style of Experiments: Density of Charging Stations}
+We expect that: as the distance the EV has to travel increases, the difference between the route time the greedy algorithm achieves and the route time the naive achieves, will increase in favour of the greedy algorithm. 
 
-We compare the performance of the greedy heuristic algorithm to the naive algorithm with the driving distance as the changing parameter. The longer distances the EV has to travel the more significant will a good path selection heuristic become. The initial distance is set to $50 \si{\km}$ for the experiment and thereafter increased by $50 \si{\km}$ for each iteration in the experiment. With full battery the EV has a range of approximately $123 \si{\km}$ at max speed ($130 \si{\km\per\hour}$). This means we shouldn't expect much difference between the time the greedy heuristic algorithm uses and the time the naive algorithm uses to pass a path in the first couple of iterations, because no charging stations has to be visited.
-
-The results of the experiment is illustrated in figure \ref{fig:charge_rate}.  
-
-\begin{figure}
+\begin{figure}[!htb]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
 	legend pos=north west, 
 	xlabel=Distance (km), 
-	ylabel=Path time (hours)] 
+	ylabel=Route time (hours)] 
 \addplot table [x=driving distance, y=naive-time, col sep=comma] {data/driving_dist.csv};
 	\addlegendentry{Naive}
 \addplot table [x=driving distance, y=greedy-time, col sep=comma] {data/driving_dist.csv};
 	\addlegendentry{Greedy heuristic}
 \end{axis}
 \end{tikzpicture}
-\caption{Time spend driving various distances given a charging station density of 20 km} 
+\caption{Time spent driving various distances with fixed charging rate} 
 \label{fig:driving_dist}
 \end{figure}
+
+The results of the experiment is illustrated in figure \ref{fig:driving_dist}. At the very first mark they achieve the same route time, this might be because no charging is needed and the optimal choice will be to drive the shortest path in terms of distance divided by $v_{max}$. The results of the experiment shows that: as the distance increases, it becomes more and more relevant to drive at a speed relative the battery level. This observation matches our expectations.
