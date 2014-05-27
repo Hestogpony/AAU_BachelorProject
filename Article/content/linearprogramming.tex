@@ -19,17 +19,16 @@ $n$ is the length of the path, $m$ is the amount of lines the functions \( D(e_i
 \begin{equation*}
 \forall_{i\in1 \dots n, j \in 1 \dots m}: \; \; SL_{i,j} \in{0,1} 
 \end{equation*}
-The speed of the EV needs to be constrained by the line segment chosen:
+Because we now have $m$ points describing each line, we need $m$ values for each $v_{e_i}$. Thus $v_{e_i}$ is extended with an additional index parameter, to handle this additional dimension. The speed of the EV needs to be constrained by the start and ending point of the line segment chosen:
 \begin{equation*}
-\forall_{i\in1 \dots n, j \in 1 \dots m-1}:\; SL_{i,j} \times P_{i,j}  \le  v_{j,e_i} \le SL_{i,j}\times P_{i,j+1}
+\forall_{i\in1 \dots n, j \in 1 \dots m-1}:\; SL_{i,j} \times P_{i,j}  \le  v_{e_i,j} \le SL_{i,j}\times P_{i,j+1}
 \end{equation*}
 $P$ is the set of starting points of all line segments including the end point of the previous segment. $SL_{i,j} \times P_{i,j}$ is the minimal speed the EV is allowed to drive on edge $i$ and $SL_{i,j}\times P_{i,j+1}$ is the maximal speed, note that the values will either be a valid value or $0$, if the segment is not selected being that $SL_{i,j}$ is $0$ if the line segment is not chosen. $P_{i,j+1}$ is the end point of $P_{i,j}$. 
-The linearization of \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ can now be found by pre-computing the line segments of each of the path edges. for instance, to linearize $R_{CO}(v_{e_i})$ we pre-compute a set of line functions on the form $a\times x+b$. We store the slope $a$ as $Slopes$, and the constants $b$ as $Constants$. In total $n \times m$ function are defined. The linearized model of $R_{CO}(v_{e_i})$ for every edge $i$ will look like this:
+The linearization of \( D(e_i)/v_{e_i} \) and $R_{CO}(v_{e_i})$ can now be found by pre-computing the line segments of each of the path edges. for instance, to linearize $R_{CO}(v_{e_i})$ we pre-compute a set of line functions on the form $ax+b$. We store the slope $a$ as $Slopes$, and the constants $b$ as $Constants$. In total $n \times m$ function are defined. The linearized model of $R_{CO}(v_{e_i})$ for every edge $i$ will look like this:
 \begin{equation*}
 \sum_{j=1}^{m} Slopes_{i,j}\times v_{e_i,j} + \sum_{j=1}^{m} SL_{i,j}\times Constants_{i,j} 
 \end{equation*}
-\todo[inline]{Explicitly explain what $v_{e_i,j}$ is}
-$\sum_{j=1}^{m} Slopes_{i,j}\times v_{e_i,j}$ is equivalent of $a\times x$ and $\sum_{j=1}^{m} SL_{i,j}\times Constants_{i,j}$ is equivalent with $b$ and thus the consumption rate of the EV is modelled as $m$ functions. 
+$\sum_{j=1}^{m} Slopes_{i,j}\times v_{e_i,j}$ is equivalent to $ax$ and $\sum_{j=1}^{m} SL_{i,j}\times Constants_{i,j}$ is equivalent with $b$. 
 Finally note that this is a way to determine the solution of $R_{CO}(v_{e_i})$ and before a solution to an edge can be found, the line segments and points for both of the non linear functions needs to be pre-computed. 
 %sources
 %1, SWP-3587
