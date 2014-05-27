@@ -1,8 +1,8 @@
 \subsection{Experiment: Running Time}
-We want to compare the running time of the greedy heuristic algorithm with Dijkstra's algorithm. We use the established base case except for the input size, which will start at 400000 vertices and scale downwards to 100000. Below 100000 it is no longer possible to find a 300km path in our road network.
+We want to compare the running time of the greedy heuristic algorithm and the naive algorithm  with Dijkstra's algorithm. Instead of the default amount of vertices, we start at 400000 vertices and scale downwards to 100000, in steps of 20000. Below 100000 it is no longer possible to find a 300km path in our road network.
 
 Technical details of the experiment environment:\\
-Both the greedy heuristic and Dijkstra's algorithm were written in Python 2.7, implemented with a minimum heap for the vertices. The input graph is kept in memory and the computation happened with a single thread on a model i7-2600 CPU.
+Both the greedy heuristic and Dijkstra's algorithm were written in Python 2.7. The graph is kept in memory and the computation were conduct using a single thread on an Intel i7-2600 CPU with 2 x 1333 MHz DDR3.
 \begin{figure}[!htb]
 \centering
 \begin{tikzpicture}
@@ -23,4 +23,4 @@ Both the greedy heuristic and Dijkstra's algorithm were written in Python 2.7, i
 \label{fig:time_comp}
 \end{figure}
 
-The results of this experiment is as we expected. Dijkstra uses 370 milliseconds solving the smallest input, where the greedy heuristic algorithm spend 25 seconds. This shows us that a significant overhead exists from calculating edge weights and managing a larger amount of data for each vertex. As per the analysis of the running time, we also see an expected increase in computation time relative to Dijkstra's. While we increase the input size 4 times, Dijkstra's computation time increased about 4,4 times, where the greedy heuristic algorithm increased about 9 times.
+The results of this experiment is as we expected. Dijkstra uses 370 milliseconds solving the smallest input, where the greedy heuristic algorithm spend 25 seconds. This shows us that a significant overhead exists from calculating edge weights and managing a larger amount of data for each vertex. As per the analysis of the running time, we also see an expected increase in computation time relative to Dijkstra's. While we increase the input size 4 times, Dijkstra's computation time increased about 4.4 times, where the greedy heuristic algorithm increased about 9 times.
