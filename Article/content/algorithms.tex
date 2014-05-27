@@ -1,56 +1,59 @@
 \section{Greedy Heuristic Graph}\label{sec:algo}
-In the previous sections we introduced two different approached for solving paths. We are now ready to describe a full algorithm for solving the fastest path problem for an entire road network. 
+In Section \ref{sec:LP} and \ref{sec:greedy} two different approached for solving a path are introduced. We are now ready to describe a algorithm for solving the fastest path problem for an entire road network. 
 
-An approach for solving the full problem, for the whole road network would be to iterate over every single simple path (a path without cycles) in the graph and figure out the best way to travel that path according to either the $travel\_time$ procedure described in Section \ref{sec:greedy} or the Linear Programming model described in Section \ref{sec:LP}. However, doing this would be too complex as the number of simple paths in a graph can be as much as $O(n!)$ which is too expensive.
+One approach for solving the fastest path problem, for a whole road network, would be to iterate over every single simple path (a path without cycles) in the graph. The problem would then be to figure out the best way to travel every path according to either the $travel\_time$ procedure or the Linear Programming model. However doing this would be too complex, as the number of simple paths in a graph can be as much as $O(n!)$, which in itself is too expensive for practical uses.
 
-Instead, one can utilize existing graph algorithms for reducing the number of paths being looked at. e.g. in Dijkstra's algorithm, the number of paths is substantially reduced by relaxing pairs of nodes. This is possible because the shortest path problem has an optimal substructure. Unfortunately the fastest path problem does not have such a substructure, however applying another heuristic to Dijkstra's greedy weight choices, will allow us to build useful paths with charging stations, see Algorithm \ref{alg:fastest_path}.  
+Instead one can utilise existing graph algorithms for reducing the number of paths to look at. For instance in Dijkstra's algorithm, the number of paths is substantially reduced by relaxing pairs of nodes. This is possible because the shortest path problem has an optimal substructure. Unfortunately the fastest path problem does not have such a substructure, however applying a heuristic to Dijkstra's algorithm, will allow us to build useful paths, see Algorithm \ref{alg:fastest_path}.   
 
-Instead of simply relaxing a static weight of edges, we relax the time being calculated by the $travel\_time$ procedure. However this will probably perform poorly by itself, as the time spend charging will skew Dijkstra's algorithm to avoid charging stations, because extra time is added without progressing in the graph. To guarantee that charging stations are used, we prioritise vertices that have charging stations on its predecessor path within driving range of the EV. Imagine that Dijkstra's is at vertex $u_1$ and want to relax vertex $u_2$, $u_1$ has a charging station on its predecessor path, which $u_2$ does not. Even if the weight of $u_1$ is larger than $u_2$, we choose $u_1$ as $u_2$'s predecessor. Note that the Linear Programming solution could theoretically be applied here instead of $travel\_time$.
+Instead of simply relaxing a static weight of edges, we relax accordingly the time being calculated by the $travel\_time$ procedure. Note that the Linear Programming solution could theoretically be applied here instead of $travel\_time$. To guarantee that charging stations are used, we only relax an edge from vertex $u_1$ to $u_2$ if both a lower travel time is found and the charging possibilities is not lowered. The charing possibilities is not considered lowered if vertex $u_2$ is a charging station, if $u_2$ do not have any charing stations on it predecessor path or if the vertex $u_1$'s predecessor path has a charging station which still allows charging, that is if the EV have not yet used more energy on driving, than what were possible to charge at the charging station. For instance, if an EV reached a charging station with 50\% battery, only 50\% battery can be added add this charging station. As the EV travels away from the charging station, the potential energy  of that charging station is continuously lowered by the amount of energy which the EV uses. 
 
-Alternative greedy choices can be utilised, for instance following time weight alone can work, but the chance that a charging station is on the predecessor paths will be lower. On the other hand more complex greedy choices, for instance where both time, charging stations and potential energy remaining on the charging station or the charge rates of the charging stations is prioritised as well. A more complex greedy choice will likely increase the quality of the paths found and increase the overall performance of the route plans found.
-
+Alternative greedy choices can be utilised, for instance following: 
+\begin{itemize}
+\item Purely time
+\item Time and charging stations with higher potential energy
+\item Time and a ratio for charging rate and potential energy of charging stations
+\item etc. 
+\end{itemize}
+Purely time might give faster paths, but will also be less robust, as it can and most likely will choose paths without charging station, which are impossible for an EV to drive. Time and charging stations with higher potential energy might lead to both faster and slower paths, however the algorithm will likely be more robust, as a higher potential energy is propagated. Time and a ratio for charging rate and potential energy of charging stations this will give a way to make a tradeoff between route time and robustness of the algorithm.  
 
 \begin{algorithm}[!htb]
 \begin{algorithmic}[1]
 \Function{GreedyHeuristic}{$RN,s,t,EV$}
-    \ForAll{$v \in RN.V$} 
-        \State $v.time = \infty$
-        \State $v.predecessor = NIL$
-        \State $v.preCS = NIL$
-        \State $v.B_{cur} = 0$
+    \ForAll{$u_2 \in RN.V$} 
+        \State $u_2.time = \infty$
+        \State $u_2.predecessor = NIL$
+        \State $u_2.preCS = NIL$
+        \State $u_2.B_{cur} = 0$
     \EndFor
     \State $s.time = 0$
     \State $s.B_{cur} = EV.B_{cur}$
-
     \State $Q = PriorityQueue$
     \State $insert(Q, (s.time, s))$ 
     \While{$Q \neq \emptyset$} 
-        \State $u = extractmin(Q)$
-        \ForAll{$v \in RN.adj(u)$} 
+        \State $u_1 = extractmin(Q)$
+        \ForAll{$u_2 \in RN.adj(u)$} 
             \State $time,preCS,B_{cur},energy = $
-            \State $travel\_time(RN, u, v, EV)$
-            \If{$v.time > u.time + time$} 
-                \State $v.time = u.time + time$
-                \State $v.predecessor = u$
-                \State $v.B_{cur} = B_{cur}$
-                \State $v.preCS = preCS$
-                \State $insert(Q, (v.time, v))$ 
-            \EndIf
-            \If{ $preCS \neq NIL$}
-                \State $a$
+            \State $travel\_time(RN, u_1, u_2, EV)$
+            \If{$u_2.time > u_1.time + time \And greedy\_choice(u_1, u_2)$} 
+                \State $u_2.time = u_1.time + time$
+                \State $u_2.predecessor = u_1$
+                \State $u_2.B_{cur} = B_{cur}$
+                \State $u_2.preCS = update\_CS(preCS, energy)$
+                \State $insert(Q, (u_2.time, u_2))$ 
             \EndIf
         \EndFor
     \EndWhile
-    \State \Return $t.time, t.path$
+    \State \Return $t.time, path(t)$
 \EndFunction
 \end{algorithmic}\label{alg:fastest_path}
 \end{algorithm}
 
-\todo[inline]{missing part of algorithm, cant describe more at $preCS \neq NIL$, søg for at alt in beskrivelsen over er i alg. og at alle ikke åbentlyse detaljer i koden beskrives efter}
+The input of the algorithm is a road network $RN$, the stating vertex is $s$ and target vertex is $t$.$EV$ is an instance of the EV driving. Lines $2-6$ initializes the values of each vertex. Lines $7-8$ sets proper values on the starting vertex ($s$), naturally the time spend driving from $s$ to $s$ is $0$. The current battery level on $s$ is set to the current battery level of the EV. Lines $9-11$ sets up a priority queue and insert $s$. Lines $11-21$ while the priority queue is not empty, the vertex $u_1$ with the lowest time is removed from the queue, and the edges from the vertex is relaxed. Lines $13-21$ goes through every adjacent vertices to $u_1$, computes the time with the $travel\_time$ function. If the time is lower and $greedy_choice()$ returns true, the adjacent vertex $u_2$ is relaxed and all the data from $travel\_time$; the time used, the charge stations prior to $v$ ($preCS$), the current battery level $B_{cur}$ and the energy used $energy$ is assigned to $u_2$. The if statement on line $16$ decided whether or not the path to the vertex adjacent to $u$ should be relaxed. The function $greedy\_choice(u_1,u_2)$ is the heuristic that decides when the modified Dijkstra's algorithm should relax, besides simply using time. This implementation of $greedy\_choice(u_1,u_2)$ return True if $u_1$ has a charging station on it predecessor path with some potential energy, if $u_2$ is a charging station or if both $u_1$ and $u_2$ have no charging stations in their predecessor paths with remaining potential energy. False is returned if only $u_2$ has charging station on its predecessor path with a charging station with potential energy.
+The function $update\_CS(preCS, energy)$ on line $20$ is a procedure that maintain the list of charging stations with potential energy for the relaxed vertex. The procedure reduces the potential energy on all charging stations on the predecessor path of $u_2$, with the amount of energy spend driving to $u_2$. Line $21$ inserts $u_2$ into the priority queue with its relaxed time. Line $22$ returns the time on $t$ and the path leading to $t$. This is done by following the line of predecessors until we reach $s$.
 
 The worst case running time of the greedy heuristic algorithm is bound by three procedures. First there is the main procedure that is derived directly from Dijkstra's, which has a worst case complexity of $O(|E|+|V|\log|V|)$, with the Fibonacci heap. To that we need to multiply $O(|V|)$ from the $travel\_time$ procedure, as this procedure might go through all vertices, if the vehicle is set to charge at a new charging station for every found edge and every vertex in the graph is also a charging station. Finally we have the procedure that maintain a set of charging stations relevant on each vertex. In the special case where the vehicle have an infinite battery capacity, but start without any battery, and every vertex found happens to be a charging station with a charge rate in a decreasing order, the procedure would have to multiply $O(|V|)$ in the worst case.
 However only one of the last two procedure's $O(|V|)$ complexity is added, as the case where the algorithm chose to charge at a new charging station for every edge, never happens with an infinite battery capacity. Likewise the case where the procedure maintains a list of every charging station, never happens if the car has a limited battery capacity. Resulting in a worst case running time of $O(|V||E|+|V^2|\log|V|)$. %http://www.wolframalpha.com/input/?i=v%28e%2Bv*log%28v%29%29
 
 \todo[inline]{wash worst-case section and add LP running time}
 
-In practice Dijkstra's algorithm run faster on a sparse graph, which road networks are, and both of the remaining procedures are simultaneously limited by the fact that only a small amount of charging stations exist and that the EV battery capacity is limited.
+In practice Dijkstra's algorithm's running time is lower on a sparse graph, which road networks are, and both of the remaining procedures are simultaneously limited by the fact that only a relatively small amount of charging stations exist and that the EV battery capacity.
