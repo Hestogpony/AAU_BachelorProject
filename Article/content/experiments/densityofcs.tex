@@ -17,6 +17,7 @@ In this experiment, we wish to find the density of charge station, for which the
 \centering
 \begin{tikzpicture}
 \begin{axis}[
+    legend pos=north west, 
     xlabel=CS Density km,
     ylabel=Route time (hours)]
 \addplot table [x=CS-Density, y=naive-time, col sep=comma] {data/cs_density.csv};
