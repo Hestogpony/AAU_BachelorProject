@@ -1,7 +1,7 @@
 \section{Algorithms}\label{sec:algo}
 In the previous sections we introduced two different approached for solving paths. We are now ready to describe a full algorithm for solving the fastest path problem for an entire road network. 
 
-An approach for solving the full problem, for the whole road network would be to iterate over every single simple path (a path without cycles) in the graph and figure out the best way to travel that path according to either the $travel\_time$ procedure described in Section \ref{sec:greedy} or the Linear Programming model described in Section \ref{sec:LP}. However, doing this would be too complex as the number of simple paths in a graph can be as much as $O(n!)$ which is too expensive.
+An approach for solving the full problem, for the whole road network would be to iterate over every single simple path in the graph and figure out the best way to travel that path according to either the $travel\_time$ procedure described in Section \ref{sec:greedy} or the Linear Programming model described in Section \ref{sec:LP}. However, doing this would be too complex as the number of simple paths in a graph can be as much as $O(n!)$ which is too expensive.
 
 Instead, one can utilize existing graph algorithms for reducing the number of paths being looked at. e.g. in Dijkstra's algorithm, the number of paths is substantially reduced by relaxing pairs of nodes. This is possible, because the shortest path problem has an optimal substructure. Unfortunately, the fastest path problem does not have such a substructure.
 
