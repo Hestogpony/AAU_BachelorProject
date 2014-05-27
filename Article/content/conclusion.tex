@@ -1,10 +1,11 @@
 \section{Conclusion}
 \label{sec:conclusion}
-As the adoption rate of EVs increases time-optimised route planning systems for electrical vehicles will become increasingly important. 
+As the adoption rate of EVs increases, time-optimised route planning systems for electrical vehicles will become increasingly important. 
 We showed that a route planning system for EVs should take charging stations and charging rates into account, since the time spend 
-charging an EV with today's standards is still relatively long. 
+charging an EV with today's standards is still relatively long. Thus planning the entire trip can achieve significantly faster route time. 
 
-The problem of finding a route plan for an EV can be modelled as an optimisation problem. We implemented a greedy heuristic algorithm that used greedy choices and heuristics about the EV and the road network to find time-optimised paths. We ran several experiments on a real world road network and compared the performance with a naive algorithm that simulated the pattern of a naive electric vehicle driver. The experiments showed that the greedy heuristic algorithm both finds better paths and better charging plans than the naive algorithm. The worst-case time complexity of the greedy heuristic algorithm is $O(|V||E|+|V^2|\log|V|)$
+The problem of finding a route plan for an EV can be modelled as an optimisation problem. We designed a greedy heuristic algorithm that uses greedy choices and heuristics about the EV and the road network to find time-optimised paths. The worst-case time complexity of the greedy heuristic algorithm is $O(|V||E|+|V^2|\log|V|)$. We ran several experiments on a real world road network and compared the performance with a naive algorithm that simulated the pattern of a naive electric vehicle driver. The experiments showed that the greedy heuristic algorithm both finds better paths and better charging plans than the naive algorithm. Along with this, we concluded that the greedy algorithm works best with a charging density below $40\si{km}$. 
 
-We further implemented a linear programming solution using GNU Linear Programming Kit but found that solving every simple path in a graph with the size of a real world road network, is simply too expensive to compute within reasonable time. We compared the path time outputted by the greedy heuristic algorithm to the path time of the linear programming solution when run on the same path. \todo[inline]{How good are the paths found relative to the linear programming solution?}
-  
+We further designed an approach using linear programming, which is able to solve a path approximately optimal using linearization. We concluded that using the LP approach for a full graph is simply too expensive to compute within reasonable time.
+
+Lastly, we assessed the quality of the paths picked by the greedy algorithm by comparing it with the LP path solver, which gave us a $0.1\%$ difference in route time.
