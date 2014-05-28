@@ -4,12 +4,12 @@
 \maketitle
 In this project we have been concerned with time-optimised route planning for electric vehicles in a large road network. We chose this problem because in the future electric vehicles will play an increasingly important role in the traffic and due to the limited recharging possibilities as well as long recharging time of electric vehicles, the requirement for a different route planning system emerges.
 
-We designed a greedy heuristic route planning algorithm that computed time-optimised paths for a road network. The greedy heuristic algorithm takes both the drive time and the recharge time into account. 
+We designed a greedy heuristic route planning algorithm that compute time-optimised paths in a road network. The greedy heuristic algorithm takes both the drive time and the recharge time into account, to optimise the time spend on a route plan. 
 
-We also designed a linear programming solution for solving simple paths optimally. We found that this solution was not suitable for a large road network. Instead we used the linear programming solution as as a benchmark for evaluating the quality of the route plan outputted by our greedy heuristic algorithm. From the evaluation we could conclude that the greedy heuristic algorithm's route plan for a path is only $0.1\%$ worse than the linear programming route plan for the same path.
+We also designed a linear programming solution for solving simple paths optimally. We found that this solution was not suitable for a large road network, as the computation time were too large. Instead we used the linear programming solution as as a benchmark for evaluating the quality of the route plan outputted by our greedy heuristic algorithm. From the evaluation we could conclude that the greedy heuristic algorithm's route plan for a path is only $0.1\%$ worse than the approximately optimal linear programming route plan for the same path.
 
-We extracted map data from OpenStreetMap to create a large road network for experimentation. We modified the data so it contained contained charging stations with varying charge rates along with Danish speed limits. We designed a naive algorithm which simulated the drive pattern of a naive EV driver. The purpose of this algorithm was to have a comparison baseline in the experiments.
+We extracted map data from OpenStreetMap to create a large road network for experimentation. The road network were modified so that it contained charging stations with varying charge rates, along with Danish speed limits. We designed a naive algorithm which simulated the drive pattern of a naive EV driver. The purpose of this algorithm was to have a baseline comparison in the experiments.
 
-We analysed the route plan and the time complexity of the greedy heuristic algorithm through four different experiments e.g.\ varying the charge rate of charging stations in the road network and varying the distance to drive. 
+We analysed the route plan and the time complexity of the greedy heuristic algorithm through four different experiments: varying the charge rate of charging stations, varying the charging station density, varying the distance to drive and finally varying the input size for computation time. 
 
 \end{document}
