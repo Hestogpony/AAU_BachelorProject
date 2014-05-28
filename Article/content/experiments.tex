@@ -1,6 +1,6 @@
 \section{Experiments}
 \label{sec:experiments}
-This section presents the experiments for the greedy heuristic algorithm. Our linear programming solution was implemented, such that we can test the quality of the greedy choices. We chose not to use LP along with Dijkstras algorithm, because it was too slow. We compare the performance of the greedy heuristic to a naive algorithm, which is presented in section \ref{sub:naivealgorithm}, on five experiments. The experiments have been selected to illustrate the effects from variables in the route planning problem, including: route distance to drive, charge rate on charging stations, consumption rate of the EV, density of charging stations in the road network and the input size.
+This section presents the experiments for the greedy heuristic algorithm. We chose not to use the LP solution along with Dijkstras algorithm, because it was too slow. Our linear programming solution was instead implemented, such that we can test the quality of the greedy choices. We compare the route times and running time of the greedy heuristic algorithm to a naive algorithm which is presented in section \ref{sub:naivealgorithm}. The experiments have been conducted in order to illustrate the effects of the different variables in the fastest path problem. The variables include: route distance to drive, charge rate on charging stations, density of charging stations in the road network and the input size.
 
 The default settings for all the experiments are as follows:
 \begin{itemize}
@@ -9,10 +9,10 @@ The default settings for all the experiments are as follows:
      \item EV consumption rate: $0.019v^2-0.77v+184.4$ $\si{Wh\per km}$, where $v$ is the speed (corresponds approximately to Tesla's Model S\cite{teslacon})
      \item EV battery capacity: 50 $\si{kWh}$
 	 \item EV initial battery: 50 $\si{kWh}$
-     \item Density of charging stations: minimum distance of $20 \si{km}$ between each charging station)
+     \item Density of charging stations: minimum distance of $20 \si{km}$ between each charging station
  \end{itemize} 
 
-The route distance, consumption rate and battery capacity is chosen to force the EV to charge in most cases. The charging station density is chosen to have a reliable infrastructure, with an even spread of charging stations. In the default settings we have 326 stations, when in fact Denmark have more than 4000\cite{Globalevoutlook}. 
+The default setting of the route distance, consumption rate and battery capacity are assigned the above mentioned values to force the EV into charging in most experimentation cases. The charging station density is set to $20 \si{km}$ to gain a reliable infrastructure, with an even spread of charging stations. In the default settings we have 326 stations, when in fact Denmark have more than 4000\cite{Globalevoutlook}, where most of these charging stations are located in cities.
 
 We have used the drivable part of Denmark as a baseline for the experiments. The dataset features:
 \begin{itemize}

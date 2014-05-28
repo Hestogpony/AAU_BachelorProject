@@ -1,6 +1,6 @@
 \subsection{Experiment: Charge Rates}
 
-In this experiment we wish to investigate how well the greedy algorithm drives based on the charging rate of the charging stations. Thus, the charging rate of charge stations is the independent variable. As explained previously, the default charging rates are generated in a range of $10-100 \si{kWh}$, in this experiment we multiply all the charging rates with a scaling factor, which starts at $-40\%$, increments by $5\%$ and stops at $75\%$. This is done 5 times to acquire an average. 
+In this experiment we wish to investigate how well the greedy heuristic algorithm solves the fastest path problem, based on charge rates of the charging stations in the road network. Thus, the charge rate of charging stations is the independent variable. As explained previously, the default charge rates are generated in a range of $10-100 \si{kWh}$. In this experiment we multiply all the charge rates with a scaling factor which starts at $-40\%$, increments by $5\%$ and stops at $75\%$. This is done 5 times to acquire an average. 
 
 \begin{figure}[!htb]
 \centering
@@ -14,8 +14,8 @@ In this experiment we wish to investigate how well the greedy algorithm drives b
     \addlegendentry{Greedy heuristic}
 \end{axis}
 \end{tikzpicture}
-\caption{Time spend driving a 300 km path on different charge rates} 
+\caption{Time spend driving a 300 km path with different charge rates} 
 \label{fig:charge_rate}
 \end{figure}
 
-In Figure \ref{fig:charge_rate} it is quite clear that the behaviour of the naive algorithm scales quite polynomially with the increasingly better charge stations, however the greedy algorithm seems to decrease linearly with better charge stations. It is also quite clear that the charging goes from being the bottleneck to driving being the bottleneck. At mark $-20\%$ there is a sudden increase in route time for the greedy algorithm, due to one of the experiments increasing the average substantially. It is hard to explain this situation, but it is probably due to the greedy algorithm making some bad choices. This is a good example of the fact that a chain of local optimal choices, does not yield an optimal solution.
+In Figure \ref{fig:charge_rate}, it is quite clear that the behaviour of the naive algorithm scales polynomially with the increasingly better charge rate on the charging stations. However, the greedy heuristic algorithm seems to decrease linearly with better charge rates. It is also clear that the charge time is the bottleneck at low charge rates, while the driving time is the bottleneck at higher charge rates. At mark $-20\%$ there is a sudden increase in route time for the greedy heuristic algorithm, due to one of the experiments increasing the average substantially. It is hard to explain this situation, but it could be due to the greedy heuristic algorithm making some bad choices. This is a good example of the fact that a chain of local optimal choices, does not yield an optimal solution.

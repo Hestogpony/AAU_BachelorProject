@@ -1,7 +1,7 @@
 \subsection{Experiment: Driving Distance}
-In this experiment we wish to investigate how well the greedy algorithm chooses and drives paths, with distance as the independent variable. We have set the charging rates to a constant value of $60 \si{kW}$, such that the charging becomes irrelevant. The initial distance is set to $50 \si{\km}$ and thereafter increases by $50 \si{\km}$ until it reaches $550 \si{km}$. This is done 5 times to acquire an average.
+In this experiment we wish to investigate how well the greedy heuristic algorithm solves the fastest path problem, with distance as the independent variable. We have set the charge rates to a constant value of $60 \si{kW}$, such that the charging stations selected becomes irrelevant. The initial route distance is set to $50 \si{\km}$ and thereafter increases by $50 \si{\km}$ until it reaches $550 \si{km}$. Each distance is iterated 3 times to acquire an average.
 
-We expect that: as the distance the EV has to travel increases, the difference between the route time the greedy algorithm achieves and the route time the naive achieves, will increase in favour of the greedy algorithm. 
+We expect that: as the distance the EV has to travel increases, the difference between the route time the greedy algorithm achieves and the route time the naive achieves, will increase in favour of the greedy algorithm. We expect this because selecting road segments which are optimised according to the charging stations in the path, as the greedy heuristic algorithm does, should result in better route times.
 
 \begin{figure}[!htb]
 \centering
@@ -20,4 +20,4 @@ We expect that: as the distance the EV has to travel increases, the difference b
 \label{fig:driving_dist}
 \end{figure}
 
-The results of the experiment is illustrated in figure \ref{fig:driving_dist}. At the very first mark they achieve the same route time, this might be because no charging is needed and the optimal choice will be to drive the shortest path in terms of distance divided by $v_{max}$. The results of the experiment shows that: as the distance increases, it becomes more and more relevant to drive at a speed relative the battery level. This observation matches our expectations.
+The results of the experiment is illustrated in figure \ref{fig:driving_dist}. At the very first mark the greedy heuristic algorithm and the naive algorithm achieve the same route time. This might be because no charging is needed and the optimal choice will be to drive the shortest path in terms of distance divided by speed. The results of the experiment shows that: as the distance increases, it becomes more and more relevant to drive at a speed optimised relative to the charging station. This observation matches our expectations.

@@ -2,10 +2,10 @@
 \label{sec:conclusion}
 As the adoption rate of EVs increases, time-optimised route planning systems for electrical vehicles will become increasingly important. 
 We showed that a route planning system for EVs should take charging stations and charging rates into account, since the time spend 
-charging an EV with today's standards is still relatively long. Thus planning the entire trip can achieve significantly faster route time. 
+charging an EV with today's standards is still relatively long.  
 
 The problem of finding a route plan for an EV can be modelled as an optimisation problem. We designed a greedy heuristic algorithm that uses greedy choices and heuristics about the EV and the road network to find time-optimised paths. The worst-case time complexity of the greedy heuristic algorithm is $O(|V||E|+|V^2|\log|V|)$. We ran several experiments on a real world road network and compared the performance with a naive algorithm that simulated the pattern of a naive electric vehicle driver. The experiments showed that the greedy heuristic algorithm both finds better paths and better charging plans than the naive algorithm. Along with this, we concluded that the greedy algorithm works best with a charging density below $40\si{km}$. 
 
-We further designed an approach using linear programming, which is able to solve a path approximately optimal using linearization. We concluded that using the LP approach for a full graph is simply too expensive to compute within reasonable time.
+We further designed a linear programming solution, which was able to solve a path approximately optimal using linearization. We concluded that using the LP solution for an entire road network is simply too expensive to compute within reasonable time.
 
-Lastly, we assessed the quality of the paths picked by the greedy algorithm by comparing it with the LP path solver, which gave us a $0.1\%$ difference in route time.
+Lastly, we assessed the quality of the paths picked by the greedy heuristic algorithm by comparing it with the LP path solver. The results showed that the route time of the greedy heuristic algorithm was $0.1\%$ worse than the route time of the LP path solver when solving the same path. 
