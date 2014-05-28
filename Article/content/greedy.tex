@@ -1,30 +1,29 @@
 \subsection{Greedy Heuristic Path}\label{sec:greedy}
-As mentioned in previous section finding an optimal solution to a path is an NP-complete problem. In this section a greedy heuristic approach is taken which solves the problem one edge at a time, instead of trying to give a solution to an entire path. The problem then becomes, which speed must we use for the current edge, in the interval of $v_{min}$ and $v_{max}$.
+As mentioned in Section \ref{sec:optiprob} finding an optimal solution to a path is an NP-complete problem. In this section a greedy heuristic approach is proposed which solves the problem one edge at a time. The problem then becomes finding the optimal speed for the current edge, in the interval of $v_{min}$ and $v_{max}$.
 
-Given a path there are two probable cases when choosing the optimal speed to pass an edge:
+Given a path there are two possible cases when choosing the optimal speed for passing an edge:
 \begin{enumerate}
-	\item Driving is fastest
-	\item Charging and driving is fastest
+	\item Case 1: Driving is fastest
+	\item Case 2: Charging and driving is fastest
 \end{enumerate}
+The intuition is then to find which speed we want to drive and whether or not we should charge before driving. However, it might not be possible to drive at all, given the limited battery of the EV. 
 
-The intuition is then to find which speed we want to drive and whether or not we should charge before driving. However, it might not be possible to drive at all, given the limited battery of the EV. The optimal speed when passing the edge $e_i$ = $(u_i, u_{i+1})$ without charging, can be found by solving this equation for $v$:
-\[B_{cur} - D(e_i)  R_{CO}(v) = 0\] 
-We call this speed $v_{opt}$. If $v_{opt}$ is lower than $v_{min}(e_i)$, there is not enough energy in the battery to drive from $u_i$ to $u_{i+1}$ and thus the time is set to $\infty$, indicating that just driving is not an option. If it is possible to drive the edge using only energy from the battery, the time it will take to pass the edge can be calculated as:
- \[T = \frac{D(e_i)}{v_{opt}} \] 
-The time spent passing edge $e_i$ when charging and driving, is given by the following equation:
+For case 1: The optimal speed when passing the edge $e_i$ = $(u_i, u_{i+1})$ without charging, can be found by solving this equation for $v$:
+\[B_{cur} - D(e_i) \times R_{CO}(v) = 0\] 
+We call this speed $v_{opt1}$. If $v_{opt1}$ is lower than $v_{min}(e_i)$, there is not enough energy in the battery to drive from $u_i$ to $u_{i+1}$ and thus the time is set to $\infty$, indicating that just driving is not an option. If it is possible to drive the edge using only energy from the battery, the time it will take to pass the edge can be calculated as $D(e_i) / v_{opt1}$
+
+For case 2: The equation for solving an edge, $e_i$, when driving and charging is given by the following equation: 
 \begin{equation*}
 \begin{aligned}
- & T(v,e_i) = \frac{D(e_i)}{v} + \frac{R_{CO}(v) \times D(e_i) - B_{cur}}{charge_{rate}(u_{i})}
+T(v) = \frac{D(e_i)}{v} + \frac{R_{CO}(v) \times D(e_i) - B_{cur}}{charge_{rate}(u_{i})}
 \end{aligned}
 \end{equation*}
-Where $v$ is the speed of the vehicle, $D(u_i, u_{i+1})$ is the distance between vertices $u_i$ and $u_{i+1}$, $R_{CO}(v)$ is the consumption rate of the EV, $B_{cur}$ is the current battery of the vehicle. Since we only charge exactly enough to pass an edge, there might be charging stations previous to $u_i$ which we could have charged more at, without exceeding the battery capacity. Therefore we want go back in history and charge at the best previous charging stations, until we have enough energy to pass edge $e_i$. This is done by $charge_{rate}(u_i)$ which gives the charge rate of the best charging station previous to $u_{i}$ or the charge rate of $u_i$ if $u_i$ is a better charging station than any of the charging stations prior to $u_i$. The charging stations that can be used, is of course only those which are within the EV's battery range.
-
-The above equation yields a function of the form: $av^2 + bv + c$, due to the fact that $R_{CO}(v)$ is a quadratic function. $a$, $b$ and $c$ are some constants which are given by the instance of the vehicle. Represented in a Cartesian coordinate system, $T(v,(u_i, u_{i+1})))$ is a parabola, as can be seen in Figure \ref{fig:graph}, note that the graph is only defined for positive speeds larger than $0$ and can only be calculated if $charge_{rate}(u_{i+1})$ is larger than $0$. On the x-axis is the speed of the vehicle and on the y-axis is the time spent. The turning point of the graph represents the optimal speed to drive for the given edge, denoted as $v_{opt}(e)$. The turning point is easily calculated by finding a tangent line with a slope of $0$. If $v_{opt}(e)$ is smaller than $v_{min}(e)$, then $v_{min}(e)$ defines the optimal speed for the edge. Similarly if $v_{opt}(e)$ is larger than $v_{max}(e)$, $v_{max}(e)$ defines the optimal speed for the edge. If $v_{opt}(e) = v_{min}(e)$ there might be a possibility that driving and charging is not an option. 
+This equation is on the form: $av^2 + bv + c$, due to the fact that $R_{CO}(v)$ is a quadratic function. $a$, $b$ and $c$ are some constants which are given by the instance of the vehicle. Represented in a Cartesian coordinate system, $T(v)$ is a parabola, as can be seen in Figure \ref{fig:graph}, note that the graph is only defined for positive speeds larger than $0$ and can only be calculated if $charge_{rate}(u_{i})$ is larger than $0$. On the x-axis is the speed of the vehicle and on the y-axis is the time spent. The turning point of the graph represents the optimal speed, $v_{opt2}$, to pass $e_i$. The turning point is easily calculated by finding a tangent line with a slope of $0$.  
 
 \begin{figure}[!htb]
 \label{fig:graph}
 \begin{tikzpicture}
-\begin{axis}[xlabel=velocity, ylabel=time,legend style={legend pos=north west}]
+\begin{axis}[xlabel=speed, ylabel=time,legend style={legend pos=north west}]
 \addplot[draw=red,domain=0:200]{(5/x)+(((0.0286*x^2 + 0.4096*x + 107.57)*5)/5000)};
 \addlegendentry{$\frac{5}{x}+\frac{(0.029\times x^2 + 0.41\times x + 107.57)\times 5}{5000}$}
 
@@ -32,10 +31,13 @@ The above equation yields a function of the form: $av^2 + bv + c$, due to the fa
 % \addplot[mark=*, domain=25:75] coordinates {(37,295)};
 \end{axis}
 \end{tikzpicture}% 
-\caption{In this instance of $T(v,e_i)$, going from $u_i$ to $u_{i+1}$, we have a distance of $5 \si{\km}$ and a charge speed of $5 \si{\kW}$ on $u_i$. The optimal speed in this case is $42.12\si{\km\per\hour}$, and the total time is roughly 17 minutes to pass through the edge when driving and charging}
+\caption{In this instance of $T(v)$, going from $u_i$ to $u_{i+1}$, we have a distance of $5 \si{\km}$ and a charge speed of $5 \si{\kW}$ on $u_i$. The optimal speed in this case is $42.12\si{\km\per\hour}$, and the total time is roughly 17 minutes to pass through the edge when driving and charging}
 \label{fig:graph}
 \end{figure}
-Having the two ways of deciding the time it takes to pass an edge, we can formulate an algorithm which decides how to drive each local road segment:
+
+If $v_{opt2}$ is smaller than $v_{min}(e_i)$, then $v_{min}(e_i)$ defines the optimal speed for the edge. Similarly if $v_{opt2}$ is larger than $v_{max}(e_i)$, $v_{max}(e_i)$ defines the optimal speed for the edge. If $v_{opt2} = v_{min}(e_i)$ there might be a possibility that driving and charging is not an option. The time when passing edge $e_i$ in case 2, can then be found with $T(v_{opt2})$.
+
+Having the two ways of deciding the time it takes to pass an edge, we can formulate an algorithm which decides how to drive each edge:
 
 \begin{algorithm}[!htb]
  \begin{algorithmic}[1]
