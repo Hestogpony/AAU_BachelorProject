@@ -1,7 +1,7 @@
 \subsection{Optimisation Problem}\label{sec:optiprob}
-This section introduces a formal description of the fastest path problem, modelled as an optimisation problem for a simple path.
+This section introduces a formal description of how to solve a simple path of length $n$ optimally.
 
-\begin{figure}[h!]
+\begin{figure}[!htb]
 \centering
     \begin{tikzpicture}[shorten >=1pt,node distance=2cm,>=stealth',thick]
         \node[state] (1) {$u_1$};
@@ -12,36 +12,36 @@ This section introduces a formal description of the fastest path problem, modell
         \draw [->] (1) to[right] node[auto] {$e_1$} (2);
         \draw [->] (2) to[right] node[auto] {$e_2$} (dots);
         \draw [->] (dots) to[right] node[auto] {$e_{n-1}$} (n);
-        \draw [->] (n) to[right] node[auto] {$e_n$} (d1);
+        %\draw [->] (n) to[right] node[auto] {$e_n$} (d1);
     \end{tikzpicture}
     \caption{Example of a path consisting of $n$ edges} \label{fig:pathexample}
 \end{figure}
 
-The objective of the optimisation problem is to minimise the time spent driving and the time spent charging on a path. The total time spent driving a path can be expressed as the following objective function:
+The objective of the optimisation problem is to minimise the time spent driving and the time spent charging on a path. The total time spent on a path can be expressed as the following objective function:
 \begin{equation*}
 \begin{aligned} &
 {\text{min:}}
 & & \sum_{i=1}^{n} \left(\frac{D(e_i)}{v_{e_i}} + CT_{u_i} \right)\\
 \end{aligned}
 \end{equation*}
-Where $D(e_i)$ is the length of road segment $i$, $v_{e_i}$ is the speed driven on road segment $i$ and $CT_{u_i}$ is the time spent charging at the $i^{\text{th}}$ vertex of the path. In Figure \ref{fig:pathexample} $u_1 = s$ and $u_{n+1} = t$. It should be clear that the objective function of this problem is concerned with time, being that \( D(e_i)/v_{e_i} \) is the time spent driving and $CT_{u_i}$ is the time spent charging. The objective function has two unknown variables $v_{e_i}$ and $CT_{u_i}$. The unknown variables of the objective function are constrained by the physical properties of the $EV$ driving the path. We will now ensure the physical constraints are not broken.
+Where $D(e_i)$ is the length of road segment $i$, $v_{e_i}$ is the speed driven on road segment $i$ and $CT_{u_i}$ is the charge time at the $i^{\text{th}}$ vertex of the path illustrated in Figure \ref{fig:pathexample}. It should be clear that the objective function of this problem is concerned with time because \( D(e_i)/v_{e_i} \) is the time spent driving and $CT_{u_i}$ is the charge time. The objective function has two unknown variables: $v_{e_i}$ and $CT_{u_i}$. The unknown variables of the objective function are constrained by the physical properties of the $EV$ driving the path. We will now ensure that the physical constraints defines the feasible region of the optimisation problem.
 
 On every edge the speed of the EV must be within the speed limits. $v_{e_i}$ is the speed on edge $e_i$. $v_{min}(e_i)$ and $v_{max}(e_i)$ is the minimum and maximum speed of edge $e_i$. Thus, the first constraint is formulated as:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;v_{min}(e_i) \leq v_{e_i} \leq v_{max}(e_i)
 \end{equation*}
-Furthermore, the battery level of the EV, must be between $0$ and $B_{max}$ (the battery capacity of the vehicle).
-This constraint is split into two constraints. The first constraint ensures that the EV can not pass an edge, without having the required energy. The second constraint ensures that the EV can not overcharge at any charging station.
-
-If we choose to charge at a vertex, the energy acquired is given by $EA(u_i)$ for the $i^{\text{th}}$ vertex of the path. The energy acquired is calculated as charge speed($R_{CH}(u_i)$) multiplied by charge time($CT_{u_i}$)
+When charging at the $i^{\text{th}}$ vertex, the energy acquired is given by $EA(u_i)$. The energy acquired is calculated as charge rate, $R_{CH}(u_i)$, multiplied by charge time, $CT_{u_i}$:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}
 \end{equation*}
-The energy spent driving edge $e_i$ is given by $ES(e_i)$ and is calculated by multiplying the distance $D(e_i)$ by the consumption rate of the vehicle $R_{CO}(v_{e_i}))$ at speed $v_{e_i}$.
+The energy spent passing edge $e_i$ is given by $ES(e_i)$ and is calculated by multiplying the distance $D(e_i)$ by the consumption rate of the vehicle $R_{CO}(v_{e_i}))$ at speed $v_{e_i}$.
 \begin{equation*}
 \forall_{i\in1 \dots n }:\; ES(e_i) = D(e_i) \times R_{CO}(v_{e_i})
 \end{equation*}
-Ignoring that the EV might have some battery at the beginning of a path, the EV should not be allowed to pass an edge without having charged the required energy to do so. The sum of energy acquired at the charging stations prior to the current edge must therefore be larger than the sum of energy spent on the edges prior to the current edge, including the energy needed to pass the current edge. As shown in \Cref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices. Taking the EV's battery into account, $B_{cur}$ is defined as the battery level of the EV at the beginning of a path, $ \sum_{j=1}^{i} EA(u_j)$ is the combined amount of energy acquired on the path at the $i^{\text{th}}$ vertex. $\sum_{j=1}^{i} EA(u_j)$ is the combined energy spend on the path at the $i^{\text{th}}$ edge. Combining these we get the following constraint:
+Furthermore, the battery level of the EV must be between $0$ and $B_{cap}$.
+This constraint is split into two constraints. The first constraint ensures that the EV can not pass an edge without having the required energy. The second constraint ensures that the EV can not overcharge at any charging station. 
+
+For the first constraint: The sum of energy acquired at the charging stations prior to the current edge, must be larger or equal to the sum of energy spent on the edges prior to the current edge and the energy needed to pass the current edge. As shown in Figure \ref{fig:pathexample} vertex $i$ is prior to edge $i$ and the path have the same amount of edges and vertices. Taking the EV's battery into account, $B_{cur}$ is defined as the battery level of the EV at the beginning of a path, $ \sum_{j=1}^{i} EA(u_j)$ is the combined amount of energy acquired on the path at the $i^{\text{th}}$ vertex. $\sum_{j=1}^{i} EA(u_j)$ is the combined energy spend on the path at the $i^{\text{th}}$ edge. Combining these we get the following constraint:
 \begin{equation*}
 \forall_{i\in1 \dots n }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}
 \end{equation*}

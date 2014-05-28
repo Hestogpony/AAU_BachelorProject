@@ -2,28 +2,27 @@
 In this section the mathematical notation and model used in this paper, is introduced. We further present a brief example of why a shorter path does not necessarily equal a faster path for EVs. 
 
 \subsection{Notation}
-We assume a road network can be modelled as a graph. Edges represent road segments, and vertices represent charging stations and road intersections. Along with the vertices and edges, the model should also include: edge distance, speed limits, charging rates. Thus a road network, $RN$, is defined as a tuple $RN=(V,E,D,v_{max},v_{min},R_{ch})$ comprising of a set $V$ of vertices and a set $E$ of edges. Where $V$ is a finite set and $E$ is a binary relation on $V$. We further introduce the following functions:
+We assume a road network can be modelled as a graph. Edges represent road segments, and vertices represent charging stations or road intersections. Along with the vertices and edges, the model should also include: edge distance, speed limits and charge rates. Thus a road network, $RN$, is defined as a tuple $RN=(V,E,D,v_{max},v_{min},R_{ch})$ comprising of a set of vertices, $V$, and a set of edges, $E$. Where $V$ is a finite set and $E$ is a binary relation on $V$. The tuple also includes the following functions:
 \[ D(e)\rightarrow d \] 
 \[ v_{max}(e)\rightarrow v \]
 \[ v_{min}(e)\rightarrow v \]
-These functions respectively returns the length of edge $e$, the maximum speed of edge $e$ and the minimum speed of edge $e$. Furthermore, each vertex is considered a charging station or a road intersection. The charge rate is described by the following function:
+These functions respectively returns the length of edge $e$, the maximum speed of edge $e$ and the minimum speed of edge $e$. The charge rate of vertex $u$, is described by the following function:
 \[R_{ch}(u)\rightarrow c\]
-$c$ is the charging rate of vertex $u$ given in Watt. Vertices with a charge rate of $c = 0\si{\W}$ implies that the vertex is just a road intersection, while a charging station is a vertex where $c > 0\si{\W}$. 
+$c$ is the charging rate of vertex $u$ given in Watt. Vertices with a charge rate of $c = 0\si{\W}$ are considered road intersections, while vertices where $c > 0\si{\W}$ are considered charging stations. 
 
 An electric vehicle $EV=(R_{co},B_{cur},B_{cap})$ is a tuple defined by three variables: Battery capacity, $B_{cap}$, given in $\si{\Wh}$, consumption rate, $R_{co}$, given in \si{Wh\per m}. The consumption rate is a function on the following form:
 \( R_{co}(v)=av^2+bv+c \)
-where $v$ is the speed of the EV and the constants $a$, $b$ and $c$ are dependent on the specific instance of the EV. The current battery level of the EV, in a given state, $B_{cur}$, is dependent on three variables: The starting battery, energy consumed and energy charged.
+where $v$ is the speed of the EV and the constants $a$, $b$ and $c$ are dependent on the specific EV. The current battery level of the EV, in a given state, $B_{cur}$, is dependent on three variables: The starting battery, energy consumed and energy charged.
 
-Lastly, we define a path $P$ of length k in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_k \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,k-1$.
+We define a path $P$ of length n in a graph as a sequence of vertices $\langle u_1,u_2,\dots,u_n \rangle$ and a set of edges $(u_{i},u_{i+1})\in E$ for $i=1,2,\dots,n-1$.
 
-The fastest path problem can now be defined using this notation:
+The fastest path problem can now be defined using the above notation:
 
 \textbf{Definition 1:} Given a road network, $RN=(V,E,D,v_{max},$\\ 
 $v_{min},R_{ch})$ and an EV, $EV=(R_{co},B_{cur},B_{cap})$. The fastest path 
-from $s$ to $t$, is defined as the path $P = \langle s,u_1,u_2,\dots,t \rangle$ where the time spent driving and charging is minimal. 
-The output should include a path and a complete schedule of:
+from $s$ to $t$, is defined as the path $P = \langle u_1,u_2,\dots,u_n \rangle$ where $u_1 = s$, $u_n = t$ and the time spent driving and charging is minimal. The output should include a path and a complete schedule of:
 \begin{itemize}
-\item Where and how long to charge and
+\item Where and how long to charge
 \item The speed to drive on each road segment
 \end{itemize}
 
