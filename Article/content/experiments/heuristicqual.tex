@@ -1,7 +1,7 @@
 \subsection{Quality Assessment}
-We will shortly investigate how well the greedy heuristic algorithm solves \emph{a path}. We are only able to test how well a path is passed (in terms of speed and charging), we can not investigate how good the actual path chosen is, this is simply too time demanding for the entire road network.
+We will shortly investigate how well the greedy heuristic algorithm solves a path. We are only able to test how well a path is passed in terms of speed and charging. We can not investigate how good the actual path chosen is, since solving the entire road network using the linear programming solution, is simply too time demanding. 
 
-To test this we implemented the LP described in Section \ref{sec:optiprob} using an existing LP solver\footnote{The LP tool used is the GNU Linear Programming Kit (GLPK). GLPK is intended for solving large-scale LP problems, mixed integer programming problems \cite{glpk}}. In our implementation we used 10 lines for linearization of the function. 
+To test the quality of the path solution, we implemented the LP solution described in Section \ref{sec:optiprob} using an existing LP solver\footnote{The LP tool used is the GNU Linear Programming Kit (GLPK). GLPK is intended for solving large-scale LP problems, mixed integer programming problems \cite{glpk}}. In our implementation we used 10 lines segments for linearization of the function. 
 
 For this quality assessment, 8 experiments were conducted using the same default settings as previously. For each $s$ and $t$ we find a path and the route time using the greedy heuristic algorithm and we find a path and the route time using the naive algorithm, for the same source and destination! We then input both these paths to the LP solver. We then end up with the following average route times:
 \begin{table}[!htb]

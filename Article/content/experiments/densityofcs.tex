@@ -1,5 +1,5 @@
 \subsection{Experiment: Density of Charging Stations}
-In this experiment, we wish to find the density of charge station, for which the greedy heuristic algorithm works best, with the independent variable being charge station density. For reference the naive time is included. For this experiment, the density of charging stations are measured in the minimum distance between two charging stations. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in Denmark. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
+In this experiment, we wish to find the density of charging stations, for which the greedy heuristic algorithm works best. The independent variable for this experiment is the density of charging stations in the road network. Initially, the minimum distance is set to 5 km which generates 3029 charging stations in road network. Table \ref{table:chargedensity} shows the number of charging stations according to the minimum distance between charging stations in the road network.
 
 \begin{table}[!htb]
 \centering
@@ -26,10 +26,9 @@ In this experiment, we wish to find the density of charge station, for which the
 \addlegendentry{Greedy}
 \end{axis}
 \end{tikzpicture}
-\caption{Charging station density experiment results} 
+\caption{Time spent driving a $300 \si{\km}$ route with various densities of charging stations} 
 \label{fig:cs_density}
 \end{figure}
 
-
-Five experiments were conducted for the greedy algorithm. Samples were taken in increments of $3\si{km}$. In Figure \ref{fig:cs_density} one can see the results, which is an average of all five experiments, fails were not counted in the average, in total there was $34$ out of $80$, $42.5\%$ fails for the greedy and $0$ for the naive. Interestingly, as we remove more and more charge stations, the greedy algorithm seems to stay relatively constant, with a few jumps here and there. Whereas the naive is very much affected by increasing the amount of charging stations. From the rest of the points we can conclude that the algorithm works mostly with a density of charging stations below $40\si{km}$
+Five experiments were conducted for the greedy heuristic algorithm. Samples were taken in increments of $3\si{km}$. In Figure \ref{fig:cs_density} the results can be seen, which is an average of all five experiments. Fails were not counted in the average. In total $34$ out of $80$ experiments failed for the greedy heuristic algorithm and $0$ for the naive. Interestingly, as we remove more and more charging stations, the greedy heuristic algorithm seems to stay relatively constant. Whereas the naive algorithm is significantly affected by decreasing the amount of charging stations. From the rest of the points, we can conclude that the greedy heuristic algorithm works best with a density of charging stations below $40\si{km}$
 
