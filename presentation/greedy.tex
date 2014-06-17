@@ -2,7 +2,7 @@
 
 \begin{frame}{Approximation Approach}
 
-  Idea: 
+  Idea:
   \begin{itemize}
     \item Drive using local optimal speed
     \item Use time as weight
@@ -40,11 +40,11 @@ Charging is more complicated.. Instead one wants to:
     \item Charge using the previously best charging station, which was not fully charged at
     \item Compute the time to pass edge $e$
     \item Repeat step 1-2 while it results in a faster passing of $e$
-  \end{enumerate}  
+  \end{enumerate}
 
   Thus we are able to utilise previously passed charging stations, to charge even more
 
-  Remember that we only charge exactly enough to pass every edge! 
+  Remember that we only charge exactly enough to pass every edge!
 \end{frame}
 
 \begin{frame}
@@ -62,7 +62,7 @@ Charging is more complicated.. Instead one wants to:
     \item Thus we are able to solve more graphs
     \item Not ideal solution
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}{Example}
@@ -82,15 +82,15 @@ highlight/.style={ultra thick,draw=blue, text=blue}]
 
   \node[main node] (3) [right of=s] {3};
   \node (3top) at ($(3) + (90:.6)$) {\textcolor{olive}{0}};
-  
+
   \node[main node] (4) [right of=3] {4};
-  \node (4top) at ($(4) + (90:.6)$) {\textcolor{olive}{20}};
-  
+  \node (4top) at ($(4) + (90:.6)$) {\textcolor{olive}{5}};
+
   \node[main node] (5) [right of=1] {5};
   \node (5top) at ($(5) + (90:.6)$) {\textcolor{olive}{50}};
 
   \node[main node] (t) [right of=4] {t};
-  
+
   \path[every node/.style={font=\sffamily\tiny}]
       (s) edge[onslide={<3>, highlight}] node {\textcolor{blue}{85}/\textcolor{red}{90}} (1)
       (s) edge[onslide={<4>, highlight}] node [below] {\textcolor{blue}{80}/\textcolor{red}{80}} (2)
@@ -106,11 +106,11 @@ highlight/.style={ultra thick,draw=blue, text=blue}]
       (4) edge[onslide={<14>, highlight}] node {\textcolor{blue}{70}/\textcolor{red}{80}} (t)
 
       (5) edge[onslide={<15>, highlight}] node {\textcolor{blue}{80}/\textcolor{red}{60}} (t);
- 
+
  %onslide={<2>, highlight}
 \end{tikzpicture}
 
-\only<1>{Edge weights: 
+\only<1>{Edge weights:
 \begin{itemize}
   \item \textcolor{blue}{distance (km)}
   \item \textcolor{red}{speed limit(km/hr)}
@@ -151,11 +151,11 @@ Best: 3
 }
 \only<9>{
 Driving: Not possible!\\
-Drive and charge: Not possible! 
+Drive and charge: Not possible!
 }
 \only<10>{
 Driving: Not possible\\
-Drive and charge: Not possible! 
+Drive and charge: Not possible!
 }
 \only<11>{
 $Q=\{2,5\}$\\
