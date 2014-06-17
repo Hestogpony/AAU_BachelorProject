@@ -1,0 +1,34 @@
+\section{Greedy Heuristic Algorithm}
+
+\begin{frame}{Example}
+    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
+
+  \node[main node] (s) {s};
+  \node[main node] (1) [above right of=s] {1};
+  \node[main node] (2) [below right of=s] {2};
+  \node[main node] (3) [right of=s] {3};
+  \node[main node] (4) [right of=3] {4};
+  \node[main node] (5) [right of=1] {5};
+  \node[main node] (t) [right of=4] {t};
+
+
+  \path[every node/.style={font=\sffamily\small}]
+      (s) edge node {85/90} (1)
+      (s) edge node [below] {80/80} (2)
+      (s) edge node {110/120} (3)
+
+      (1) edge node {120/100} (5)
+
+      (2) edge node {100/90} (3)
+      (2) edge node [below] {70/90} (4)
+
+      (3) edge node [below] {85/90} (4)
+      (3) edge node {90/100} (5)
+
+      (4) edge node {70/80} (t)
+
+      (5) edge node {80/60} (t);
+\end{tikzpicture}
+
+\end{frame}
