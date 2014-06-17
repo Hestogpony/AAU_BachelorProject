@@ -1,34 +1,256 @@
 \section{Greedy Heuristic Algorithm}
 
+\begin{frame}{Approximation Approach}
+
+  Idea: 
+  \begin{itemize}
+    \item Drive using local optimal speed
+    \item Use time as weight
+    \item Solve as a CSPP using Dijkstra
+  \end{itemize}
+  The assumption here is that the shortest path, according to $\frac{distance}{speed}$, is the fastest in most cases
+\end{frame}
+
+\begin{frame}
+  How to find the local optimal speed in any given situation?
+
+  Compute the time spent doing the following:
+  \begin{enumerate}
+    \item Drive
+    \item Drive and charge
+  \end{enumerate}
+  Then, pick the fastest
+
+  We will now consider how to compute the two
+
+\end{frame}
+
+\begin{frame}{Driving}
+  The optimal speed when passing edge $e=(u,v)$ can be found by solving this equation for $v$:
+  \[B_{cur} - D(e) \times R_{CO}(v)=0\]
+
+  Resulting in $v_{opt1}$, the time spent passing this edge is then: $\frac{D(e)}{v_{opt1}}$
+
+  Might not be possible!
+\end{frame}
+\begin{frame}{Driving and charging}
+Charging is more complicated.. Instead one wants to:
+
+\begin{enumerate}
+    \item Charge using the previously best charging station, which was not fully charged at
+    \item Compute the time to pass edge $e$
+    \item Repeat step 1-2 while it results in a faster passing of $e$
+  \end{enumerate}  
+
+  Thus we are able to utilise previously passed charging stations, to charge even more
+
+  Remember that we only charge exactly enough to pass every edge! 
+\end{frame}
+
+\begin{frame}
+  Consequences of this approach:
+  \begin{itemize}
+    \item Charging stations are not prioritized
+    \item Choices might get the vehicle ``stuck''
+    \item ...
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  How do we fix this?
+  \begin{itemize}
+    \item Prioritize nodes with charging stations and lowest time
+    \item Thus we are able to solve more graphs
+    \item Not ideal solution
+  \end{itemize}
+  
+\end{frame}
+
 \begin{frame}{Example}
-    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-  thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
+\begin{columns}[c]
+\column{0.55\textwidth}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,scale=0.7, every node/.style={scale=0.7}, thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries},
+highlight/.style={ultra thick,draw=blue, text=blue}]
 
   \node[main node] (s) {s};
+  \node (stop) at ($(s) + (90:.6)$) {\textcolor{olive}{10}};
+
   \node[main node] (1) [above right of=s] {1};
+  \node (1top) at ($(1) + (90:.6)$) {\textcolor{olive}{20}};
+
   \node[main node] (2) [below right of=s] {2};
+  \node (2top) at ($(2) + (90:.6)$) {\textcolor{olive}{15}};
+
   \node[main node] (3) [right of=s] {3};
+  \node (3top) at ($(3) + (90:.6)$) {\textcolor{olive}{0}};
+  
   \node[main node] (4) [right of=3] {4};
+  \node (4top) at ($(4) + (90:.6)$) {\textcolor{olive}{20}};
+  
   \node[main node] (5) [right of=1] {5};
+  \node (5top) at ($(5) + (90:.6)$) {\textcolor{olive}{50}};
+
   \node[main node] (t) [right of=4] {t};
+  
+  \path[every node/.style={font=\sffamily\tiny}]
+      (s) edge[onslide={<3>, highlight}] node {\textcolor{blue}{85}/\textcolor{red}{90}} (1)
+      (s) edge[onslide={<4>, highlight}] node [below] {\textcolor{blue}{80}/\textcolor{red}{80}} (2)
+      (s) edge[onslide={<5>, highlight}] node {\textcolor{blue}{110}/\textcolor{red}{120}} (3)
 
+      (1) edge[onslide={<7>, highlight}] node {\textcolor{blue}{120}/\textcolor{red}{100}} (5)
 
-  \path[every node/.style={font=\sffamily\small}]
-      (s) edge node {85/90} (1)
-      (s) edge node [below] {80/80} (2)
-      (s) edge node {110/120} (3)
+      (2) edge[onslide={<12>, highlight}] node [below] {\textcolor{blue}{70}/\textcolor{red}{90}} (4)
 
-      (1) edge node {120/100} (5)
+      (3) edge[onslide={<10>, highlight}] node [below] {\textcolor{blue}{85}/\textcolor{red}{90}} (4)
+      (3) edge[onslide={<9>, highlight}] node {\textcolor{blue}{90}/\textcolor{red}{100}} (5)
 
-      (2) edge node {100/90} (3)
-      (2) edge node [below] {70/90} (4)
+      (4) edge[onslide={<14>, highlight}] node {\textcolor{blue}{70}/\textcolor{red}{80}} (t)
 
-      (3) edge node [below] {85/90} (4)
-      (3) edge node {90/100} (5)
-
-      (4) edge node {70/80} (t)
-
-      (5) edge node {80/60} (t);
+      (5) edge[onslide={<15>, highlight}] node {\textcolor{blue}{80}/\textcolor{red}{60}} (t);
+ 
+ %onslide={<2>, highlight}
 \end{tikzpicture}
 
+\only<1>{Edge weights: 
+\begin{itemize}
+  \item \textcolor{blue}{distance (km)}
+  \item \textcolor{red}{speed limit(km/hr)}
+\end{itemize}
+Node weights:\\
+\begin{itemize}
+  \item \textcolor{olive}{charging speed (kW)}
+\end{itemize}
+}
+
+\only<2>{
+$Q=\{s\}$\\
+Best: s
+}
+\only<3>{
+Driving: 90km/hr: 0.94 hr\\
+Drive and charge: Same
+}
+\only<4>{
+Driving: 80km/hr: 1hr\\
+Drive and charge: Same
+}
+\only<5>{
+Driving: 120km/hr: 0.92hr\\
+Drive and charge: Same
+}
+\only<6>{
+$Q=\{1,3,2\}$\\
+Best: 1
+}
+\only<7>{
+Driving: 71.1km/hr: 1.7 hr\\
+Drive and charge: 88.1km/hr: 1.6 hr
+}
+\only<8>{
+$Q=\{3,2,5\}$\\
+Best: 3
+}
+\only<9>{
+Driving: Not possible!\\
+Drive and charge: Not possible! 
+}
+\only<10>{
+Driving: Not possible\\
+Drive and charge: Not possible! 
+}
+\only<11>{
+$Q=\{2,5\}$\\
+Best: 2
+}
+\only<12>{
+Driving: 90km/hr: 0.8hr\\
+Drive and charge: Same
+}
+\only<13>{
+$Q=\{5,4\}$\\
+Best: 4
+}
+\only<14>{
+Driving: Not possible\\
+Drive and charge: 58.6km/hr: 1.7hr
+}
+\only<15>{
+$Q=\{5\}$\\
+Best: 5
+}
+\only<16>{
+Driving: Not possible\\
+Drive and charge: 120km/hr: 1.2hr}
+\only<17>{
+  Shortest path was fastest!
+}
+
+
+
+\column{0.45\textwidth}
+
+\only<1>{Paths:\\
+$\langle s,1,5,t\rangle$: 285km, 3.5hr \\
+$\langle s,3,4,t\rangle$: 265km, 2.7hr\\
+$\langle s,3,5,t\rangle$: 280km, 3.2hr\\
+$\langle s,2,4,t\rangle$: 220km, 2.7hr}
+\only<2->{
+  \begin{tabular}{| c | c | c | c | c |}
+    \hline
+    & $\pi$ & time & bat\\ \hline
+    s& & 0 &  50 \\ \hline
+    \only<2>{1& & &\\ \hline
+    2& & &\\ \hline
+    3& & &\\ \hline
+    4& & &\\ \hline
+    5& & &\\ \hline
+    t& & &\\ \hline
+    }
+    \only<3>{1& s & 0.9 & 27.1\\ \hline
+    2& & &\\ \hline
+    3& & &\\ \hline
+    4& & &\\ \hline
+    5& & &\\ \hline
+    t& & &\\ \hline
+    }
+     \only<4>{1& s & 0.9 & 27.1\\ \hline
+    2& s & 1 & 30.4\\ \hline
+    3& & &\\ \hline
+    4& & &\\ \hline
+    5& & &\\ \hline
+    t& & &\\ \hline
+    }
+     \only<5-6>{1& s & 0.9 &27.1\\ \hline
+    2& s & 1 & 30.4\\ \hline
+    3& s & 0.9 & 9.8\\ \hline
+    4& & &\\ \hline
+    5& & &\\ \hline
+    t& & &\\ \hline
+    }
+     \only<7-11>{1& s & 0.9 & 27.1\\ \hline
+    2& s & 1  & 30.4\\ \hline
+    3& s & 0.9 & 9.8\\ \hline
+    4& & &\\ \hline
+    5& 1 & 2.5 &  0\\ \hline
+    t& & &\\ \hline
+    }
+    \only<12-13>{1& s & 0.9 & 27.1\\ \hline
+    2& s & 1 & 30.4\\ \hline
+    3& s & 0.9 & 9.8\\ \hline
+    4& 2 & 1.8 & 11.6\\ \hline
+    5& 1 & 2.5 & 0\\ \hline
+    t& & &\\ \hline
+    }
+    \only<14->{1& s & 0.9 & 27.1\\ \hline
+    2& s & 1 & 30.4\\ \hline
+    3& s & 0.9 & 9.8\\ \hline
+    4& 2 & 1.8 & 11.6\\ \hline
+    5& 1 & 2.5 & 0\\ \hline
+    t & 4 & 3.5 & 0\\ \hline
+    }
+
+
+  \end{tabular}
+}
+
+\end{columns}
 \end{frame}
