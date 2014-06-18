@@ -1,5 +1,5 @@
 \section{Optimal solution to a path}
-
+\subsection{Modeling of the physical system}
 \begin{frame}{Physical system}
 Modeling the physical system, of an EV and a path.
 \begin{figure}[!htb]
@@ -28,11 +28,10 @@ Modeling the physical system, of an EV and a path.
 \item[+] Further two constants from the EV are important to model, namely, battery capacity ($B_{max}$) and initial battery ($B_{cur}$)
 \end{itemize}
 \end{itemize} 
-
 \end{frame}
-
-\begin{frame}{optimisation problem}
-Formulating a optimization problem, which when solved will yield a optimal solution. 
+\subsection{Optimisation problem}
+\begin{frame}{Optimisation problem}
+Formulating a optimisation problem, which when solved will yield a optimal solution. 
 \begin{itemize}
 \item Objective: Move from $u_1$ to $u_n$ using minimum time . 
 \begin{itemize}
@@ -55,7 +54,7 @@ Formulating a optimization problem, which when solved will yield a optimal solut
 \end{itemize} 
 \end{frame}
 \begin{frame}{battery constraint}
-The battery constraint of the optimization problem can be split into two parts
+The battery constraint of the optimisation problem can be split into two parts
 \begin{itemize}
 \item No road segment can be passed without having the required energy
 \item No overcharging at any charging station. 
@@ -130,13 +129,13 @@ No overcharging at any charging station.
 \item $\forall_{i\in1 \dots n-1}:\;0 \leq B_{cur} + \sum_{j=1}^{i+1} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}$
 \end{itemize}
 \end{frame}
-
+\subsection{Linear programming}
 \begin{frame}{Linear programming}
 NP-complete problem.
 
 Linearization and linear programming for approximate solution. 
 
-Two functions of the optimization problem are non linear functions. 
+Two functions of the optimisation problem are non linear functions. 
 \begin{itemize}
 \item Consumption rate ($R_{CO}(v_{e_i})$)
 \item Driving time ($\frac{D(e_i)}{v_{e_i}}$)
@@ -177,7 +176,7 @@ Function for energy consumption after linearization. $R_{CO}(v)=0.019*x^2 - 0.77
 \end{figure}
 \begin{itemize}
 \item For all linear function their slope and the y-intercept is precomputed. 
-\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n=$edges in the path and $m=$linear pieces of each line. 
+\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n$ is edges in the path and $m$ is linear pieces of each line. 
 \end{itemize}
 \end{frame}
 \begin{frame}{linearization example}
