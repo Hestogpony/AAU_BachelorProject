@@ -44,6 +44,14 @@
 \setbeamercolor*{palette tertiary}{fg=black,bg=black!10}
 \setbeamercolor*{palette quaternary}{fg=black,bg=black!10}
 
+% Page numbering
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
 \renewcommand{\(}{\begin{columns}}
 \renewcommand{\)}{\end{columns}}
 \newcommand{\<}[1]{\begin{column}{#1}}
