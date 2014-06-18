@@ -1,5 +1,6 @@
 \section{Greedy Heuristic Algorithm}
 
+\subsection{Approximation approach}
 \begin{frame}{Approximation Approach}
 
   Idea:
@@ -13,7 +14,6 @@
 
 \begin{frame}
   How to find the local optimal speed in any given situation?
-
   Compute the time spent doing the following:
   \begin{enumerate}
     \item Drive
@@ -24,7 +24,7 @@
   We will now consider how to compute the two
 
 \end{frame}
-
+\subsection{Local Optimal Speed}
 \begin{frame}{Driving}
   The optimal speed when passing edge $e=(u,v)$ can be found by solving this equation for $v$:
   \[B_{cur} - D(e) \times R_{CO}(v)=0\]
@@ -47,8 +47,8 @@ Charging is more complicated.. Instead one wants to:
   Remember that we only charge exactly enough to pass every edge!
 \end{frame}
 
-\begin{frame}
-  Consequences of this approach:
+\subsection{Consequences}
+\begin{frame}{Consequences of this approach:}
   \begin{itemize}
     \item Charging stations are not prioritized
     \item Choices might get the vehicle ``stuck''
@@ -64,7 +64,7 @@ Charging is more complicated.. Instead one wants to:
   \end{itemize}
 
 \end{frame}
-
+\subsection{Example}
 \begin{frame}{Example}
 \begin{columns}[c]
 \column{0.55\textwidth}
@@ -204,51 +204,43 @@ $\langle s,2,4,t\rangle$: 220km, 2.7hr}
     4& & &\\ \hline
     5& & &\\ \hline
     t& & &\\ \hline
-    }
-    \only<3>{1& s & 0.9 & 27.1\\ \hline
+    }\only<3>{1& s & 0.9 & 27.1\\ \hline
     2& & &\\ \hline
     3& & &\\ \hline
     4& & &\\ \hline
     5& & &\\ \hline
     t& & &\\ \hline
-    }
-     \only<4>{1& s & 0.9 & 27.1\\ \hline
+    }\only<4>{1& s & 0.9 & 27.1\\ \hline
     2& s & 1 & 30.4\\ \hline
     3& & &\\ \hline
     4& & &\\ \hline
     5& & &\\ \hline
     t& & &\\ \hline
-    }
-     \only<5-6>{1& s & 0.9 &27.1\\ \hline
+    }\only<5-6>{1& s & 0.9 &27.1\\ \hline
     2& s & 1 & 30.4\\ \hline
     3& s & 0.9 & 9.8\\ \hline
     4& & &\\ \hline
     5& & &\\ \hline
     t& & &\\ \hline
-    }
-     \only<7-11>{1& s & 0.9 & 27.1\\ \hline
+    }\only<7-11>{1& s & 0.9 & 27.1\\ \hline
     2& s & 1  & 30.4\\ \hline
     3& s & 0.9 & 9.8\\ \hline
     4& & &\\ \hline
     5& 1 & 2.5 &  0\\ \hline
     t& & &\\ \hline
-    }
-    \only<12-13>{1& s & 0.9 & 27.1\\ \hline
+    }\only<12-13>{1& s & 0.9 & 27.1\\ \hline
     2& s & 1 & 30.4\\ \hline
     3& s & 0.9 & 9.8\\ \hline
     4& 2 & 1.8 & 11.6\\ \hline
     5& 1 & 2.5 & 0\\ \hline
     t& & &\\ \hline
-    }
-    \only<14->{1& s & 0.9 & 27.1\\ \hline
+    }\only<14->{1& s & 0.9 & 27.1\\ \hline
     2& s & 1 & 30.4\\ \hline
     3& s & 0.9 & 9.8\\ \hline
     4& 2 & 1.8 & 11.6\\ \hline
     5& 1 & 2.5 & 0\\ \hline
     t & 4 & 3.5 & 0\\ \hline
     }
-
-
   \end{tabular}
 }
 
