@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  This Beamer template was created by Cameron Bracken.
 %%  Anyone can freely use or modify it for any purpose
 %%  without attribution.
@@ -10,8 +10,18 @@
 
 %% General document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
+\usepackage{pgfplots}
 \usepackage{tikz}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage{siunitx}
+\usepackage{pgf}
+\usetikzlibrary{arrows}
 \usetikzlibrary{decorations.fractals, arrows}
+\usetikzlibrary{arrows,decorations.pathreplacing}
+\usepackage{xcolor}
+\usetikzlibrary{arrows, shapes, calc}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -37,6 +47,9 @@
 \renewcommand{\)}{\end{columns}}
 \newcommand{\<}[1]{\begin{column}{#1}}
 \renewcommand{\>}{\end{column}}
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} % \pgfkeysalso doesn't change the path
+}}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -47,24 +60,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{\scshape Introduction}
-\begin{frame}
-\title{\huge Time-optimised Route Planning for Electric Vehicles}
-%\subtitle{SUBTITLE}
-\author{
-	Simon Buus Jensen,\\
-	Andreas Berre Eriksen,\\
-	Mikkel Alexander Madsen,\\
-	Mathias Meldgaard Andersen\\
-}
-
-\titlepage
-\end{frame}
-
-\begin{frame}{Introduction}
-\tableofcontents
-\end{frame}
-
 
 \input{intromoto.tex}
 \input{greedy.tex}
