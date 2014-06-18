@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  This Beamer template was created by Cameron Bracken.
 %%  Anyone can freely use or modify it for any purpose
 %%  without attribution.
@@ -20,6 +20,8 @@
 \usetikzlibrary{arrows}
 \usetikzlibrary{decorations.fractals, arrows}
 \usetikzlibrary{arrows,decorations.pathreplacing}
+\usepackage{xcolor}
+\usetikzlibrary{decorations.fractals, arrows, shapes, calc}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -45,6 +47,9 @@
 \renewcommand{\)}{\end{columns}}
 \newcommand{\<}[1]{\begin{column}{#1}}
 \renewcommand{\>}{\end{column}}
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} % \pgfkeysalso doesn't change the path
+}}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -55,29 +60,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{\scshape Introduction}
-\begin{frame}
-\title{Presentation Title}
-%\subtitle{SUBTITLE}
-\author{
-	Cameron Bracken\\
-	{\it Humboldt State University}\\
-}
-\date{
-	\begin{tikzpicture}[decoration=Koch curve type 2]
-		\draw[DeepSkyBlue4] decorate{ decorate{ decorate{ (0,0) -- (3,0) }}};
-	\end{tikzpicture}
-	\\
-	\vspace{1cm}
-	\today
-}
-\titlepage
-\end{frame}
-
-\begin{frame}{Introduction}
-\tableofcontents
-\end{frame}
-
 
 \input{intromoto.tex}
 \input{greedy.tex}
