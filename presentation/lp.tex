@@ -30,7 +30,7 @@ Modeling the physical system, of an EV and a path.
 \end{itemize} 
 \end{frame}
 \subsection{Optimisation problem}
-\begin{frame}{optimisation}
+\begin{frame}{Optimisation problem}
 Formulating a optimisation problem, which when solved will yield a optimal solution. 
 \begin{itemize}
 \item Objective: Move from $u_1$ to $u_n$ using minimum time . 
@@ -129,7 +129,6 @@ No overcharging at any charging station.
 \item $\forall_{i\in1 \dots n-1}:\;0 \leq B_{cur} + \sum_{j=1}^{i+1} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}$
 \end{itemize}
 \end{frame}
-
 \subsection{Linear programming}
 \begin{frame}{Linear programming}
 NP-complete problem.
@@ -177,7 +176,7 @@ Function for energy consumption after linearization. $R_{CO}(v)=0.019*x^2 - 0.77
 \end{figure}
 \begin{itemize}
 \item For all linear function their slope and the y-intercept is precomputed. 
-\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n=$edges in the path and $m=$linear pieces of each line. 
+\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n$ is edges in the path and $m$ is linear pieces of each line. 
 \end{itemize}
 \end{frame}
 \begin{frame}{linearization example}
