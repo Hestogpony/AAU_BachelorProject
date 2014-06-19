@@ -1,5 +1,10 @@
-\section{Optimal solution to a path}
+\section{\scshape Optimal Path Solution}
 \subsection{Modeling of the physical system}
+
+\begin{frame}
+\center \huge \scshape Optimal Path Solution
+\end{frame}
+
 \begin{frame}{Physical system}
 Modeling the physical system, of an EV and a path.
 \begin{figure}[!htb]
@@ -59,10 +64,10 @@ The battery constraint of the optimisation problem can be split into two parts
 \item No road segment can be passed without having the required energy
 \item No overcharging at any charging station. 
 \end{itemize}
-Energy can be..
+Energy can be:
 \begin{itemize}
 \item Spend: $\forall_{i\in1 \dots n-1 }:\; ES(e_i) = D(e_i) \times R_{CO}(v_{e_i})$
-\item Acuried: $\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}$
+\item Acquired: $\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}$
 \item Already in the battery: $B_{cur}$
 \end{itemize}
 \end{frame}

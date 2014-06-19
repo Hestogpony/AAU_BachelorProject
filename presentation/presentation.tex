@@ -30,6 +30,7 @@
 \useinnertheme{default}
 \usefonttheme{serif}
 \usepackage{palatino}
+\setcounter{tocdepth}{1}
 
 \setbeamerfont{title like}{shape=\scshape}
 \setbeamerfont{frametitle}{shape=\scshape}
@@ -42,6 +43,14 @@
 
 \setbeamercolor*{palette tertiary}{fg=black,bg=black!10}
 \setbeamercolor*{palette quaternary}{fg=black,bg=black!10}
+
+% Page numbering
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
 
 \renewcommand{\(}{\begin{columns}}
 \renewcommand{\)}{\end{columns}}
@@ -62,8 +71,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{intromoto.tex}
-\input{greedy.tex}
 \input{lp.tex}
+\input{greedy.tex}
 \input{experiment.tex}
 \input{futurework.tex}
 
