@@ -6,7 +6,7 @@
 \end{frame}
 
 \begin{frame}{Physical system}
-Modeling the physical system, of an EV and a path.
+Modeling the physical system, of an EV and a path
 \begin{figure}[!htb]
 \centering
     \begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,>=stealth',thick]
@@ -24,37 +24,37 @@ Modeling the physical system, of an EV and a path.
 \begin{itemize}
 \item Path
 \begin{itemize}
-\item[+] Charging stations, with charging rate ($R_{CH}(u_i)$)
-\item[+] Road segments, with speed limit ($v_{min}(e_i)$, $v_{max}(e_i)$) and distance ($D(e_i)$) 
+\item Charging stations, with charging rate ($R_{CH}(u_i)$)
+\item Road segments, with speed limit ($v_{min}(e_i)$, $v_{max}(e_i)$) and distance ($D(e_i)$) 
 \end{itemize}
 \item EV
 \begin{itemize}
-\item[+] Driving consumes energy accordingly to the speed of the EV, defined by: ($R_{CO}(e_i)$)
-\item[+] Further two constants from the EV are important to model, namely, battery capacity ($B_{max}$) and initial battery ($B_{cur}$)
+\item Driving consumes energy accordingly to the speed of the EV, defined by: ($R_{CO}(v_{e_i})$)
+\item Further two constants from the EV are important to model, namely, battery capacity ($B_{cap}$) and initial battery ($B_{cur}$)
 \end{itemize}
 \end{itemize} 
 \end{frame}
 \subsection{Optimisation problem}
 \begin{frame}{Optimisation problem}
-Formulating a optimisation problem, which when solved will yield a optimal solution. 
+Formulating an optimisation problem, which when solved will yield an optimal solution
 \begin{itemize}
-\item Objective: Move from $u_1$ to $u_n$ using minimum time . 
+\item Objective: Move from $u_1$ to $u_n$ using minimum time
 \begin{itemize}
-\item[+] Time can be used driving or charging. 
+\item Time can be used driving or charging 
 \begin{itemize}
-\item[-] $\text{min: } \sum_{i=1}^{n-1} \left(\frac{D(e_i)}{v_{e_i}} + CT_{u_i} \right)$
+\item $\text{min: } \sum_{i=1}^{n-1} \left(\frac{D(e_i)}{v_{e_i}} + CT_{u_i} \right)$
 \end{itemize}
 \end{itemize}
 \item Physical constraints:
 \begin{itemize}
-\item[+] Each edge must be driven at a speed within the speed limit:\begin{itemize}
-\item [-] $\forall_{i\in1 \dots n-1 }:\;v_{min}(e_i) \leq v_{e_i} \leq v_{max}(e_i)$
+\item Each edge must be driven at a speed within the speed limit:\begin{itemize}
+\item $\forall_{i\in1 \dots n-1 }:\;v_{min}(e_i) \leq v_{e_i} \leq v_{max}(e_i)$
 \end{itemize}
-\item[+] Time can only be positive.\begin{itemize}
-\item [-] $\forall_{i\in1 \dots n }:\; 0 \leq CT_{u_i} $
+\item Charge time can only be positive\begin{itemize}
+\item $\forall_{i\in1 \dots n }:\; 0 \leq CT_{u_i} $
 \end{itemize}
 
-\item[+] The energy is the battery must alway be between 0 and $B_{max}$
+\item The energy in the battery must always be between 0 and $B_{max}$
 \end{itemize}
 \end{itemize} 
 \end{frame}
@@ -62,12 +62,12 @@ Formulating a optimisation problem, which when solved will yield a optimal solut
 The battery constraint of the optimisation problem can be split into two parts
 \begin{itemize}
 \item No road segment can be passed without having the required energy
-\item No overcharging at any charging station. 
+\item No overcharging at any charging station 
 \end{itemize}
-Energy can be..
+Energy can be:
 \begin{itemize}
 \item Spend: $\forall_{i\in1 \dots n-1 }:\; ES(e_i) = D(e_i) \times R_{CO}(v_{e_i})$
-\item Acuried: $\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}$
+\item Acquired: $\forall_{i\in1 \dots n }:\; EA(u_i) = R_{CH}(u_i) \times CT_{u_i}$
 \item Already in the battery: $B_{cur}$
 \end{itemize}
 \end{frame}
@@ -99,12 +99,12 @@ No road segment can be passed without having the required energy
     \end{tikzpicture}
 \end{figure} 
 \begin{itemize}
-\item $\forall_{i\in1 \dots n-1 }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}$
+\item $\forall_{i\in1 \dots n-1 }:\;0 \leq B_{cur} + \sum_{j=1}^{i} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{cap}$
 \end{itemize}
 \end{frame}
 
 \begin{frame}{battery constraint}
-No overcharging at any charging station.
+No overcharging at any charging station
 \begin{figure}[!htb]
 \centering
     \begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,>=stealth',thick]
@@ -131,25 +131,27 @@ No overcharging at any charging station.
     \end{tikzpicture}
 \end{figure} 
 \begin{itemize}
-\item $\forall_{i\in1 \dots n-1}:\;0 \leq B_{cur} + \sum_{j=1}^{i+1} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{max}$
+\item $\forall_{i\in1 \dots n-1}:\;0 \leq B_{cur} + \sum_{j=1}^{i+1} EA(u_j) - \sum_{j=1}^{i} ES(e_j) \leq B_{cap}$
 \end{itemize}
 \end{frame}
 \subsection{Linear programming}
 \begin{frame}{Linear programming}
-NP-complete problem.
+\begin{itemize}
+\item NP-complete problem
 
-Linearization and linear programming for approximate solution. 
+\item Linearisation and linear programming for approximate solution 
 
-Two functions of the optimisation problem are non linear functions. 
+\item Two functions of the optimisation problem are non linear functions 
 \begin{itemize}
 \item Consumption rate ($R_{CO}(v_{e_i})$)
 \item Driving time ($\frac{D(e_i)}{v_{e_i}}$)
 \end{itemize}
+\end{itemize}
 \end{frame}
 
 
-\begin{frame}{linearization example}
-Function for energy consumption before linearization. $R_{CO}(v)=0.019*x^2 - 0.770*x + 184.4$
+\begin{frame}{linearisation example}
+Function for energy consumption before linearisation $R_{CO}(v)=0.019*v^2 - 0.770*v + 184.4$
 \begin{figure}[!htb]
 \label{fig:graph}
 \begin{tikzpicture}
@@ -165,8 +167,8 @@ Function for energy consumption before linearization. $R_{CO}(v)=0.019*x^2 - 0.7
 \end{figure}
 \end{frame}
 
-\begin{frame}{linearization example}
-Function for energy consumption after linearization. $R_{CO}(v)=0.019*x^2 - 0.770*x + 184.4$
+\begin{frame}{linearisation example}
+Function for energy consumption after linearisation $R_{CO}(v)=0.019*v^2 - 0.770*v + 184.4$
 \begin{figure}[!htb]
 \label{fig:graph}
 \begin{tikzpicture}
@@ -179,15 +181,12 @@ Function for energy consumption after linearization. $R_{CO}(v)=0.019*x^2 - 0.77
 
 \label{fig:graph}
 \end{figure}
-\begin{itemize}
-\item For all linear function their slope and the y-intercept is precomputed. 
-\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n$ is edges in the path and $m$ is linear pieces of each line. 
-\end{itemize}
+
 \end{frame}
-\begin{frame}{linearization example}
+\begin{frame}{linearisation example}
 \begin{itemize}
-\item For all linear function their slope and the y-intercept is precomputed. 
-\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n=$edges in the path and $m=$linear pieces of each line. 
+\item For all linear functions their slope and the y-intercept is precomputed 
+\item For every edge in the path exactly one line segment needs to be chosen. Thus a binary matrix i introduced of size $n \times m$, where $n$ is edges in the path and $m$ is linear pieces of each line 
 \end{itemize}
 \end{frame}
 
