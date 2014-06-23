@@ -219,10 +219,13 @@ def lp_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, fi
             ### NAIVE
             print 'Initialising Naive...'
             _, time = naive_path(rn, s, t, ev)
+            print _
+            print time 
             naive_t += time if time!=float('inf') else 0
             naive_f += 0 if time!=float('inf') else 1
+           
 
-            linear_t1, cur = linearProgramming(rn, _, ev, ev.curbat)
+            #linear_t1, cur = linearProgramming(rn, _, ev, ev.curbat)
 
 
             print 'done'
@@ -230,14 +233,17 @@ def lp_driving_dist(ev, CS_density,min_dist, max_dist, step_size, iterations, fi
             ### Greedy
             print 'Initialising Greedy...'
             _, time = fastest_path_greedy(rn, s, t, 1, ev) # 1 for slope
+            print _
+            print time
             greedy_t += time if time!=float('inf') else 0
             greedy_f += 0 if time!=float('inf') else 1
-            linear_t2, cur = linearProgramming(rn, _, ev, ev.curbat)
-            print naive_t, linear_t1, greedy_t, linear_t2
 
-
+            print 'Initialising LP'
+            _, time = fastest_path_greedy(rn, s, t, 0, ev) # 1 for slope
+            print _
+            print time
             print 'done'
-
+        
         with open(file_name, 'a') as f:
             f.write('%s,%s,%s,%s,%s\n' % (
                                               distance,

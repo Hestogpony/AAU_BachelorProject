@@ -65,14 +65,14 @@ Having the two ways of deciding the time it takes to pass an edge, we can formul
   		\State $v_{opt2} = solve2 (v, f_{charge-drive})$ 
   		\State $energy\_needed_{2} = RN.D(e)\times EV.R_{CO}(v_{opt2})$
   		\State $energy = energy + B_{possible}$
-  		\If{$energy - energy\_needed_{2}) < 0$}
+  		\If{$energy < energy\_needed_{2}$}
   			\State $time\_added = time\_added\; +$
          \XState{$(B_{possible} / charge\_rate)$}
   			\State $CS.remove(0)$
   			\State $updateCS(CS)$
   		\EndIf	
   	\EndWhile
-  	\If{$(energy - energy\_needed_{2}) < 0$}
+  	\If{$energy > energy\_needed_{2}$}
   		\State $time_2 = (RN.D(e)/v_{opt2})\; +$ 
       \XState{$(energy\_needed_{2}/charge\_rate) + time\_added$}
   	\EndIf

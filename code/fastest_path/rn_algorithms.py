@@ -5,6 +5,7 @@ from inRange import inRange
 import subprocess
 import networkx as nx
 from haversine import distance
+from linearprogramming import linearProgramming
 
 def drange(start, stop, step):
     while start < stop:
@@ -131,7 +132,18 @@ def update_possible_energy(charge_stations, energy):
         else:
             cs[0] -= energy
     return filterCS(charge_stations)
-         
+     
+def lp(G, s, t, n, ev, curbat):
+	driven_path = []
+	path =  t
+	driven_path.append(n)
+	while path !=s:
+		driven_path.append(path)
+		path = G.node[path]['path']
+	driven_path.append(s)
+	driven_path.reverse()
+	time, newbat = linearProgramming(G, driven_path, ev, curbat)  
+	return time, newbat, 0, [] 
 
 def fastest_path_greedy(G, s, t, algorithm, ev):
     #shortest_path_time = nx.shortest_path_length(G, s, t, weight = 'weight') * 1.5
@@ -148,17 +160,31 @@ def fastest_path_greedy(G, s, t, algorithm, ev):
     open_nodes = []
     heappush(open_nodes, (0, s))
     while open_nodes:
-        node_id = heappop(open_nodes)[1] 
+        n_time, node_id = heappop(open_nodes) 
         node_data = G.node[node_id]
         for _, neighbour_id, edge_data in G.edges([node_id], data=True):
             neighbour_data = G.node[neighbour_id]
-
-            time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), edge_data, ev, node_data['curbat'])
-            totalTime = node_data['time'] + time
+            if n_time > neighbour_data['time'] and algorithm != 1:
+	            continue
+            if algorithm == 1:
+                time, preCS, curbat, energyUsed = travel_time(deepcopy(node_data['preCS']), deepcopy(node_data['myCS']), edge_data, ev, node_data['curbat'])
+                totalTime = node_data['time'] + time
+            else:
+	            totalTime, curbat, energyUsed, preCS = lp(G, s, node_id,neighbour_id, ev, node_data['curbat'])
+	            if neighbour_id == t:
+		            print totalTime
+		            driven_path = []
+		            driven_path.append(t)
+		            while path !=s:
+		                driven_path.append(path)
+		                path = G.node[path]['path']
+		            driven_path.append(s)
+		            driven_path.reverse()
+		            print driven_path    
 
             if totalTime == float('inf'):
                 continue
-
+			
             if neighbour_data['time'] > totalTime and ((preCS or  neighbour_data['myCS'][1] > 0) or not neighbour_data['preCS']):
                 neighbour_data['time'] = totalTime
                 neighbour_data['path'] = node_id
